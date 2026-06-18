@@ -1,0 +1,28 @@
+{
+  "name": "models",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/challenge/models/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:challenge"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/challenge/models/ng-package.json",
+        "tsConfig": "libs/challenge/models/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/challenge/models/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

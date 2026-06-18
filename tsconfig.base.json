@@ -1,0 +1,45 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "paths": {
+      "@practica11y/models": ["./libs/challenge/models/src/index.ts"],
+      "@practica11y/loader": ["./libs/challenge/loader/src/index.ts"],
+      "@practica11y/validators": ["./libs/challenge/validators/src/index.ts"],
+      "@practica11y/monaco": ["./libs/editor/monaco/src/index.ts"],
+      "@practica11y/sandbox": ["./libs/preview/sandbox/src/index.ts"],
+      "@practica11y/sandbox-scripts": [
+        "./libs/preview/sandbox-scripts/src/lib/messaging.ts"
+      ],
+      "@practica11y/axe": ["./libs/accessibility/axe/src/index.ts"],
+      "@practica11y/tree": ["./libs/accessibility/tree/src/index.ts"],
+      "@practica11y/keyboard": ["./libs/accessibility/keyboard/src/index.ts"],
+      "@practica11y/focus": ["./libs/accessibility/focus/src/index.ts"],
+      "@practica11y/challenge-shell": [
+        "./libs/features/challenge-shell/src/index.ts"
+      ],
+      "@practica11y/challenge-list": [
+        "./libs/features/challenge-list/src/index.ts"
+      ],
+      "@practica11y/challenge-feedback": [
+        "./libs/features/challenge-feedback/src/index.ts"
+      ],
+      "@practica11y/accessibility-tree": [
+        "./libs/features/accessibility-tree/src/index.ts"
+      ],
+      "@practica11y/ui": ["./libs/shared/ui/src/index.ts"],
+      "@practica11y/util": ["./libs/shared/util/src/index.ts"],
+      "@practica11y/types": ["./libs/shared/types/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

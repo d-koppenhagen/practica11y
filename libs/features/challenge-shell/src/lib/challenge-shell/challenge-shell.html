@@ -1,0 +1,290 @@
+<a11y-confetti [trigger]="showConfetti()" />
+
+<div class="shell-grid">
+  <!-- Col 1: Task Description (spans both rows) -->
+  <a11y-shell-panel
+    #descriptionPanel
+    class="shell-description"
+    [collapsible]="true"
+    collapseDirection="horizontal"
+    panelLabel="Description"
+    [attr.aria-labelledby]="'description-heading'"
+    [style.flex]="descriptionFlex()"
+  >
+    <h1 panelHeader id="description-heading">
+      {{ challenge().title }} @if (challengeCompleted()) {
+      <span class="completion-badge" aria-label="Completed">✓</span>
+      }
+    </h1>
+    <div
+      class="shell-description-content prose"
+      [innerHTML]="renderedDescription()"
+    ></div>
+    @if (challenge().links.length > 0) {
+    <nav class="shell-description-links" aria-label="Further reading">
+      <h2>Further Reading</h2>
+      <ul>
+        @for (link of challenge().links; track link.url) {
+        <li>
+          <a [href]="link.url" target="_blank" rel="noopener noreferrer">
+            {{ link.text }}
+            <span class="sr-only">(opens in new tab)</span>
+            <svg
+              aria-hidden="true"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+              />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </a>
+        </li>
+        }
+      </ul>
+    </nav>
+    }
+  </a11y-shell-panel>
+
+  <!-- Vertical resizer between col 1 and col 2 -->
+  <a11y-shell-resizer
+    class="shell-resizer-col1"
+    orientation="vertical"
+    [valueNow]="col1SeparatorPercent()"
+    (resized)="onResizeCol1($event)"
+  />
+
+  <!-- Right side: 2×2 grid -->
+  <div class="shell-right" [style.flex]="colWidths()[1] + colWidths()[2]">
+    <!-- Top row -->
+    <div class="shell-right-top" [style.flex]="topRowFlex()">
+      <!-- Col 2, Row 1: Editor -->
+      <a11y-shell-panel
+        #editorPanel
+        class="shell-editor"
+        [collapsible]="true"
+        collapseDirection="vertical"
+        panelLabel="Editor"
+        [scrollBody]="false"
+        [attr.aria-labelledby]="'editor-heading'"
+        [style.flex]="colWidths()[1]"
+      >
+        <h2 id="editor-heading" class="sr-only">Code Editor</h2>
+        <div
+          panelHeader
+          role="tablist"
+          aria-label="Editor language"
+          class="shell-tabs"
+        >
+          <button
+            id="editor-tab-html"
+            role="tab"
+            [attr.aria-selected]="activeEditorTab() === 'html'"
+            [attr.aria-controls]="'editor-panel-html'"
+            [class]="'shell-tab' + (activeEditorTab() === 'html' ? ' shell-tab--active' : '')"
+            [tabindex]="activeEditorTab() === 'html' ? 0 : -1"
+            (click)="switchEditorTab('html')"
+            (keydown)="onEditorTabKeydown($event, 'html')"
+          >
+            HTML
+          </button>
+          @if (challenge().starter.js) {
+          <button
+            id="editor-tab-js"
+            role="tab"
+            [attr.aria-selected]="activeEditorTab() === 'js'"
+            [attr.aria-controls]="'editor-panel-js'"
+            [class]="'shell-tab' + (activeEditorTab() === 'js' ? ' shell-tab--active' : '')"
+            [tabindex]="activeEditorTab() === 'js' ? 0 : -1"
+            (click)="switchEditorTab('js')"
+            (keydown)="onEditorTabKeydown($event, 'js')"
+          >
+            JS
+          </button>
+          }
+          <button
+            id="editor-tab-css"
+            role="tab"
+            [attr.aria-selected]="activeEditorTab() === 'css'"
+            [attr.aria-controls]="'editor-panel-css'"
+            [class]="'shell-tab' + (activeEditorTab() === 'css' ? ' shell-tab--active' : '')"
+            [tabindex]="activeEditorTab() === 'css' ? 0 : -1"
+            (click)="switchEditorTab('css')"
+            (keydown)="onEditorTabKeydown($event, 'css')"
+          >
+            CSS
+          </button>
+        </div>
+        <div
+          id="editor-panel-html"
+          role="tabpanel"
+          aria-labelledby="editor-tab-html"
+          [class]="'shell-editor-panel' + (activeEditorTab() !== 'html' ? ' shell-editor-panel--hidden' : '')"
+        >
+          <a11y-monaco-editor
+            [language]="'html'"
+            [initialContent]="challenge().starter.html"
+            (content)="onHtmlContentChange($event)"
+          />
+        </div>
+        @if (challenge().starter.js) {
+        <div
+          id="editor-panel-js"
+          role="tabpanel"
+          aria-labelledby="editor-tab-js"
+          [class]="'shell-editor-panel' + (activeEditorTab() !== 'js' ? ' shell-editor-panel--hidden' : '')"
+        >
+          <a11y-monaco-editor
+            [language]="'javascript'"
+            [initialContent]="challenge().starter.js"
+            (content)="onJsContentChange($event)"
+          />
+        </div>
+        }
+        <div
+          id="editor-panel-css"
+          role="tabpanel"
+          aria-labelledby="editor-tab-css"
+          [class]="'shell-editor-panel' + (activeEditorTab() !== 'css' ? ' shell-editor-panel--hidden' : '')"
+        >
+          <a11y-monaco-editor
+            [language]="'css'"
+            [initialContent]="challenge().starter.css"
+            (content)="onCssContentChange($event)"
+          />
+        </div>
+      </a11y-shell-panel>
+
+      <!-- Vertical resizer between col 2 and col 3 -->
+      <a11y-shell-resizer
+        class="shell-resizer-col2"
+        orientation="vertical"
+        [valueNow]="col2SeparatorPercent()"
+        (resized)="onResizeCol2($event)"
+      />
+
+      <!-- Col 3, Row 1: Preview -->
+      <a11y-shell-panel
+        #previewPanel
+        class="shell-preview"
+        [collapsible]="true"
+        collapseDirection="vertical"
+        panelLabel="Preview"
+        [scrollBody]="false"
+        [attr.aria-labelledby]="'preview-heading'"
+        [style.flex]="colWidths()[2]"
+      >
+        <div panelHeader class="preview-header">
+          <h2 id="preview-heading">Live Preview</h2>
+          <button
+            class="preview-open-btn"
+            (click)="openPreviewInNewTab()"
+            aria-label="Open preview in new tab"
+            title="Open in new tab"
+          >
+            <svg
+              aria-hidden="true"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+              />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </button>
+        </div>
+        <a11y-sandbox-preview
+          [htmlContent]="htmlContent()"
+          [jsContent]="jsContent()"
+          [cssContent]="cssContent()"
+          [previewTitle]="challenge().previewTitle"
+          (domReady)="onDomReady()"
+          (axeResult)="onAxeResult($event)"
+          (axeError)="onAxeError($event)"
+          (interactionChange)="onInteractionChange()"
+        />
+      </a11y-shell-panel>
+    </div>
+
+    <!-- Horizontal resizer between rows -->
+    <a11y-shell-resizer
+      class="shell-resizer-row"
+      orientation="horizontal"
+      [valueNow]="rowSeparatorPercent()"
+      (resized)="onResizeRow($event)"
+    />
+
+    <!-- Bottom row -->
+    <div class="shell-right-bottom" [style.flex]="bottomRowFlex()">
+      <!-- Col 2, Row 2: Accessibility Tree -->
+      <a11y-shell-panel
+        #treePanel
+        class="shell-tree"
+        [collapsible]="true"
+        collapseDirection="vertical"
+        panelLabel="Accessibility Tree"
+        [attr.aria-labelledby]="'a11y-tree-heading'"
+        [style.flex]="colWidths()[1]"
+      >
+        <h2 panelHeader id="a11y-tree-heading">Accessibility Tree</h2>
+        <a11y-accessibility-tree
+          [tree]="accessibilityTree()"
+          [pageTitle]="sandboxPageTitle()"
+        />
+      </a11y-shell-panel>
+
+      <!-- Vertical resizer between col 2 and col 3 (bottom row) -->
+      <a11y-shell-resizer
+        class="shell-resizer-col2-bottom"
+        orientation="vertical"
+        [valueNow]="col2SeparatorPercent()"
+        (resized)="onResizeCol2($event)"
+      />
+
+      <!-- Col 3, Row 2: Feedback -->
+      <a11y-shell-panel
+        #feedbackPanel
+        class="shell-feedback"
+        [collapsible]="true"
+        collapseDirection="vertical"
+        panelLabel="Feedback"
+        [attr.aria-labelledby]="'feedback-heading'"
+        [style.flex]="colWidths()[2]"
+      >
+        <h2 panelHeader id="feedback-heading">Feedback</h2>
+        @switch (feedbackState()) { @case ('button') {
+        <div class="shell-feedback-action">
+          <button class="check-solution-btn" (click)="checkSolution()">
+            Check Solution
+          </button>
+        </div>
+        } @case ('loading') {
+        <div class="shell-feedback-loading" role="status" aria-live="polite">
+          <span class="shell-spinner"></span>
+          Analyzing…
+        </div>
+        } @case ('results') {
+        <div aria-live="polite" aria-atomic="true">
+          <a11y-challenge-feedback [result]="pipeline.analysisResult()" />
+        </div>
+        } }
+      </a11y-shell-panel>
+    </div>
+  </div>
+</div>

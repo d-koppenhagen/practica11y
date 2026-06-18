@@ -1,0 +1,13 @@
+{
+  "name": "@practica11y/axe",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "catalog:",
+    "@practica11y/types": "workspace:*",
+    "@practica11y/tree": "workspace:*",
+    "@practica11y/keyboard": "workspace:*",
+    "@practica11y/focus": "workspace:*",
+    "axe-core": "catalog:"
+  },
+  "sideEffects": false
+}

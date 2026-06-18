@@ -1,0 +1,379 @@
+import {
+  Component,
+  ChangeDetectionStrategy,
+  input,
+  inject,
+  signal,
+  computed,
+  effect,
+  ElementRef,
+  viewChild,
+} from '@angular/core';
+import { Challenge } from '@practica11y/models';
+import { Monaco } from '@practica11y/monaco';
+import { SandboxPreview, SandboxAxeViolation } from '@practica11y/sandbox';
+import { AccessibilityTree } from '@practica11y/accessibility-tree';
+import { ChallengeFeedback } from '@practica11y/challenge-feedback';
+import { AccessibilityNode, AxeViolation } from '@practica11y/types';
+import { renderMarkdown, LayoutStore, ProgressStore } from '@practica11y/util';
+
+import { AnalysisPipeline } from '../analysis-pipeline';
+import { ShellPanel } from '../shell-panel/shell-panel';
+import { ShellResizer } from '../shell-resizer/shell-resizer';
+import { Confetti } from '../confetti/confetti';
+
+type EditorTab = 'html' | 'js' | 'css';
+
+@Component({
+  selector: 'a11y-challenge-shell',
+  imports: [
+    Monaco,
+    SandboxPreview,
+    AccessibilityTree,
+    ChallengeFeedback,
+    ShellPanel,
+    ShellResizer,
+    Confetti,
+  ],
+  providers: [AnalysisPipeline],
+  templateUrl: './challenge-shell.html',
+  styleUrl: './challenge-shell.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ChallengeShell {
+  readonly challenge = input.required<Challenge>();
+
+  protected readonly pipeline = inject(AnalysisPipeline);
+  private readonly layoutStore = inject(LayoutStore);
+  private readonly progressStore = inject(ProgressStore);
+
+  protected readonly htmlContent = signal<string>('');
+  protected readonly jsContent = signal<string>('');
+  protected readonly cssContent = signal<string>('');
+  protected readonly activeEditorTab = signal<EditorTab>('html');
+  protected readonly challengeCompleted = signal(false);
+
+  private readonly hostRef = inject(ElementRef);
+
+  // Panel references for tracking collapsed state
+  protected readonly descriptionPanel =
+    viewChild<ShellPanel>('descriptionPanel');
+  protected readonly editorPanel = viewChild<ShellPanel>('editorPanel');
+  protected readonly previewPanel = viewChild<ShellPanel>('previewPanel');
+  protected readonly treePanel = viewChild<ShellPanel>('treePanel');
+  protected readonly feedbackPanel = viewChild<ShellPanel>('feedbackPanel');
+
+  /** Column widths — reads from layout store */
+  protected readonly colWidths = computed(
+    () => this.layoutStore.layout().colWidths,
+  );
+
+  /** Row heights — reads from layout store */
+  protected readonly rowHeights = computed(
+    () => this.layoutStore.layout().rowHeights,
+  );
+
+  /** Separator position as percentage for col1 resizer (left / total) */
+  protected readonly col1SeparatorPercent = computed(() => {
+    const [l, m, r] = this.colWidths();
+    return Math.round((l / (l + m + r)) * 100);
+  });
+
+  /** Separator position as percentage for col2 resizer (middle / (middle + right)) */
+  protected readonly col2SeparatorPercent = computed(() => {
+    const [, m, r] = this.colWidths();
+    return Math.round((m / (m + r)) * 100);
+  });
+
+  /** Separator position as percentage for row resizer (top / total) */
+  protected readonly rowSeparatorPercent = computed(() => {
+    const [t, b] = this.rowHeights();
+    return Math.round((t / (t + b)) * 100);
+  });
+
+  /** Compute effective description flex: collapse to auto when panel is collapsed */
+  protected readonly descriptionFlex = computed(() => {
+    const panel = this.descriptionPanel();
+    if (panel?.collapsed()) {
+      return '0 0 auto';
+    }
+    return String(this.colWidths()[0]);
+  });
+
+  /** Compute effective top row flex: if both editor+preview are collapsed, row shrinks */
+  protected readonly topRowFlex = computed(() => {
+    const editor = this.editorPanel();
+    const preview = this.previewPanel();
+    if (editor?.collapsed() && preview?.collapsed()) {
+      return '0 0 auto';
+    }
+    return String(this.rowHeights()[0]);
+  });
+
+  /** Compute effective bottom row flex: if both tree+feedback are collapsed, row shrinks */
+  protected readonly bottomRowFlex = computed(() => {
+    const tree = this.treePanel();
+    const feedback = this.feedbackPanel();
+    if (tree?.collapsed() && feedback?.collapsed()) {
+      return '0 0 auto';
+    }
+    return String(this.rowHeights()[1]);
+  });
+
+  protected readonly accessibilityTree = computed<AccessibilityNode | null>(
+    () =>
+      this.pipeline.analysisResult()?.accessibilityAnalysis?.treeNodes ?? null,
+  );
+
+  protected readonly sandboxPageTitle = signal<string | null>(null);
+
+  protected readonly feedbackVisible = signal<boolean>(false);
+
+  protected readonly feedbackState = computed<'button' | 'loading' | 'results'>(
+    () => {
+      if (!this.feedbackVisible()) {
+        return 'button';
+      }
+      if (this.pipeline.isAnalyzing()) {
+        return 'loading';
+      }
+      return 'results';
+    },
+  );
+
+  protected readonly showConfetti = computed(
+    () =>
+      this.feedbackVisible() &&
+      (this.pipeline.analysisResult()?.challengeCompleted ?? false),
+  );
+
+  protected readonly renderedDescription = computed(() =>
+    renderMarkdown(this.challenge().description),
+  );
+
+  constructor() {
+    effect(() => {
+      const challenge = this.challenge();
+      this.htmlContent.set(challenge.starter.html);
+      this.jsContent.set(challenge.starter.js);
+      this.cssContent.set(challenge.starter.css);
+      this.feedbackVisible.set(false);
+      this.pipeline.setChallenge(challenge);
+      this.pipeline.updateCode(
+        challenge.starter.html,
+        challenge.starter.js,
+        challenge.starter.css,
+      );
+
+      // Load completed status for this challenge
+      this.progressStore.loadProgress().then((progress) => {
+        this.challengeCompleted.set(
+          progress.completedChallenges.includes(challenge.id),
+        );
+      });
+    });
+
+    // Update completed status when analysis result indicates completion
+    effect(() => {
+      if (this.pipeline.analysisResult()?.challengeCompleted) {
+        this.challengeCompleted.set(true);
+      }
+    });
+
+    // Restore collapsed state from store once panels are available
+    effect(() => {
+      const collapsed = this.layoutStore.layout().collapsed;
+      const description = this.descriptionPanel();
+      const editor = this.editorPanel();
+      const preview = this.previewPanel();
+      const tree = this.treePanel();
+      const feedback = this.feedbackPanel();
+
+      if (description) description.collapsed.set(collapsed.description);
+      if (editor) editor.collapsed.set(collapsed.editor);
+      if (preview) preview.collapsed.set(collapsed.preview);
+      if (tree) tree.collapsed.set(collapsed.tree);
+      if (feedback) feedback.collapsed.set(collapsed.feedback);
+    });
+
+    // Sync panel collapsed state back to store
+    effect(() => {
+      const description = this.descriptionPanel()?.collapsed() ?? false;
+      const editor = this.editorPanel()?.collapsed() ?? false;
+      const preview = this.previewPanel()?.collapsed() ?? false;
+      const tree = this.treePanel()?.collapsed() ?? false;
+      const feedback = this.feedbackPanel()?.collapsed() ?? false;
+
+      // Only update if different from current store to avoid loops
+      const current = this.layoutStore.layout().collapsed;
+      if (
+        current.description !== description ||
+        current.editor !== editor ||
+        current.preview !== preview ||
+        current.tree !== tree ||
+        current.feedback !== feedback
+      ) {
+        this.layoutStore.layout.update((l) => ({
+          ...l,
+          collapsed: { description, editor, preview, tree, feedback },
+        }));
+      }
+    });
+  }
+
+  protected onResizeCol1(delta: number): void {
+    const el = this.hostRef.nativeElement as HTMLElement;
+    const gridWidth =
+      el.querySelector('.shell-grid')?.clientWidth ?? el.clientWidth;
+    const [l, m, r] = this.colWidths();
+    const total = l + m + r;
+    const frDelta = (delta / gridWidth) * total;
+    const newL = Math.max(0.5, l + frDelta);
+    const newM = Math.max(0.5, m - frDelta);
+    this.layoutStore.setColWidths([newL, newM, r]);
+  }
+
+  protected onResizeCol2(delta: number): void {
+    const el = this.hostRef.nativeElement as HTMLElement;
+    const gridWidth =
+      el.querySelector('.shell-grid')?.clientWidth ?? el.clientWidth;
+    const [l, m, r] = this.colWidths();
+    const total = l + m + r;
+    const frDelta = (delta / gridWidth) * total;
+    const newM = Math.max(0.5, m + frDelta);
+    const newR = Math.max(0.5, r - frDelta);
+    this.layoutStore.setColWidths([l, newM, newR]);
+  }
+
+  protected onResizeRow(delta: number): void {
+    const el = this.hostRef.nativeElement as HTMLElement;
+    const gridHeight =
+      el.querySelector('.shell-grid')?.clientHeight ?? el.clientHeight;
+    const [t, b] = this.rowHeights();
+    const total = t + b;
+    const frDelta = (delta / gridHeight) * total;
+    const newT = Math.max(0.3, t + frDelta);
+    const newB = Math.max(0.3, b - frDelta);
+    this.layoutStore.setRowHeights([newT, newB]);
+  }
+
+  protected onHtmlContentChange(content: string): void {
+    this.htmlContent.set(content);
+    this.feedbackVisible.set(false);
+    this.pipeline.updateCode(content, this.jsContent(), this.cssContent());
+  }
+
+  protected onJsContentChange(content: string): void {
+    this.jsContent.set(content);
+    this.feedbackVisible.set(false);
+    this.pipeline.updateCode(this.htmlContent(), content, this.cssContent());
+  }
+
+  protected onCssContentChange(content: string): void {
+    this.cssContent.set(content);
+    this.feedbackVisible.set(false);
+    this.pipeline.updateCode(this.htmlContent(), this.jsContent(), content);
+  }
+
+  protected onDomReady(): void {
+    const doc = this.getSandboxDocument();
+    if (doc) {
+      this.pipeline.setSandboxDocument(doc);
+      this.pipeline.runTreeAnalysis(doc);
+      this.sandboxPageTitle.set(doc.title || null);
+    }
+  }
+
+  protected checkSolution(): void {
+    this.feedbackVisible.set(true);
+    const doc = this.getSandboxDocument();
+    if (doc) {
+      this.pipeline.runValidation(doc);
+      this.requestIframeAnalysis();
+    }
+  }
+
+  protected onAxeResult(axeResults: SandboxAxeViolation[]): void {
+    this.pipeline.setAxeResults(axeResults as unknown as AxeViolation[]);
+  }
+
+  protected onAxeError(message: string): void {
+    console.warn('[ChallengeShell] axe-core error in iframe:', message);
+    this.pipeline.setAxeResults([]);
+  }
+
+  protected onInteractionChange(): void {
+    const doc = this.getSandboxDocument();
+    if (doc) {
+      this.pipeline.updateTreeOnly(doc);
+      this.sandboxPageTitle.set(doc.title || null);
+    }
+  }
+
+  protected openPreviewInNewTab(): void {
+    const html = this.htmlContent();
+    const js = this.jsContent();
+    const css = this.cssContent();
+    const srcdoc = `<!DOCTYPE html><html><head><style>${css}</style></head><body>${html}<script>${js}</script></body></html>`;
+    const blob = new Blob([srcdoc], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+  }
+
+  protected readonly editorTabs = computed<EditorTab[]>(() => {
+    const tabs: EditorTab[] = ['html'];
+    if (this.challenge().starter.js) {
+      tabs.push('js');
+    }
+    tabs.push('css');
+    return tabs;
+  });
+
+  protected switchEditorTab(tab: EditorTab): void {
+    this.activeEditorTab.set(tab);
+  }
+
+  protected onEditorTabKeydown(event: KeyboardEvent, tab: EditorTab): void {
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+      event.preventDefault();
+      const tabs = this.editorTabs();
+      const currentIndex = tabs.indexOf(tab);
+      let nextIndex: number;
+      if (event.key === 'ArrowRight') {
+        nextIndex = (currentIndex + 1) % tabs.length;
+      } else {
+        nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      }
+      const nextTab = tabs[nextIndex];
+      this.switchEditorTab(nextTab);
+      const tabId = `editor-tab-${nextTab}`;
+      const el = (event.target as HTMLElement)
+        .closest('[role="tablist"]')
+        ?.querySelector(`#${tabId}`) as HTMLElement | null;
+      el?.focus();
+    }
+  }
+
+  private requestIframeAnalysis(): void {
+    const host = this.hostRef.nativeElement as HTMLElement;
+    const iframe = host.querySelector(
+      '.shell-preview iframe',
+    ) as HTMLIFrameElement | null;
+    if (iframe?.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'run-analysis' }, '*');
+    }
+  }
+
+  private getSandboxDocument(): Document | null {
+    const host = this.hostRef.nativeElement as HTMLElement;
+    const iframe = host.querySelector(
+      '.shell-preview iframe',
+    ) as HTMLIFrameElement | null;
+    if (!iframe) return null;
+    try {
+      return iframe.contentDocument;
+    } catch {
+      return null;
+    }
+  }
+}

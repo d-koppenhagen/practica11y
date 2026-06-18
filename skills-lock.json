@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "skills": {
+    "angular-developer": {
+      "source": "angular/skills",
+      "sourceType": "github",
+      "skillPath": "angular-developer/SKILL.md",
+      "computedHash": "e6400c4e948ba8c9d002509e9a482862c189f96938e01655f56a1e9a4533cb19"
+    },
+    "create-challenge": {
+      "source": "./skills/create-challenge",
+      "sourceType": "local",
+      "computedHash": "e3b55466f87cadef10bce3a5325552bee74421940fe49bc529f828d6cf503bd0"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+header {
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 2rem;
+  font-family: system-ui, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #1f2937;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  color: #2563eb;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav a:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+main {
+  max-width: 600px;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+main h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}

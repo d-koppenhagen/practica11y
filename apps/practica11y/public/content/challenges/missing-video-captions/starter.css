@@ -1,0 +1,40 @@
+main {
+  max-width: 600px;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+main > p {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+video {
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 480px;
+  background-color: #000000;
+}
+
+.video-description {
+  margin-top: 1.5rem;
+}
+
+.video-description h2 {
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.video-description ul {
+  padding-left: 1.5rem;
+}
+
+.video-description li {
+  margin-bottom: 0.25rem;
+  color: #374151;
+}

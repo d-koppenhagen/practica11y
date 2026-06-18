@@ -1,0 +1,45 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+  touch-action: none;
+  z-index: 10;
+}
+
+:host(.resizer-vertical) {
+  width: 8px;
+  cursor: col-resize;
+}
+
+:host(.resizer-horizontal) {
+  height: 8px;
+  cursor: row-resize;
+}
+
+.resizer-handle {
+  border-radius: 2px;
+  background-color: transparent;
+  transition: background-color 0.15s ease;
+}
+
+:host(.resizer-vertical) .resizer-handle {
+  width: 4px;
+  height: 32px;
+}
+
+:host(.resizer-horizontal) .resizer-handle {
+  height: 4px;
+  width: 32px;
+}
+
+:host:hover .resizer-handle,
+.resizer-handle:focus-visible {
+  background-color: var(--p11y-primary, #4f46e5);
+}
+
+.resizer-handle:focus-visible {
+  outline: 2px solid var(--p11y-primary, #2563eb);
+  outline-offset: 2px;
+}

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="600" height="350">
+  <!-- Background -->
+  <rect width="600" height="350" fill="#f9fafb" rx="8"/>
+
+  <!-- Title -->
+  <text x="300" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="#1f2937">Quarterly Revenue 2024</text>
+  <text x="300" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#6b7280">in million EUR</text>
+
+  <!-- Y-Axis gridlines and labels -->
+  <line x1="80" y1="280" x2="550" y2="280" stroke="#e5e7eb" stroke-width="1"/>
+  <line x1="80" y1="235" x2="550" y2="235" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="80" y1="190" x2="550" y2="190" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="80" y1="145" x2="550" y2="145" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="80" y1="100" x2="550" y2="100" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4"/>
+
+  <text x="70" y="284" text-anchor="end" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">0</text>
+  <text x="70" y="239" text-anchor="end" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">1</text>
+  <text x="70" y="194" text-anchor="end" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">2</text>
+  <text x="70" y="149" text-anchor="end" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">3</text>
+  <text x="70" y="104" text-anchor="end" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">4</text>
+
+  <!-- Y-Axis unit -->
+  <text x="70" y="75" text-anchor="end" font-family="system-ui, sans-serif" font-size="10" fill="#9ca3af">Mio €</text>
+
+  <!-- Bars -->
+  <!-- Q1: 2.3M → height = 2.3/4.5 * 180 = 92 -->
+  <rect x="115" y="188" width="70" height="92" fill="#3b82f6" rx="4"/>
+  <text x="150" y="180" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#1f2937">2.3</text>
+
+  <!-- Q2: 3.1M → height = 3.1/4.5 * 180 = 124 -->
+  <rect x="230" y="156" width="70" height="124" fill="#3b82f6" rx="4"/>
+  <text x="265" y="148" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#1f2937">3.1</text>
+
+  <!-- Q3: 4.7M → height = 4.7/4.5 * 180 = 188 (capped visual) -->
+  <rect x="345" y="92" width="70" height="188" fill="#2563eb" rx="4"/>
+  <text x="380" y="84" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#1f2937">4.7</text>
+
+  <!-- Q4: 3.9M → height = 3.9/4.5 * 180 = 156 -->
+  <rect x="460" y="124" width="70" height="156" fill="#3b82f6" rx="4"/>
+  <text x="495" y="116" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#1f2937">3.9</text>
+
+  <!-- X-Axis labels -->
+  <text x="150" y="300" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#374151">Q1</text>
+  <text x="265" y="300" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#374151">Q2</text>
+  <text x="380" y="300" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#374151">Q3</text>
+  <text x="495" y="300" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#374151">Q4</text>
+
+  <!-- Legend / annotation -->
+  <rect x="170" y="320" width="12" height="12" fill="#2563eb" rx="2"/>
+  <text x="188" y="331" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">Peak quarter</text>
+  <rect x="290" y="320" width="12" height="12" fill="#3b82f6" rx="2"/>
+  <text x="308" y="331" font-family="system-ui, sans-serif" font-size="11" fill="#6b7280">Regular quarter</text>
+</svg>

@@ -1,0 +1,340 @@
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--p11y-primary);
+  color: var(--p11y-primary-text);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 var(--p11y-radius) 0;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--p11y-primary);
+  outline-offset: 2px;
+}
+
+/* Header */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--p11y-border);
+  background-color: var(--p11y-bg-surface);
+}
+
+.app-nav {
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 80rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  gap: 0.5rem 0.75rem;
+}
+
+.app-nav--full-width {
+  max-width: none;
+}
+
+@media (min-width: 640px) {
+  .app-nav {
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--p11y-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.app-logo-img {
+  height: 2rem;
+  width: auto;
+}
+
+.app-logo:hover {
+  color: var(--p11y-primary);
+}
+
+@media (min-width: 640px) {
+  .app-logo {
+    font-size: 1.25rem;
+  }
+}
+
+/* Status section (level + XP) */
+.app-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .app-status {
+    gap: 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+.app-level {
+  font-weight: 500;
+  color: var(--p11y-text-secondary);
+  white-space: nowrap;
+}
+
+.app-xp {
+  border-radius: 9999px;
+  background-color: var(--p11y-primary-light);
+  padding: 0.25rem 0.625rem;
+  font-weight: 600;
+  color: var(--p11y-primary-badge-text);
+  white-space: nowrap;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-xp--bumped {
+  animation: xp-bump 0.4s ease;
+}
+
+@keyframes xp-bump {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.2);
+    box-shadow: 0 0 8px var(--p11y-primary, #4f46e5);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-xp--bumped {
+    animation: none;
+  }
+}
+
+@media (min-width: 640px) {
+  .app-xp {
+    padding: 0.25rem 0.75rem;
+  }
+}
+
+/* Challenge Navigation (prev/next in header) */
+.app-challenge-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  order: 1;
+  flex-basis: 100%;
+  justify-content: center;
+}
+
+@media (min-width: 900px) {
+  .app-challenge-nav {
+    order: 0;
+    flex-basis: auto;
+    justify-content: flex-start;
+  }
+}
+
+.app-challenge-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--p11y-border);
+  border-radius: var(--p11y-radius-sm);
+  background: var(--p11y-bg-surface);
+  color: var(--p11y-text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    opacity 0.15s;
+  white-space: nowrap;
+  max-width: 12rem;
+}
+
+.app-challenge-nav-link:hover {
+  background-color: var(--p11y-bg-muted);
+  border-color: var(--p11y-primary);
+}
+
+.app-challenge-nav-link:focus-visible {
+  outline: 2px solid var(--p11y-primary);
+  outline-offset: 2px;
+}
+
+.app-challenge-nav-link--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.app-challenge-nav-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Error notifications */
+.app-errors {
+  margin-inline: auto;
+  max-width: 80rem;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .app-errors {
+    padding-inline: 1.5rem;
+  }
+}
+
+.app-error-item {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-radius: var(--p11y-radius-sm);
+  border: 1px solid var(--p11y-error-border);
+  background-color: var(--p11y-error-bg);
+  padding: 0.75rem 1rem;
+  color: var(--p11y-error-text);
+}
+
+.app-error-message {
+  font-size: 0.875rem;
+}
+
+.app-error-dismiss {
+  flex-shrink: 0;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  color: var(--p11y-error-text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.app-error-dismiss:hover {
+  background-color: var(--p11y-bg-muted);
+}
+
+.app-error-dismiss:focus-visible {
+  outline: 2px solid oklch(0.5 0.15 25);
+  outline-offset: 2px;
+}
+
+/* Main content */
+.app-main {
+  margin-inline: auto;
+  max-width: 80rem;
+  padding: 1rem;
+}
+
+.app-main:focus {
+  outline: none;
+}
+
+@media (min-width: 640px) {
+  .app-main {
+    padding: 1.5rem;
+  }
+}
+
+.app-main--full-width {
+  max-width: none;
+  padding: 0;
+}
+
+@media (min-width: 1024px) {
+  .app-main--full-width {
+    overflow: hidden;
+    height: calc(100dvh - var(--app-header-height, 4rem));
+  }
+}
+
+/* About link in header */
+.app-about-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--p11y-text-secondary);
+  border-radius: var(--p11y-radius-sm);
+  padding: 0.25rem;
+  transition: color 0.15s;
+}
+
+.app-about-link:hover {
+  color: var(--p11y-primary);
+}
+
+.app-about-link:focus-visible {
+  outline: 2px solid var(--p11y-primary);
+  outline-offset: 2px;
+}
+
+/* Footer */
+.app-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid var(--p11y-border);
+  font-size: 0.8125rem;
+  color: var(--p11y-text-muted);
+}
+
+@media (min-width: 640px) {
+  .app-footer {
+    padding: 1.5rem;
+  }
+}
+
+.app-footer a {
+  color: var(--p11y-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s;
+}
+
+.app-footer a:hover {
+  color: var(--p11y-primary);
+}
+
+.app-footer a:focus-visible {
+  outline: 2px solid var(--p11y-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.app-footer-links {
+  display: flex;
+  gap: 1rem;
+}

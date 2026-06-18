@@ -1,0 +1,12 @@
+{
+  "name": "@practica11y/util",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "catalog:",
+    "@angular/core": "catalog:",
+    "@practica11y/types": "workspace:*",
+    "rxjs": "catalog:",
+    "marked": "catalog:"
+  },
+  "sideEffects": false
+}

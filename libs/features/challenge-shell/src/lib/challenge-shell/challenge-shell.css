@@ -1,0 +1,468 @@
+:host {
+  display: block;
+  height: auto;
+}
+
+@media (min-width: 1024px) {
+  :host {
+    height: 100%;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  :host * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus-visible styles for keyboard navigation */
+:host button:focus-visible,
+:host [role='tabpanel']:focus-visible {
+  outline: 2px solid var(--p11y-primary, #2563eb);
+  outline-offset: 2px;
+}
+
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ===================================================================
+   Grid layout
+   =================================================================== */
+
+/* Mobile: stacked */
+.shell-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  height: auto;
+  overflow: visible;
+}
+
+.shell-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.shell-right-top,
+.shell-right-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Hide resizers on mobile */
+a11y-shell-resizer {
+  display: none;
+}
+
+/* Desktop: flex-based resizable layout */
+@media (min-width: 1024px) {
+  .shell-grid {
+    flex-direction: row;
+    gap: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  a11y-shell-resizer {
+    display: flex;
+  }
+
+  .shell-description {
+    flex: 3;
+    min-width: 200px;
+  }
+
+  .shell-right {
+    flex-direction: column;
+    flex: 8;
+    min-width: 0;
+    gap: 0;
+  }
+
+  .shell-right-top,
+  .shell-right-bottom {
+    flex-direction: row;
+    min-height: 0;
+    gap: 0;
+  }
+
+  .shell-editor,
+  .shell-tree {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .shell-preview,
+  .shell-feedback {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* ===================================================================
+   Description overrides
+   =================================================================== */
+
+.shell-description ::ng-deep .panel-header h1 {
+  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.completion-badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: var(--p11y-success-bg);
+  color: var(--p11y-success-text);
+  font-size: 0.875rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.shell-description ::ng-deep .panel-body {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.shell-description-content {
+  max-width: none;
+  color: var(--p11y-text-secondary, #4b5563);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  flex: 1;
+}
+
+.shell-description-content ::ng-deep h2,
+.shell-description-content ::ng-deep h3 {
+  color: var(--p11y-text);
+}
+
+.shell-description-content ::ng-deep h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.shell-description-content ::ng-deep h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.shell-description-content ::ng-deep p {
+  margin: 0.75rem 0;
+}
+
+.shell-description-content ::ng-deep ul,
+.shell-description-content ::ng-deep ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.shell-description-content ::ng-deep ul {
+  list-style-type: disc;
+}
+
+.shell-description-content ::ng-deep ol {
+  list-style-type: decimal;
+}
+
+.shell-description-content ::ng-deep li {
+  margin: 0.25rem 0;
+}
+
+.shell-description-content ::ng-deep li::marker {
+  color: var(--p11y-text-muted, #6b7280);
+}
+
+.shell-description-content ::ng-deep code {
+  background-color: var(--p11y-code-bg);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+}
+
+.shell-description-content ::ng-deep a {
+  color: var(--p11y-link);
+}
+
+.shell-description-content ::ng-deep a:hover {
+  color: var(--p11y-link-hover);
+}
+
+/* Links section pinned at bottom of description */
+.shell-description-links {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--p11y-border, #e5e7eb);
+  font-size: 0.8125rem;
+}
+
+.shell-description-links h2 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--p11y-text-muted, #6b7280);
+  margin: 0 0 0.5rem;
+}
+
+.shell-description-links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.shell-description-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--p11y-link, #2563eb);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.shell-description-links a:hover {
+  color: var(--p11y-link-hover, #1d4ed8);
+  text-decoration: underline;
+}
+
+.shell-description-links a:focus-visible {
+  outline: 2px solid var(--p11y-primary, #2563eb);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.shell-description-links svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* ===================================================================
+   Editor overrides
+   =================================================================== */
+
+.shell-editor ::ng-deep .panel-header {
+  padding: 0;
+  border-bottom: none;
+}
+
+.shell-editor ::ng-deep .panel-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.shell-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--p11y-border, #e5e7eb);
+  background-color: var(--p11y-bg-muted, #f9fafb);
+}
+
+.shell-tab {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--p11y-text-secondary, #4b5563);
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.shell-tab:hover {
+  color: var(--p11y-text, #111827);
+  background-color: var(--p11y-bg-surface, #ffffff);
+}
+
+.shell-tab--active {
+  color: var(--p11y-primary, #4f46e5);
+  border-bottom: 2px solid var(--p11y-primary, #4f46e5);
+  background-color: var(--p11y-bg-surface, #ffffff);
+}
+
+.shell-editor-panel {
+  flex: 1;
+  min-height: 0;
+}
+
+.shell-editor-panel--hidden {
+  display: none;
+}
+
+/* ===================================================================
+   Preview overrides
+   =================================================================== */
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.preview-header h2 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.preview-open-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--p11y-text-muted, #6b7280);
+  border-radius: 4px;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.preview-open-btn:hover {
+  color: var(--p11y-primary, #4f46e5);
+  background-color: var(--p11y-bg-muted, #f3f4f6);
+}
+
+.preview-open-btn:focus-visible {
+  outline: 2px solid var(--p11y-primary, #2563eb);
+  outline-offset: 2px;
+}
+
+.shell-preview ::ng-deep .panel-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===================================================================
+   Tree overrides
+   =================================================================== */
+
+.shell-tree ::ng-deep .panel-body {
+  padding: 0.75rem;
+}
+
+/* ===================================================================
+   Feedback overrides
+   =================================================================== */
+
+.shell-feedback-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: var(--p11y-text-muted, #6b7280);
+}
+
+.shell-spinner {
+  display: inline-block;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+  border: 2px solid var(--p11y-border, #d1d5db);
+  border-top-color: var(--p11y-primary, #2563eb);
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.shell-feedback-action {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+.shell-feedback-action::before {
+  content: '?';
+  position: absolute;
+  font-size: 24rem;
+  font-weight: 900;
+  color: var(--p11y-primary, #4f46e5);
+  opacity: 0.08;
+  filter: blur(4px);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+.check-solution-btn {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--p11y-primary, #4f46e5);
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  margin: 0;
+  z-index: 1;
+}
+
+.check-solution-btn:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--p11y-primary, #4f46e5) 10%,
+    transparent
+  );
+  color: var(--p11y-primary, #4f46e5);
+}
+
+.check-solution-btn:focus-visible {
+  outline: 2px solid var(--p11y-primary, #2563eb);
+  outline-offset: -2px;
+}
+
+.check-solution-btn:active {
+  background-color: color-mix(
+    in srgb,
+    var(--p11y-primary, #4f46e5) 18%,
+    transparent
+  );
+  color: var(--p11y-primary, #4f46e5);
+}

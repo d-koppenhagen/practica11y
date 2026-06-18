@@ -1,0 +1,39 @@
+header {
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 2rem;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  font-family: system-ui, sans-serif;
+}
+
+nav a {
+  color: #2563eb;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+nav a:hover {
+  background-color: #eff6ff;
+}
+
+nav a:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+main {
+  max-width: 600px;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+main h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}

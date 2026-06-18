@@ -1,0 +1,83 @@
+<section class="challenge-list" aria-label="Challenge overview">
+  <div class="filters" role="group" aria-label="Filters">
+    <div class="filter-group">
+      <label for="difficulty-filter">Difficulty</label>
+      <select
+        id="difficulty-filter"
+        [value]="difficultyFilter()"
+        (change)="setDifficultyFilter($any($event.target).value)"
+      >
+        <option value="all">All</option>
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="tag-filter">Tag</label>
+      <select
+        id="tag-filter"
+        [value]="tagFilter()"
+        (change)="setTagFilter($any($event.target).value)"
+      >
+        <option value="all">All</option>
+        @for (tag of availableTags(); track tag) {
+        <option [value]="tag">{{ tag }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <ul class="challenge-items" role="list">
+    @for (challenge of filteredChallenges(); track challenge.id) {
+    <li
+      class="challenge-item"
+      [class.challenge-item--disabled]="challenge.disabled"
+    >
+      <button
+        class="challenge-button"
+        type="button"
+        (click)="selectChallenge(challenge)"
+        [attr.aria-disabled]="challenge.disabled ? 'true' : null"
+        [attr.aria-label]="challenge.title + (challenge.disabled ? ' (coming soon)' : '') + (isCompleted(challenge.id) ? ' (completed)' : '')"
+      >
+        <span class="challenge-title">
+          {{ challenge.title }} @if (challenge.disabled) {
+          <span class="coming-soon-badge" aria-hidden="true">Coming soon</span>
+          }
+        </span>
+
+        @if (isCompleted(challenge.id)) {
+        <span class="completion-status completed" aria-label="Completed"
+          >✓</span
+        >
+        } @else {
+        <span class="completion-status pending" aria-hidden="true"></span>
+        }
+
+        <span class="challenge-meta">
+          <span
+            class="difficulty-badge"
+            [class.difficulty-beginner]="challenge.difficulty === 'beginner'"
+            [class.difficulty-intermediate]="challenge.difficulty === 'intermediate'"
+            [class.difficulty-advanced]="challenge.difficulty === 'advanced'"
+          >
+            {{ challenge.difficulty }}
+          </span>
+
+          <span class="challenge-tags">
+            @for (tag of challenge.tags; track tag) {
+            <span class="tag-badge">{{ tag }}</span>
+            }
+          </span>
+
+          <span class="challenge-points">{{ challenge.points }} Points</span>
+        </span>
+      </button>
+    </li>
+    } @empty {
+    <li class="empty-state">No challenges found.</li>
+    }
+  </ul>
+</section>

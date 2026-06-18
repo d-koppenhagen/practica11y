@@ -1,0 +1,138 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: var(--p11y-radius, 0.5rem);
+  border: 1px solid var(--p11y-border, #e5e7eb);
+  background-color: var(--p11y-bg-surface, #ffffff);
+  box-shadow: var(--p11y-shadow, 0 1px 3px 0 rgb(0 0 0 / 0.1));
+  overflow: hidden;
+  transition: flex 0.2s ease;
+  width: 100%;
+}
+
+/* Vertical collapse: panel keeps width, shrinks height */
+:host(.panel-collapsed.panel-collapse-vertical) {
+  align-self: flex-start;
+}
+
+/* Horizontal collapse: panel keeps height, shrinks width */
+:host(.panel-collapsed.panel-collapse-horizontal) {
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+  width: 2rem;
+}
+
+:host(.panel-collapsed.panel-collapse-horizontal) .panel-header {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.25rem;
+  height: 100%;
+  cursor: pointer;
+}
+
+:host(.panel-collapsed.panel-collapse-horizontal) .panel-toggle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 0;
+}
+
+:host(.panel-collapsed.panel-collapse-horizontal) .panel-header {
+  position: relative;
+}
+
+.panel-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--p11y-text-secondary, #4b5563);
+  background-color: var(--p11y-bg-muted, #f9fafb);
+  border-bottom: 1px solid var(--p11y-border, #e5e7eb);
+}
+
+:host(.panel-collapsed) .panel-header {
+  border-bottom: none;
+}
+
+.panel-header--collapsible {
+  gap: 0.25rem;
+}
+
+.panel-header:empty {
+  display: none;
+}
+
+.panel-header ::ng-deep h1,
+.panel-header ::ng-deep h2 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--p11y-text, #111827);
+}
+
+.panel-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--p11y-text-muted, #6b7280);
+  border-radius: 4px;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.panel-toggle:hover {
+  color: var(--p11y-primary, #4f46e5);
+  background-color: var(--p11y-bg-muted, #f3f4f6);
+}
+
+.panel-toggle:focus-visible {
+  outline: 2px solid var(--p11y-primary, #2563eb);
+  outline-offset: 2px;
+}
+
+.panel-toggle-icon {
+  transition: transform 0.2s ease;
+}
+
+.panel-toggle-icon--collapsed {
+  transform: rotate(-90deg);
+}
+
+:host(.panel-collapse-horizontal) .panel-toggle-icon {
+  transform: rotate(90deg);
+}
+
+:host(.panel-collapse-horizontal) .panel-toggle-icon--collapsed {
+  transform: rotate(-90deg);
+}
+
+.panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.panel-body--no-scroll {
+  overflow: hidden;
+}
+
+.panel-body:focus-visible {
+  outline: 2px solid var(--p11y-primary, #2563eb);
+  outline-offset: -2px;
+}

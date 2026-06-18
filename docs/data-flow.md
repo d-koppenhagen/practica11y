@@ -1,0 +1,114 @@
+# Data Flow Documentation
+
+## Analysis Pipeline
+
+The Analysis Pipeline is the heart of the application. It coordinates the data flow from editor changes to feedback:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Editor as Monaco Editor
+    participant Pipeline as Analysis Pipeline
+    participant Sandbox as Sandbox iframe
+    participant Engine as Accessibility Engine
+    participant Validator as ChallengeValidator
+    participant Feedback as Feedback Panel
+
+    User->>Editor: Code input
+    Editor->>Pipeline: Signal: codeContent
+    Note over Pipeline: Debounce (300ms)
+    Pipeline->>Sandbox: srcdoc update (HTML + CSS)
+    Sandbox->>Sandbox: Render HTML/CSS
+    Sandbox->>Pipeline: postMessage({ type: 'dom-ready' })
+    Pipeline->>Engine: analyze(document)
+
+    par Parallel Analysis
+        Engine->>Engine: axe-core analysis
+        Engine->>Engine: Generate accessibility tree
+        Engine->>Engine: Keyboard analysis
+        Engine->>Engine: Focus analysis
+    end
+
+    Engine->>Pipeline: AccessibilityAnalysisResult
+    Pipeline->>Validator: validateChallenge(document, validatorIds, analysisResult)
+    Validator->>Pipeline: ValidationResult[]
+    Pipeline->>Feedback: Update (validation status + violations)
+```
+
+### Detailed Flow
+
+1. **Editor input**: User types code in Monaco Editor → Signal `codeContent` is updated
+2. **Debounce**: After 300ms without further input, the pipeline is triggered
+3. **Sandbox update**: The new HTML/CSS code is written as `srcdoc` into the iframe
+4. **DOM Ready**: The iframe sends a `dom-ready` event to the host via `postMessage`
+5. **Accessibility Engine**: Runs four analyses in parallel:
+   - **axe-core**: Detect WCAG violations
+   - **Accessibility Tree**: Generate semantic tree structure
+   - **Keyboard**: Focusability, tab order, non-focusable interactive elements
+   - **Focus**: Focus traps, hidden focusable elements, focus order
+6. **Validation**: ChallengeValidator checks all registered validators against the analysis results
+7. **Feedback**: The Feedback Panel is updated with validation status and violations
+
+## Gamification Flow
+
+When a challenge is successfully completed, the gamification flow kicks in:
+
+```mermaid
+sequenceDiagram
+    participant Validator as ChallengeValidator
+    participant Gamification as Gamification Service
+    participant Progress as Progress Store
+
+    Validator->>Validator: All validators passed
+    Note over Validator: challengeCompleted = true
+    Validator->>Gamification: Challenge completed (challengeId, points)
+    Gamification->>Gamification: addXP(points)
+    Gamification->>Gamification: Level-up check
+
+    alt XP threshold exceeded
+        Gamification->>Gamification: Emit level-up event
+    end
+
+    Gamification->>Gamification: checkAchievements(event)
+
+    alt Achievement unlocked
+        Gamification->>Gamification: Achievement notification
+    end
+
+    Gamification->>Progress: saveProgress(UserProgress)
+    Progress->>Progress: Write to IndexedDB / localStorage
+```
+
+### Detailed Flow
+
+1. **Challenge completed**: All `ValidationResult.passed === true` → Challenge is considered completed
+2. **Add XP**: `Gamification.addXP(challenge.points)` → new XP value
+3. **Check level-up**: Compare new XP value with thresholds (Hatchling → Scout → Guardian → Legend)
+4. **Check achievements**: Certain actions trigger achievements (e.g., "First Fix", "Form Master")
+5. **Persist**: The entire progress is written via `ProgressStore` to IndexedDB/localStorage
+
+## Sandbox Communication
+
+Communication between the host application and the sandbox iframe is exclusively via `postMessage`:
+
+```mermaid
+sequenceDiagram
+    participant Host as Angular Host
+    participant Iframe as Sandbox iframe
+
+    Host->>Iframe: Set srcdoc (HTML + CSS + Script)
+    Iframe->>Iframe: Render HTML/CSS
+    Iframe->>Host: postMessage({ type: 'dom-ready' })
+    Host->>Host: Start accessibility analysis
+
+    alt Runtime error in user code
+        Iframe->>Host: postMessage({ type: 'error', message })
+        Host->>Host: Show error state in preview
+    end
+```
+
+### Security Model
+
+- The iframe uses `sandbox="allow-scripts"` — no access to parent DOM, no navigation
+- User code is **never** executed in the Angular context
+- Errors in user code are caught inside the iframe and communicated via `postMessage`

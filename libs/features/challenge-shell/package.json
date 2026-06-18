@@ -1,0 +1,18 @@
+{
+  "name": "@practica11y/challenge-shell",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "catalog:",
+    "rxjs": "catalog:",
+    "@practica11y/axe": "workspace:*",
+    "@practica11y/models": "workspace:*",
+    "@practica11y/types": "workspace:*",
+    "@practica11y/util": "workspace:*",
+    "@practica11y/validators": "workspace:*",
+    "@practica11y/monaco": "workspace:*",
+    "@practica11y/sandbox": "workspace:*",
+    "@practica11y/accessibility-tree": "workspace:*",
+    "@practica11y/challenge-feedback": "workspace:*"
+  },
+  "sideEffects": false
+}

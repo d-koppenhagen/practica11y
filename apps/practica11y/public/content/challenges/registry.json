@@ -1,0 +1,23 @@
+{
+  "challenges": [
+    { "id": "clickable-div" },
+    { "id": "missing-alt-text" },
+    { "id": "heading-chaos" },
+    { "id": "missing-label" },
+    { "id": "focus-trap" },
+    { "id": "missing-landmarks" },
+    { "id": "no-skip-link" },
+    { "id": "button-vs-link" },
+    { "id": "focus-outline-removed" },
+    { "id": "lost-focus-navigation" },
+    { "id": "missing-page-title" },
+    { "id": "live-region-dynamic" },
+    { "id": "image-bar-chart" },
+    { "id": "color-contrast-fail" },
+    { "id": "reduced-motion" },
+    { "id": "invalid-form-error", "disabled": true },
+    { "id": "disabled-submit", "disabled": true },
+    { "id": "missing-video-captions", "disabled": true },
+    { "id": "placeholder-as-label", "disabled": true }
+  ]
+}

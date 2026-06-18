@@ -1,0 +1,35 @@
+@if (tree(); as treeData) { @if (pageTitle(); as title) {
+<div class="page-title-info" aria-label="Page title">
+  <span class="page-title-label">document.title:</span>
+  <span class="page-title-value">"{{ title }}"</span>
+</div>
+}
+<ul
+  role="tree"
+  aria-label="Accessibility Tree"
+  class="accessibility-tree"
+  tabindex="0"
+  (keydown)="onTreeKeydown($event)"
+>
+  @for (child of treeData.children; track child.name; let i = $index) {
+  <a11y-accessibility-tree-node
+    [node]="child"
+    [depth]="0"
+    [parentSize]="treeData.children.length"
+    [positionInSet]="i + 1"
+    (nodeAction)="onNodeAction($event)"
+  />
+  } @if (treeData.children.length === 0) {
+  <li role="treeitem" aria-selected="false" class="tree-node tree-node-empty">
+    <span class="tree-node-content">
+      <span class="tree-node-label"
+        >{{ treeData.role }}{{ treeData.name ? ' "' + treeData.name + '"' : ''
+        }}</span
+      >
+    </span>
+  </li>
+  }
+</ul>
+} @else {
+<p class="tree-empty-message">No accessibility tree data available.</p>
+}

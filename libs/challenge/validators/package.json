@@ -1,0 +1,11 @@
+{
+  "name": "@practica11y/validators",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "catalog:",
+    "@practica11y/models": "workspace:*",
+    "@practica11y/types": "workspace:*",
+    "htmlparser2": "catalog:"
+  },
+  "sideEffects": false
+}

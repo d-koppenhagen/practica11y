@@ -1,0 +1,65 @@
+<li
+  role="treeitem"
+  [attr.aria-expanded]="hasChildren() ? expanded() : null"
+  [attr.aria-selected]="false"
+  [attr.aria-level]="depth() + 1"
+  [attr.aria-setsize]="parentSize()"
+  [attr.aria-posinset]="positionInSet()"
+  [attr.tabindex]="-1"
+  (keydown)="onKeydown($event)"
+  class="tree-node"
+>
+  <span
+    class="tree-node-content"
+    role="button"
+    tabindex="0"
+    (click)="toggleExpand($event)"
+    (keydown.enter)="toggleExpand($event)"
+    (keydown.space)="toggleExpand($event)"
+  >
+    @if (hasChildren()) {
+    <span
+      class="tree-node-arrow"
+      aria-hidden="true"
+      [class.tree-node-arrow--expanded]="expanded()"
+    ></span>
+    } @else {
+    <span
+      class="tree-node-arrow tree-node-arrow--leaf"
+      aria-hidden="true"
+    ></span>
+    }
+    <span class="tree-node-label">
+      @if (isTextNode()) {
+      <span class="tree-node-role tree-node-role--text">StaticText</span>
+      @if (node().name) {
+      <span class="tree-node-name">"{{ node().name }}"</span>
+      } } @else {
+      <span class="tree-node-role">{{ node().role }}</span>
+      @if (node().name) {
+      <span class="tree-node-name">"{{ node().name }}"</span>
+      } @if (node().level !== undefined) {
+      <span class="tree-node-prop">level:</span>
+      <span class="tree-node-prop-value">{{ node().level }}</span>
+      } @if (node().properties) { @for (prop of node().properties; track
+      prop.key) {
+      <span class="tree-node-prop">{{ prop.key }}:</span>
+      <span class="tree-node-prop-value">{{ prop.value }}</span>
+      } } }
+    </span>
+  </span>
+
+  @if (hasChildren() && expanded()) {
+  <ul role="group" class="tree-group">
+    @for (child of node().children; track child.name; let i = $index) {
+    <a11y-accessibility-tree-node
+      [node]="child"
+      [depth]="depth() + 1"
+      [parentSize]="node().children.length"
+      [positionInSet]="i + 1"
+      (nodeAction)="onChildAction($event)"
+    />
+    }
+  </ul>
+  }
+</li>

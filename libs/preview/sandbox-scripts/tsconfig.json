@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM"],
+    "strict": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "isolatedModules": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

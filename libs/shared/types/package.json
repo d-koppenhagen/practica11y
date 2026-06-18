@@ -1,0 +1,8 @@
+{
+  "name": "@practica11y/types",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "catalog:"
+  },
+  "sideEffects": false
+}

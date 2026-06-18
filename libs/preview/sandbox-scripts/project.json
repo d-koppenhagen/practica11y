@@ -1,0 +1,23 @@
+{
+  "name": "sandbox-scripts",
+  "sourceRoot": "libs/preview/sandbox-scripts/src",
+  "projectType": "library",
+  "tags": ["scope:preview"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{workspaceRoot}/apps/practica11y/public/assets/sandbox-analysis.js"
+      ],
+      "inputs": ["{projectRoot}/src/**/*.ts"],
+      "options": {
+        "command": "pnpm exec esbuild libs/preview/sandbox-scripts/src/index.ts --bundle --format=iife --outfile=apps/practica11y/public/assets/sandbox-analysis.js --platform=browser --target=es2020"
+      },
+      "configurations": {
+        "production": {
+          "command": "pnpm exec esbuild libs/preview/sandbox-scripts/src/index.ts --bundle --format=iife --outfile=apps/practica11y/public/assets/sandbox-analysis.js --platform=browser --target=es2020 --minify"
+        }
+      }
+    }
+  }
+}

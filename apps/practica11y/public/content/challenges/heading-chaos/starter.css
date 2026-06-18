@@ -1,0 +1,22 @@
+.page {
+  max-width: 600px;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+.page h1,
+.page h2,
+.page h3,
+.page h4,
+.page h5 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.page ul {
+  padding-left: 1.5rem;
+}
+
+.page li {
+  margin-bottom: 0.25rem;
+}

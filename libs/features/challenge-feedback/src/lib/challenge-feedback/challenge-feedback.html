@@ -1,0 +1,87 @@
+@if (result(); as data) {
+<section class="feedback-panel" aria-label="Challenge Feedback">
+  <!-- Success message -->
+  @if (challengeCompleted()) {
+  <div class="success-message" role="alert">
+    <span class="success-icon" aria-hidden="true">🎉</span>
+    <h3>Challenge completed!</h3>
+    <p>Congratulations! All validations passed.</p>
+  </div>
+  }
+
+  <!-- Validator Status List -->
+  <section aria-labelledby="validators-heading">
+    <h3 id="validators-heading">Validation Results</h3>
+    <div aria-live="polite" aria-atomic="true">
+      <ul class="validator-list">
+        @for (result of validationResults(); track result.validatorId) {
+        <li
+          class="validator-item"
+          [class.passed]="result.passed"
+          [class.failed]="!result.passed"
+        >
+          <span class="validator-status" aria-hidden="true"
+            >{{ result.passed ? '✓' : '✗' }}</span
+          >
+          <span class="validator-info">
+            <span class="validator-message">
+              <span class="sr-only"
+                >{{ result.passed ? 'Passed:' : 'Failed:' }}</span
+              >
+              {{ result.message }}
+            </span>
+            @if (!result.passed && result.details) {
+            <span class="validator-details">{{ result.details }}</span>
+            }
+          </span>
+        </li>
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- axe-core Violations grouped by impact -->
+  @if (hasViolations()) {
+  <section aria-labelledby="violations-heading">
+    <h3 id="violations-heading">Accessibility Issues</h3>
+    <div aria-live="polite" aria-atomic="true">
+      @for (group of violationGroups(); track group.impact) {
+      <div class="violation-group">
+        <h4 class="violation-group-header impact-{{ group.impact }}">
+          <span class="impact-badge">{{ group.impact }}</span>
+          <span class="violation-count">({{ group.violations.length }})</span>
+        </h4>
+        <ul class="violation-list">
+          @for (violation of group.violations; track violation.id) {
+          <li class="violation-item">
+            <p class="violation-description">{{ violation.description }}</p>
+            <a
+              [href]="violation.helpUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="violation-help-link"
+            >
+              Learn more
+              <span class="sr-only">about {{ violation.description }}</span>
+            </a>
+            @if (violation.nodes.length > 0) {
+            <ul class="violation-nodes">
+              @for (node of violation.nodes; track node.html) {
+              <li class="violation-node">
+                <code class="violation-node-html">{{ node.html }}</code>
+              </li>
+              }
+            </ul>
+            }
+          </li>
+          }
+        </ul>
+      </div>
+      }
+    </div>
+  </section>
+  }
+</section>
+} @else {
+<p class="feedback-empty">No analysis results available yet.</p>
+}

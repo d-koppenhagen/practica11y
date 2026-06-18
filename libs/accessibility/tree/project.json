@@ -1,0 +1,34 @@
+{
+  "name": "tree",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/accessibility/tree/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:accessibility"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/accessibility/tree/ng-package.json",
+        "tsConfig": "libs/accessibility/tree/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/accessibility/tree/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/angular:unit-test",
+      "options": {
+        "watch": false
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

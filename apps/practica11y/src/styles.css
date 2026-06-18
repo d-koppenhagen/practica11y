@@ -1,0 +1,261 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ===================================================================
+   Practica11y Design System
+   - CSS custom properties for colors, spacing, typography
+   - Light theme (default) + Dark theme via data-theme attribute or prefers-color-scheme
+   =================================================================== */
+
+/* Tailwind theme extension for utility classes */
+@theme {
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+}
+
+/* ===================================================================
+   Light Theme (default) - using CSS custom properties
+   =================================================================== */
+:root {
+  /* Color palette */
+  --color-primary-50: oklch(0.97 0.02 180);
+  --color-primary-100: oklch(0.93 0.04 180);
+  --color-primary-200: oklch(0.87 0.08 180);
+  --color-primary-300: oklch(0.78 0.12 180);
+  --color-primary-400: oklch(0.68 0.16 180);
+  --color-primary-500: oklch(0.58 0.19 180);
+  --color-primary-600: oklch(0.5 0.19 180);
+  --color-primary-700: oklch(0.44 0.17 180);
+  --color-primary-800: oklch(0.37 0.14 180);
+  --color-primary-900: oklch(0.32 0.11 180);
+
+  --color-surface-50: oklch(0.985 0 0);
+  --color-surface-100: oklch(0.97 0 0);
+  --color-surface-200: oklch(0.93 0.003 180);
+  --color-surface-300: oklch(0.87 0.005 180);
+  --color-surface-400: oklch(0.71 0.01 180);
+  --color-surface-500: oklch(0.55 0.014 180);
+  --color-surface-600: oklch(0.45 0.014 180);
+  --color-surface-700: oklch(0.37 0.013 180);
+  --color-surface-800: oklch(0.27 0.01 180);
+  --color-surface-900: oklch(0.21 0.01 180);
+
+  --color-success: oklch(0.55 0.15 145);
+  --color-warning: oklch(0.75 0.15 85);
+  --color-error: oklch(0.55 0.2 25);
+
+  /* Semantic design tokens — light mode */
+  --p11y-bg: var(--color-surface-50);
+  --p11y-bg-surface: #ffffff;
+  --p11y-bg-muted: var(--color-surface-100);
+  --p11y-bg-accent: var(--color-primary-50);
+
+  --p11y-text: var(--color-surface-900);
+  --p11y-text-secondary: var(--color-surface-600);
+  --p11y-text-muted: var(--color-surface-500);
+
+  --p11y-border: var(--color-surface-200);
+  --p11y-border-strong: var(--color-surface-300);
+
+  --p11y-primary: var(--color-primary-600);
+  --p11y-primary-hover: var(--color-primary-700);
+  --p11y-primary-text: #ffffff;
+  --p11y-primary-light: var(--color-primary-100);
+  --p11y-primary-badge-text: var(--color-primary-800);
+
+  --p11y-success: var(--color-success);
+  --p11y-warning: var(--color-warning);
+  --p11y-error: var(--color-error);
+
+  --p11y-success-bg: oklch(0.95 0.04 145);
+  --p11y-success-border: oklch(0.85 0.08 145);
+  --p11y-success-text: oklch(0.35 0.1 145);
+
+  --p11y-error-bg: oklch(0.95 0.03 25);
+  --p11y-error-border: oklch(0.85 0.08 25);
+  --p11y-error-text: oklch(0.4 0.12 25);
+
+  --p11y-warning-bg: oklch(0.95 0.04 85);
+  --p11y-warning-border: oklch(0.85 0.08 85);
+  --p11y-warning-text: oklch(0.4 0.1 85);
+
+  --p11y-info-bg: oklch(0.95 0.03 260);
+  --p11y-info-border: oklch(0.85 0.06 260);
+  --p11y-info-text: oklch(0.35 0.12 260);
+
+  --p11y-link: var(--color-primary-600);
+  --p11y-link-hover: var(--color-primary-700);
+
+  --p11y-code-bg: var(--color-surface-100);
+
+  --p11y-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --p11y-shadow-lg:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  --p11y-radius: 0.5rem;
+  --p11y-radius-sm: 0.375rem;
+  --p11y-radius-lg: 0.75rem;
+}
+
+/* ===================================================================
+   Dark Theme - triggered by data-theme="dark" on <html>
+   =================================================================== */
+[data-theme='dark'] {
+  --p11y-bg: var(--color-surface-900);
+  --p11y-bg-surface: var(--color-surface-800);
+  --p11y-bg-muted: var(--color-surface-700);
+  --p11y-bg-accent: var(--color-primary-900);
+
+  --p11y-text: var(--color-surface-50);
+  --p11y-text-secondary: var(--color-surface-300);
+  --p11y-text-muted: var(--color-surface-400);
+
+  --p11y-border: var(--color-surface-700);
+  --p11y-border-strong: var(--color-surface-600);
+
+  --p11y-primary: var(--color-primary-400);
+  --p11y-primary-hover: var(--color-primary-300);
+  --p11y-primary-text: var(--color-surface-900);
+  --p11y-primary-light: var(--color-primary-800);
+  --p11y-primary-badge-text: var(--color-primary-200);
+
+  --p11y-success-bg: oklch(0.25 0.04 145);
+  --p11y-success-border: oklch(0.4 0.08 145);
+  --p11y-success-text: oklch(0.8 0.08 145);
+
+  --p11y-error-bg: oklch(0.25 0.04 25);
+  --p11y-error-border: oklch(0.4 0.08 25);
+  --p11y-error-text: oklch(0.85 0.08 25);
+
+  --p11y-warning-bg: oklch(0.25 0.04 85);
+  --p11y-warning-border: oklch(0.4 0.06 85);
+  --p11y-warning-text: oklch(0.85 0.08 85);
+
+  --p11y-info-bg: oklch(0.25 0.03 260);
+  --p11y-info-border: oklch(0.4 0.06 260);
+  --p11y-info-text: oklch(0.85 0.06 260);
+
+  --p11y-link: var(--color-primary-400);
+  --p11y-link-hover: var(--color-primary-300);
+
+  --p11y-code-bg: var(--color-surface-700);
+
+  --p11y-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --p11y-shadow-lg:
+    0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+}
+
+/* Also support prefers-color-scheme as default when no explicit theme is set */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --p11y-bg: var(--color-surface-900);
+    --p11y-bg-surface: var(--color-surface-800);
+    --p11y-bg-muted: var(--color-surface-700);
+    --p11y-bg-accent: var(--color-primary-900);
+
+    --p11y-text: var(--color-surface-50);
+    --p11y-text-secondary: var(--color-surface-300);
+    --p11y-text-muted: var(--color-surface-400);
+
+    --p11y-border: var(--color-surface-700);
+    --p11y-border-strong: var(--color-surface-600);
+
+    --p11y-primary: var(--color-primary-400);
+    --p11y-primary-hover: var(--color-primary-300);
+    --p11y-primary-text: var(--color-surface-900);
+    --p11y-primary-light: var(--color-primary-800);
+    --p11y-primary-badge-text: var(--color-primary-200);
+
+    --p11y-success-bg: oklch(0.25 0.04 145);
+    --p11y-success-border: oklch(0.4 0.08 145);
+    --p11y-success-text: oklch(0.8 0.08 145);
+
+    --p11y-error-bg: oklch(0.25 0.04 25);
+    --p11y-error-border: oklch(0.4 0.08 25);
+    --p11y-error-text: oklch(0.85 0.08 25);
+
+    --p11y-warning-bg: oklch(0.25 0.04 85);
+    --p11y-warning-border: oklch(0.4 0.06 85);
+    --p11y-warning-text: oklch(0.85 0.08 85);
+
+    --p11y-info-bg: oklch(0.25 0.03 260);
+    --p11y-info-border: oklch(0.4 0.06 260);
+    --p11y-info-text: oklch(0.85 0.06 260);
+
+    --p11y-link: var(--color-primary-400);
+    --p11y-link-hover: var(--color-primary-300);
+
+    --p11y-code-bg: var(--color-surface-700);
+
+    --p11y-shadow:
+      0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+    --p11y-shadow-lg:
+      0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  }
+}
+
+/* ===================================================================
+   Base Styles using design tokens
+   =================================================================== */
+body {
+  background-color: var(--p11y-bg);
+  color: var(--p11y-text);
+  font-family:
+    ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  line-height: 1.6;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ===================================================================
+   Custom Scrollbars
+   Uses scrollbar-color (standard) with WebKit fallback.
+   Minimum width/height of 8px ensures usability for pointer and
+   assistive technology users.
+   =================================================================== */
+
+/* Standard: Firefox, Chrome 121+, Edge 121+ */
+* {
+  scrollbar-color: var(--p11y-border-strong) transparent;
+  scrollbar-width: thin;
+}
+
+/* WebKit fallback for older Safari / Chrome */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--p11y-border-strong);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--p11y-text-muted);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

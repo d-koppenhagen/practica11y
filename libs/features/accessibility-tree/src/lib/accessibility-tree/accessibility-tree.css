@@ -1,0 +1,156 @@
+/* ===================================================================
+   Accessibility Tree — Chrome DevTools Style
+   =================================================================== */
+
+:host {
+  display: block;
+  font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--tree-text, #303942);
+}
+
+.accessibility-tree {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tree-group {
+  list-style: none;
+  padding-left: 1rem;
+  margin: 0;
+  border-left: 1px solid var(--tree-guide, #e0e0e0);
+}
+
+.tree-node {
+  outline: none;
+  cursor: default;
+}
+
+.tree-node:focus > .tree-node-content {
+  background-color: var(--tree-focus-bg, #e8f0fe);
+  outline: 1px solid var(--tree-focus-border, #1a73e8);
+  border-radius: 2px;
+}
+
+.tree-node-content {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  padding: 1px 4px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 2px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.tree-node-content:hover {
+  background-color: var(--tree-hover-bg, #f5f5f5);
+}
+
+/* Arrow toggle — triangle like DevTools */
+.tree-node-arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 4px 0 4px 6px;
+  border-color: transparent transparent transparent var(--tree-arrow, #6e6e6e);
+  flex-shrink: 0;
+  margin-right: 4px;
+  transition: transform 0.1s ease;
+}
+
+.tree-node-arrow--expanded {
+  transform: rotate(90deg);
+}
+
+.tree-node-arrow--leaf {
+  visibility: hidden;
+}
+
+/* Label container */
+.tree-node-label {
+  display: inline;
+}
+
+/* Role — bold, purple/brown like DevTools */
+.tree-node-role {
+  font-weight: bold;
+  color: var(--tree-role-color, #881280);
+}
+
+/* Text role — not bold, more subtle */
+.tree-node-role--text {
+  font-weight: normal;
+  color: var(--tree-text-role-color, #303942);
+}
+
+/* Name — red string like DevTools */
+.tree-node-name {
+  color: var(--tree-name-color, #c41a16);
+  margin-left: 3px;
+}
+
+/* Property key — gray */
+.tree-node-prop {
+  color: var(--tree-prop-color, #5f6368);
+  margin-left: 4px;
+}
+
+/* Property value — blue */
+.tree-node-prop-value {
+  color: var(--tree-prop-value-color, #1a1aa6);
+  margin-left: 2px;
+}
+
+/* Empty state */
+.tree-node-empty {
+  color: var(--tree-empty-color, #5f6368);
+  font-style: italic;
+}
+
+.tree-empty-message {
+  color: var(--tree-empty-color, #5f6368);
+  font-style: italic;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+/* Page title info bar */
+.page-title-info {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--tree-guide, #e0e0e0);
+  font-size: 11px;
+}
+
+.page-title-label {
+  color: var(--tree-prop-color, #5f6368);
+  font-weight: bold;
+}
+
+.page-title-value {
+  color: var(--tree-name-color, #c41a16);
+}
+
+/* Dark theme overrides */
+:host-context([data-theme='dark']) {
+  --tree-text: #bdc6cf;
+  --tree-guide: #3c4043;
+  --tree-hover-bg: #2a2a2a;
+  --tree-focus-bg: #1c3a5e;
+  --tree-focus-border: #5294e2;
+  --tree-arrow: #9aa0a6;
+  --tree-role-color: #c792ea;
+  --tree-text-role-color: #bdc6cf;
+  --tree-name-color: #f28b54;
+  --tree-prop-color: #9aa0a6;
+  --tree-prop-value-color: #89b4fa;
+  --tree-empty-color: #9aa0a6;
+}

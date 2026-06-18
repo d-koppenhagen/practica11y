@@ -1,0 +1,10 @@
+{
+  "name": "@practica11y/tree",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "catalog:",
+    "dom-accessibility-api": "catalog:",
+    "@practica11y/types": "workspace:*"
+  },
+  "sideEffects": false
+}

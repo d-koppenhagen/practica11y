@@ -1,0 +1,196 @@
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<header class="app-header" [class.app-header--full-width]="isFullWidth()">
+  <nav
+    class="app-nav"
+    [class.app-nav--full-width]="isFullWidth()"
+    aria-label="Main navigation"
+  >
+    <a routerLink="/challenges" class="app-logo">
+      <img
+        [src]="'assets/' + themeService.theme() + '.png'"
+        alt=""
+        class="app-logo-img"
+        aria-hidden="true"
+        width="32"
+        height="32"
+      />
+      <span>Practica11y</span>
+    </a>
+
+    @if (isFullWidth()) {
+    <nav class="app-challenge-nav" aria-label="Challenge navigation">
+      @if (previousChallenge(); as prev) {
+      <a
+        class="app-challenge-nav-link"
+        [routerLink]="['/challenges', prev.id]"
+        [attr.aria-label]="'Previous challenge: ' + prev.title"
+      >
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        <span class="app-challenge-nav-label">{{ prev.title }}</span>
+      </a>
+      } @else {
+      <span
+        class="app-challenge-nav-link app-challenge-nav-link--disabled"
+        aria-disabled="true"
+      >
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        <span class="app-challenge-nav-label">—</span>
+      </span>
+      } @if (nextChallenge(); as next) {
+      <a
+        class="app-challenge-nav-link"
+        [routerLink]="['/challenges', next.id]"
+        [attr.aria-label]="'Next challenge: ' + next.title"
+      >
+        <span class="app-challenge-nav-label">{{ next.title }}</span>
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </a>
+      } @else {
+      <span
+        class="app-challenge-nav-link app-challenge-nav-link--disabled"
+        aria-disabled="true"
+      >
+        <span class="app-challenge-nav-label">—</span>
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </span>
+      }
+    </nav>
+    }
+
+    <div class="app-status">
+      <span class="app-level" aria-label="Current level"
+        >{{ levelDisplay() }}</span
+      >
+      <span
+        class="app-xp"
+        [class.app-xp--bumped]="xpBumped()"
+        aria-label="Experience points"
+        [attr.aria-live]="'polite'"
+      >
+        {{ animatedXP() }} XP
+      </span>
+      <a
+        routerLink="/about"
+        class="app-about-link"
+        aria-label="About Practica11y"
+      >
+        <svg
+          aria-hidden="true"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </a>
+      <lib-theme-toggle />
+    </div>
+  </nav>
+</header>
+
+<div aria-live="polite" aria-atomic="false" class="app-errors">
+  @for (error of errors(); track error.id) {
+  <div class="app-error-item" role="alert">
+    <p class="app-error-message">{{ error.message }}</p>
+    <button
+      type="button"
+      class="app-error-dismiss"
+      (click)="dismissError(error.id)"
+      [attr.aria-label]="'Dismiss error: ' + error.message"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  }
+</div>
+
+<main
+  #mainContent
+  id="main-content"
+  [class]="'app-main' + (isFullWidth() ? ' app-main--full-width' : '')"
+  tabindex="-1"
+>
+  <router-outlet></router-outlet>
+</main>
+
+@if (!isFullWidth()) {
+<footer class="app-footer">
+  <span
+    >Made with ♥ by
+    <a href="https://k9n.dev" target="_blank" rel="noopener noreferrer"
+      >Danny Koppenhagen</a
+    ></span
+  >
+  <nav class="app-footer-links" aria-label="Footer navigation">
+    <a routerLink="/about">About</a>
+    <a
+      href="https://github.com/d-koppenhagen/practica11y"
+      target="_blank"
+      rel="noopener noreferrer"
+      >GitHub</a
+    >
+    <a
+      href="https://github.com/sponsors/d-koppenhagen"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Sponsor</a
+    >
+  </nav>
+</footer>
+}

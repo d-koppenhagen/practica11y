@@ -1,0 +1,94 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+        env:
+          npm_config_ignore_scripts: true
+
+      - run: pnpm rebuild
+
+      - run: pnpm nx run-many --target=lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+        env:
+          npm_config_ignore_scripts: true
+
+      - run: pnpm rebuild
+
+      - run: pnpm nx run-many --target=test
+
+  deploy:
+    name: Build & Deploy
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+        env:
+          npm_config_ignore_scripts: true
+
+      - run: pnpm rebuild
+
+      - name: Build
+        run: pnpm nx build practica11y --configuration=production
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/apps/practica11y/browser
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,11 @@
+{
+  "name": "@practica11y/ui",
+  "version": "0.0.1",
+  "dependencies": {
+    "@practica11y/util": "workspace:*"
+  },
+  "peerDependencies": {
+    "@angular/core": "catalog:"
+  },
+  "sideEffects": false
+}

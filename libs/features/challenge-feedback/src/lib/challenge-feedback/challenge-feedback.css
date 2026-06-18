@@ -1,0 +1,230 @@
+:host {
+  display: block;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.feedback-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+/* Success message */
+.success-message {
+  background-color: var(--p11y-success-bg);
+  border: 1px solid var(--p11y-success-border);
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.success-message h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--p11y-success-text);
+  flex-basis: 100%;
+}
+
+.success-message p {
+  margin: 0;
+  color: var(--p11y-success-text);
+}
+
+.success-icon {
+  font-size: 1.5rem;
+}
+
+/* Validator list */
+h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.validator-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.validator-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--p11y-border);
+}
+
+.validator-item.passed {
+  border-color: var(--p11y-success-border);
+  background-color: var(--p11y-success-bg);
+}
+
+.validator-item.failed {
+  border-color: var(--p11y-error-border);
+  background-color: var(--p11y-error-bg);
+}
+
+.validator-status {
+  font-weight: bold;
+  flex-shrink: 0;
+  width: 1.25rem;
+  text-align: center;
+}
+
+.validator-item.passed .validator-status {
+  color: var(--p11y-success-text);
+}
+
+.validator-item.failed .validator-status {
+  color: var(--p11y-error-text);
+}
+
+.validator-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.validator-message {
+  font-size: 0.875rem;
+}
+
+.validator-details {
+  font-size: 0.8rem;
+  color: var(--p11y-text-muted);
+  font-style: italic;
+}
+
+/* Violations */
+.violation-group {
+  margin-bottom: 1rem;
+}
+
+.violation-group-header {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.impact-badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.impact-critical .impact-badge {
+  background-color: var(--p11y-error-bg);
+  color: var(--p11y-error-text);
+}
+
+.impact-serious .impact-badge {
+  background-color: var(--p11y-warning-bg);
+  color: var(--p11y-warning-text);
+}
+
+.impact-moderate .impact-badge {
+  background-color: var(--p11y-warning-bg);
+  color: var(--p11y-warning-text);
+}
+
+.impact-minor .impact-badge {
+  background-color: var(--p11y-info-bg);
+  color: var(--p11y-info-text);
+}
+
+.violation-count {
+  font-size: 0.8rem;
+  color: var(--p11y-text-muted);
+}
+
+.violation-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.violation-item {
+  padding: 0.75rem;
+  border: 1px solid var(--p11y-border);
+  border-radius: 0.25rem;
+  background-color: var(--p11y-bg-muted);
+}
+
+.violation-description {
+  margin: 0 0 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.violation-help-link {
+  font-size: 0.8rem;
+  color: var(--p11y-link);
+  text-decoration: underline;
+}
+
+.violation-help-link:hover {
+  color: var(--p11y-link-hover);
+}
+
+.violation-nodes {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.violation-node-html {
+  font-size: 0.75rem;
+  background-color: var(--p11y-code-bg);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  display: block;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Empty state */
+.feedback-empty {
+  padding: 1rem;
+  text-align: center;
+  color: var(--p11y-text-muted);
+  font-style: italic;
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

@@ -1,0 +1,103 @@
+{
+  "name": "practica11y",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/practica11y/src",
+  "tags": ["scope:app"],
+  "implicitDependencies": ["sandbox-scripts"],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "dependsOn": [
+        "copy-axe",
+        { "projects": ["sandbox-scripts"], "target": "build" }
+      ],
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/practica11y",
+        "browser": "apps/practica11y/src/main.ts",
+        "tsConfig": "apps/practica11y/tsconfig.app.json",
+        "loader": {
+          ".ttf": "file"
+        },
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/practica11y/public"
+          }
+        ],
+        "styles": ["apps/practica11y/src/styles.css"]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "copy-axe": {
+      "executor": "nx:run-commands",
+      "inputs": [
+        {
+          "runtime": "node -e \"console.log(require('axe-core/package.json').version)\""
+        }
+      ],
+      "outputs": ["{workspaceRoot}/apps/practica11y/public/assets/axe.min.js"],
+      "options": {
+        "command": "cp node_modules/axe-core/axe.min.js apps/practica11y/public/assets/axe.min.js"
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "dependsOn": [
+        "copy-axe",
+        { "projects": ["sandbox-scripts"], "target": "build" }
+      ],
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "practica11y:build:production"
+        },
+        "development": {
+          "buildTarget": "practica11y:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "watch": false
+      }
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "practica11y:build",
+        "staticFilePath": "dist/apps/practica11y/browser",
+        "spa": true
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@practica11y/focus",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "catalog:",
+    "@practica11y/types": "workspace:*"
+  },
+  "sideEffects": false
+}

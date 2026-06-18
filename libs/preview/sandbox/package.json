@@ -1,0 +1,10 @@
+{
+  "name": "@practica11y/sandbox",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "catalog:",
+    "@angular/platform-browser": "catalog:",
+    "@practica11y/util": "workspace:*"
+  },
+  "sideEffects": false
+}

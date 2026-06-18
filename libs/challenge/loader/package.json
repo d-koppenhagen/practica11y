@@ -1,0 +1,11 @@
+{
+  "name": "@practica11y/loader",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "catalog:",
+    "@angular/core": "catalog:",
+    "@practica11y/models": "workspace:*",
+    "yaml": "catalog:"
+  },
+  "sideEffects": false
+}

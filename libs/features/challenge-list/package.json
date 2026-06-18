@@ -1,0 +1,9 @@
+{
+  "name": "@practica11y/challenge-list",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "catalog:",
+    "@practica11y/models": "workspace:*"
+  },
+  "sideEffects": false
+}

@@ -1,0 +1,97 @@
+{
+  "name": "@practica11y/source",
+  "version": "0.0.0",
+  "description": "A gamified, browser-based learning platform for web accessibility",
+  "license": "MIT",
+  "author": "Danny Koppenhagen <mail@k9n.dev> (https://k9n.dev)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d-koppenhagen/practica11y"
+  },
+  "homepage": "https://github.com/d-koppenhagen/practica11y#readme",
+  "bugs": {
+    "url": "https://github.com/d-koppenhagen/practica11y/issues"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "learning",
+    "angular",
+    "challenges",
+    "gamification"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@11.1.1",
+  "scripts": {
+    "start": "nx serve practica11y",
+    "build": "nx build practica11y",
+    "test": "pnpm nx run-many --target=test",
+    "lint": "pnpm nx run-many --target=lint",
+    "format": "prettier --write ."
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/cdk": "catalog:",
+    "@angular/common": "catalog:",
+    "@angular/compiler": "catalog:",
+    "@angular/core": "catalog:",
+    "@angular/forms": "catalog:",
+    "@angular/platform-browser": "catalog:",
+    "@angular/router": "catalog:",
+    "axe-core": "catalog:",
+    "dom-accessibility-api": "catalog:",
+    "htmlparser2": "catalog:",
+    "marked": "catalog:",
+    "monaco-editor": "catalog:",
+    "rxjs": "catalog:",
+    "tslib": "catalog:",
+    "yaml": "catalog:"
+  },
+  "devDependencies": {
+    "@angular-devkit/core": "catalog:",
+    "@angular-devkit/schematics": "catalog:",
+    "@angular/build": "catalog:",
+    "@angular/cli": "catalog:",
+    "@angular/compiler-cli": "catalog:",
+    "@angular/language-service": "catalog:",
+    "@eslint/js": "catalog:",
+    "@nx/angular": "catalog:",
+    "@nx/eslint": "catalog:",
+    "@nx/eslint-plugin": "catalog:",
+    "@nx/js": "catalog:",
+    "@nx/vite": "catalog:",
+    "@nx/vitest": "catalog:",
+    "@nx/web": "catalog:",
+    "@nx/workspace": "catalog:",
+    "@schematics/angular": "catalog:",
+    "@swc-node/register": "catalog:",
+    "@swc/core": "catalog:",
+    "@swc/helpers": "catalog:",
+    "@testing-library/angular": "catalog:",
+    "@testing-library/dom": "catalog:",
+    "@types/node": "catalog:",
+    "@typescript-eslint/utils": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "angular-eslint": "catalog:",
+    "autoprefixer": "catalog:",
+    "esbuild": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "jsdom": "catalog:",
+    "jsonc-eslint-parser": "catalog:",
+    "ng-packagr": "catalog:",
+    "nx": "catalog:",
+    "postcss": "catalog:",
+    "prettier": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "nx": {
+    "includedScripts": []
+  }
+}

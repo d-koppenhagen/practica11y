@@ -1,0 +1,34 @@
+{
+  "name": "sandbox",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/preview/sandbox/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:preview"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/preview/sandbox/ng-package.json",
+        "tsConfig": "libs/preview/sandbox/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/preview/sandbox/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/angular:unit-test",
+      "options": {
+        "watch": false
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
