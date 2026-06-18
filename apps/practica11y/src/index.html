@@ -9,5 +9,17 @@
   </head>
   <body>
     <app-root></app-root>
+    <script>
+      // GitHub Pages SPA support: restore path after 404.html redirect
+      (function () {
+        var redirect = sessionStorage.getItem('spa-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('spa-redirect');
+          if (redirect !== '/') {
+            history.replaceState(null, '', redirect);
+          }
+        }
+      })();
+    </script>
   </body>
 </html>
