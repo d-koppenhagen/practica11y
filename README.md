@@ -73,9 +73,6 @@ libs/
     loader/                 # Challenge loading and frontmatter parsing
     validators/             # Validation logic (generic + challenge-specific)
 
-  editor/
-    monaco/                 # Monaco editor wrapper component
-
   preview/
     sandbox/                # Sandboxed iframe for live preview
 

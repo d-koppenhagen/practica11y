@@ -56,8 +56,6 @@ libs/
     models/             → Data models
     loader/             → Challenge loader
     validators/         → Validation logic
-  editor/
-    monaco/             → Monaco editor integration
   preview/
     sandbox/            → Preview sandbox
   accessibility/

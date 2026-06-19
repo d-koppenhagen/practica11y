@@ -32,7 +32,7 @@ Feature component for the challenge workspace. Orchestrates editor, live preview
 ## Dependencies
 
 - `@practica11y/models` — Challenge interface
-- `@practica11y/monaco` — Editor component
+- `@ng-catbee/monaco-editor` — Editor component
 - `@practica11y/sandbox` — Preview component
 - `@practica11y/accessibility-tree` — Tree visualization
 - `@practica11y/challenge-feedback` — Feedback panel

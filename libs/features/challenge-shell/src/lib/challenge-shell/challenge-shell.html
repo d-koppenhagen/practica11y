@@ -129,10 +129,13 @@
           aria-labelledby="editor-tab-html"
           [class]="'shell-editor-panel' + (activeEditorTab() !== 'html' ? ' shell-editor-panel--hidden' : '')"
         >
-          <a11y-monaco-editor
+          <ng-catbee-monaco-editor
             [language]="'html'"
-            [initialContent]="challenge().starter.html"
-            (content)="onHtmlContentChange($event)"
+            [options]="editorOptions()"
+            [height]="'100%'"
+            [width]="'100%'"
+            [(value)]="htmlContent"
+            (valueChange)="onHtmlContentChange($event)"
           />
         </div>
         @if (challenge().starter.js) {
@@ -142,10 +145,13 @@
           aria-labelledby="editor-tab-js"
           [class]="'shell-editor-panel' + (activeEditorTab() !== 'js' ? ' shell-editor-panel--hidden' : '')"
         >
-          <a11y-monaco-editor
+          <ng-catbee-monaco-editor
             [language]="'javascript'"
-            [initialContent]="challenge().starter.js"
-            (content)="onJsContentChange($event)"
+            [options]="editorOptions()"
+            [height]="'100%'"
+            [width]="'100%'"
+            [(value)]="jsContent"
+            (valueChange)="onJsContentChange($event)"
           />
         </div>
         }
@@ -155,10 +161,13 @@
           aria-labelledby="editor-tab-css"
           [class]="'shell-editor-panel' + (activeEditorTab() !== 'css' ? ' shell-editor-panel--hidden' : '')"
         >
-          <a11y-monaco-editor
+          <ng-catbee-monaco-editor
             [language]="'css'"
-            [initialContent]="challenge().starter.css"
-            (content)="onCssContentChange($event)"
+            [options]="editorOptions()"
+            [height]="'100%'"
+            [width]="'100%'"
+            [(value)]="cssContent"
+            (valueChange)="onCssContentChange($event)"
           />
         </div>
       </a11y-shell-panel>

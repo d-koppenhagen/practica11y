@@ -7,7 +7,12 @@
       // GitHub Pages SPA redirect
       // Stores the current path and redirects to index.html,
       // where the Angular router picks up the route.
-      sessionStorage.setItem('spa-redirect', window.location.pathname + window.location.search + window.location.hash);
+      sessionStorage.setItem(
+        'spa-redirect',
+        window.location.pathname +
+          window.location.search +
+          window.location.hash,
+      );
       window.location.replace('/');
     </script>
   </head>

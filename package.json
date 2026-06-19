@@ -40,11 +40,11 @@
     "@angular/forms": "catalog:",
     "@angular/platform-browser": "catalog:",
     "@angular/router": "catalog:",
+    "@ng-catbee/monaco-editor": "catalog:",
     "axe-core": "catalog:",
     "dom-accessibility-api": "catalog:",
     "htmlparser2": "catalog:",
     "marked": "catalog:",
-    "monaco-editor": "catalog:",
     "rxjs": "catalog:",
     "tslib": "catalog:",
     "yaml": "catalog:"

@@ -55,7 +55,6 @@ catalog:
   jsdom: 27.1.0
   jsonc-eslint-parser: 2.1.0
   marked: 18.0.5
-  monaco-editor: 0.55.1
   ng-packagr: 21.2.0
   nx: 22.7.5
   postcss: 8.4.5
@@ -69,5 +68,6 @@ catalog:
   vite: 8.0.0
   vitest: 4.1.9
   yaml: 2.9.0
+  '@ng-catbee/monaco-editor': 21.0.3
 
 catalogMode: strict

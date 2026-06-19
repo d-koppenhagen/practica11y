@@ -15,7 +15,6 @@
       "@practica11y/models": ["./libs/challenge/models/src/index.ts"],
       "@practica11y/loader": ["./libs/challenge/loader/src/index.ts"],
       "@practica11y/validators": ["./libs/challenge/validators/src/index.ts"],
-      "@practica11y/monaco": ["./libs/editor/monaco/src/index.ts"],
       "@practica11y/sandbox": ["./libs/preview/sandbox/src/index.ts"],
       "@practica11y/sandbox-scripts": [
         "./libs/preview/sandbox-scripts/src/lib/messaging.ts"

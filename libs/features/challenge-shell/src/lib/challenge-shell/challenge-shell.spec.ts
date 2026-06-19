@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, model, output, signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Challenge } from '@practica11y/models';
 import {
@@ -18,13 +18,16 @@ import { Confetti } from '../confetti/confetti';
 // --- Stub components ---
 
 @Component({
-  selector: 'a11y-monaco-editor',
+  selector: 'ng-catbee-monaco-editor',
   standalone: true,
   template: '<div class="mock-monaco"></div>',
 })
-class MockMonaco {
-  readonly language = input<'html' | 'css' | 'javascript'>('html');
-  readonly initialContent = input<string>('');
+class MockCatbeeMonacoEditor {
+  readonly language = input<string>('');
+  readonly options = input<Record<string, unknown>>({});
+  readonly height = input<string>('100%');
+  readonly width = input<string>('100%');
+  readonly value = model<string>('');
 }
 
 @Component({
@@ -107,6 +110,21 @@ describe('ChallengeShell', () => {
   let mockPipeline: MockAnalysisPipeline;
 
   beforeEach(async () => {
+    // Mock window.matchMedia for ThemeService
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+
     mockPipeline = new MockAnalysisPipeline();
 
     await TestBed.configureTestingModule({
@@ -115,7 +133,7 @@ describe('ChallengeShell', () => {
       .overrideComponent(ChallengeShell, {
         set: {
           imports: [
-            MockMonaco,
+            MockCatbeeMonacoEditor,
             MockSandboxPreview,
             MockAccessibilityTree,
             MockChallengeFeedback,

@@ -9,7 +9,7 @@ The core data flow follows a unidirectional pattern:
 ```mermaid
 graph TD
     A[Challenge Loader] -->|Challenge data| B[Challenge Shell]
-    B --> C[Monaco Editor]
+    B --> C[Monaco Editor - @ng-catbee/monaco-editor]
     B --> D[Live Preview - Sandbox iframe]
     B --> E[Accessibility Tree View]
     B --> F[Feedback Panel]
@@ -54,10 +54,6 @@ graph LR
         CV[validators]
     end
 
-    subgraph libs/editor
-        EM[monaco]
-    end
-
     subgraph libs/preview
         PS[sandbox]
     end
@@ -77,7 +73,6 @@ graph LR
 
     APP --> FS
     APP --> FL
-    FS --> EM
     FS --> PS
     FS --> FF
     FS --> FAT
@@ -91,7 +86,6 @@ graph LR
     CV --> AF
     PS --> ST
     CL --> CM
-    EM --> SU
     FF --> SU
 ```
 
@@ -99,19 +93,18 @@ graph LR
 
 Clear import restrictions prevent circular dependencies and enforce the layered architecture:
 
-| Library Type     | May Import                                                       |
-| ---------------- | ---------------------------------------------------------------- |
-| `apps/`          | `features/`, `shared/`                                           |
-| `features/`      | `challenge/`, `editor/`, `preview/`, `accessibility/`, `shared/` |
-| `challenge/`     | `challenge/`, `shared/`                                          |
-| `editor/`        | `editor/`, `shared/`                                             |
-| `preview/`       | `preview/`, `shared/`                                            |
-| `accessibility/` | `accessibility/`, `shared/`                                      |
-| `shared/`        | only other `shared/` libs                                        |
+| Library Type     | May Import                                            |
+| ---------------- | ----------------------------------------------------- |
+| `apps/`          | `features/`, `shared/`                                |
+| `features/`      | `challenge/`, `preview/`, `accessibility/`, `shared/` |
+| `challenge/`     | `challenge/`, `shared/`                               |
+| `preview/`       | `preview/`, `shared/`                                 |
+| `accessibility/` | `accessibility/`, `shared/`                           |
+| `shared/`        | only other `shared/` libs                             |
 
 ### Principles
 
 - **Unidirectional dependency flow**: Apps → Features → Domain libs → Shared
-- **No cross-imports**: One domain (e.g., `editor/`) never imports from another domain (e.g., `challenge/`)
+- **No cross-imports**: One domain (e.g., `preview/`) never imports from another domain (e.g., `challenge/`)
 - **Shared as foundation**: Only `shared/` libs are used by all other layers
 - **Nx Enforce Boundaries**: These rules are enforced via Nx tags and the `@nx/enforce-module-boundaries` ESLint rule

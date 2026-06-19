@@ -9,7 +9,6 @@
     "@practica11y/types": "workspace:*",
     "@practica11y/util": "workspace:*",
     "@practica11y/validators": "workspace:*",
-    "@practica11y/monaco": "workspace:*",
     "@practica11y/sandbox": "workspace:*",
     "@practica11y/accessibility-tree": "workspace:*",
     "@practica11y/challenge-feedback": "workspace:*"

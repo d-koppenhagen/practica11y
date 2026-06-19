@@ -10,12 +10,20 @@ import {
   viewChild,
 } from '@angular/core';
 import { Challenge } from '@practica11y/models';
-import { Monaco } from '@practica11y/monaco';
+import {
+  CatbeeMonacoEditor,
+  MonacoEditorOptions,
+} from '@ng-catbee/monaco-editor';
 import { SandboxPreview, SandboxAxeViolation } from '@practica11y/sandbox';
 import { AccessibilityTree } from '@practica11y/accessibility-tree';
 import { ChallengeFeedback } from '@practica11y/challenge-feedback';
 import { AccessibilityNode, AxeViolation } from '@practica11y/types';
-import { renderMarkdown, LayoutStore, ProgressStore } from '@practica11y/util';
+import {
+  renderMarkdown,
+  LayoutStore,
+  ProgressStore,
+  ThemeService,
+} from '@practica11y/util';
 
 import { AnalysisPipeline } from '../analysis-pipeline';
 import { ShellPanel } from '../shell-panel/shell-panel';
@@ -27,7 +35,7 @@ type EditorTab = 'html' | 'js' | 'css';
 @Component({
   selector: 'a11y-challenge-shell',
   imports: [
-    Monaco,
+    CatbeeMonacoEditor,
     SandboxPreview,
     AccessibilityTree,
     ChallengeFeedback,
@@ -46,12 +54,18 @@ export class ChallengeShell {
   protected readonly pipeline = inject(AnalysisPipeline);
   private readonly layoutStore = inject(LayoutStore);
   private readonly progressStore = inject(ProgressStore);
+  private readonly themeService = inject(ThemeService);
 
   protected readonly htmlContent = signal<string>('');
   protected readonly jsContent = signal<string>('');
   protected readonly cssContent = signal<string>('');
   protected readonly activeEditorTab = signal<EditorTab>('html');
   protected readonly challengeCompleted = signal(false);
+
+  protected readonly editorOptions = computed<MonacoEditorOptions>(() => ({
+    theme: this.themeService.theme() === 'dark' ? 'hc-black' : 'hc-light',
+    ariaLabel: 'Code Editor',
+  }));
 
   private readonly hostRef = inject(ElementRef);
 

@@ -64,6 +64,7 @@ vitest.config.*.timestamp*
 
 # Playwright
 .playwright-mcp
+.playwright-cli
 
 # Generated sandbox assets (built by Nx targets)
 apps/practica11y/public/assets/sandbox-analysis.js
