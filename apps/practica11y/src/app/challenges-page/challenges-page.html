@@ -1,0 +1,25 @@
+<section class="challenges-hero">
+  <div class="challenges-hero-inner">
+    <h1 class="challenges-hero-title">
+      Learn web accessibility
+      <span class="challenges-hero-accent">by doing.</span>
+    </h1>
+    <p class="challenges-hero-tagline">
+      Gamified, browser-based challenges that turn WCAG guidelines into hands-on
+      practice for developers.
+    </p>
+    <p class="challenges-hero-badge">WCAG 2.2 AA</p>
+  </div>
+</section>
+
+<h2 class="challenges-heading">Challenges</h2>
+@if (loadError()) {
+<p class="text-red-600 p-4 mb-4 border border-red-200 rounded" role="alert">
+  {{ loadError() }}
+</p>
+}
+<a11y-challenge-list
+  [challenges]="challenges()"
+  [completedChallengeIds]="completedChallengeIds()"
+  (challengeSelected)="onChallengeSelected($event)"
+/>

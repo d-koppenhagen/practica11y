@@ -4,6 +4,7 @@
   "peerDependencies": {
     "@angular/common": "catalog:",
     "@angular/core": "catalog:",
+    "@angular/platform-browser": "catalog:",
     "@practica11y/types": "workspace:*",
     "rxjs": "catalog:",
     "marked": "catalog:"

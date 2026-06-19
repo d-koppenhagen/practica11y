@@ -530,6 +530,9 @@ importers:
       '@angular/core':
         specifier: 'catalog:'
         version: 21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)
+      '@angular/platform-browser':
+        specifier: 'catalog:'
+        version: 21.2.16(@angular/common@21.2.16(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))
       '@practica11y/types':
         specifier: workspace:*
         version: link:../types

@@ -5,5 +5,7 @@ export { LayoutStore } from './lib/layout-store';
 export type { ShellLayout, PanelCollapsedState } from './lib/layout-store';
 export { renderMarkdown } from './lib/markdown-renderer';
 export { ProgressStore } from './lib/progress-store';
+export { Seo } from './lib/seo';
+export type { SeoConfig } from './lib/seo';
 export { ThemeService } from './lib/theme-service';
 export type { Theme } from './lib/theme-service';

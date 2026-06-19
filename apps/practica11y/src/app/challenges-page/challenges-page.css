@@ -1,0 +1,63 @@
+.challenges-hero {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  padding: clamp(1.75rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+  border-radius: var(--p11y-radius-lg, 0.75rem);
+  background: var(--p11y-hero-bg);
+}
+
+/* Left accent bar matching the share image */
+.challenges-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: var(--p11y-hero-accent-bar);
+}
+
+.challenges-hero-inner {
+  max-width: 46rem;
+}
+
+.challenges-hero-title {
+  margin: 0;
+  color: var(--p11y-hero-title);
+  font-weight: 800;
+  font-size: clamp(1.875rem, 5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.challenges-hero-accent {
+  color: var(--p11y-hero-accent);
+}
+
+.challenges-hero-tagline {
+  margin: clamp(0.75rem, 2vw, 1.25rem) 0 0;
+  max-width: 38rem;
+  color: var(--p11y-hero-tagline);
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  line-height: 1.5;
+}
+
+.challenges-hero-badge {
+  display: inline-block;
+  margin: clamp(1rem, 2.5vw, 1.5rem) 0 0;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--p11y-hero-badge-border);
+  border-radius: 999px;
+  background: var(--p11y-hero-badge-bg);
+  color: var(--p11y-hero-badge-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.challenges-heading {
+  margin: 0 0 1.5rem;
+  color: var(--p11y-text);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
