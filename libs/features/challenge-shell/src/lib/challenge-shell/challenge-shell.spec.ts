@@ -17,11 +17,13 @@ import { Confetti } from '../confetti/confetti';
 
 // --- Stub components ---
 
+/* eslint-disable @angular-eslint/component-selector */
 @Component({
   selector: 'ng-catbee-monaco-editor',
   standalone: true,
   template: '<div class="mock-monaco"></div>',
 })
+/* eslint-enable @angular-eslint/component-selector */
 class MockCatbeeMonacoEditor {
   readonly language = input<string>('');
   readonly options = input<Record<string, unknown>>({});

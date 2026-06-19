@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/core": "catalog:",
+    "@ng-catbee/monaco-editor": "*",
     "rxjs": "catalog:",
     "@practica11y/axe": "workspace:*",
     "@practica11y/models": "workspace:*",

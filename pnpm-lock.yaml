@@ -457,6 +457,9 @@ importers:
       '@angular/core':
         specifier: 'catalog:'
         version: 21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)
+      '@ng-catbee/monaco-editor':
+        specifier: '*'
+        version: 21.0.3
       '@practica11y/accessibility-tree':
         specifier: workspace:*
         version: link:../accessibility-tree
