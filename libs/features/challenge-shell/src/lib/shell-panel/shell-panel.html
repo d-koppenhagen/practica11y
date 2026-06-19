@@ -23,7 +23,7 @@
       <polyline points="6 9 12 15 18 9" />
     </svg>
   </button>
-  } @if (!(collapsed() && collapseDirection() === 'horizontal')) {
+  } @if (!(collapsed() && effectiveCollapseDirection() === 'horizontal')) {
   <ng-content select="[panelHeader]" />
   }
 </header>
