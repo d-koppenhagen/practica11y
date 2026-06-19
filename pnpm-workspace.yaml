@@ -69,5 +69,6 @@ catalog:
   vitest: 4.1.9
   yaml: 2.9.0
   '@ng-catbee/monaco-editor': 21.0.3
+  monaco-editor: 0.55.1
 
 catalogMode: strict

@@ -15,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes, withComponentInputBinding()),
     provideHttpClient(),
     provideCatbeeMonacoEditor({
+      baseUrl: 'assets/monaco-editor',
       defaultOptions: {
         automaticLayout: true,
         minimap: { enabled: false },

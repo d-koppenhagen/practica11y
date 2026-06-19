@@ -26,7 +26,8 @@
   "packageManager": "pnpm@11.1.1",
   "scripts": {
     "start": "nx serve practica11y",
-    "build": "nx build practica11y",
+    "build": "nx build practica11y --no-tui",
+    "preview": "pnpm run build && pnpm dlx http-server dist/apps/practica11y/browser -p 8080 --gzip -c-1",
     "test": "pnpm nx run-many --target=test",
     "lint": "pnpm nx run-many --target=lint",
     "format": "prettier --write ."
@@ -45,6 +46,7 @@
     "dom-accessibility-api": "catalog:",
     "htmlparser2": "catalog:",
     "marked": "catalog:",
+    "monaco-editor": "catalog:",
     "rxjs": "catalog:",
     "tslib": "catalog:",
     "yaml": "catalog:"
