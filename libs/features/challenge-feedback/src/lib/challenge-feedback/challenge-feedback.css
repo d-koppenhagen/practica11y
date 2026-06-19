@@ -105,6 +105,8 @@ h3 {
   font-size: 0.8rem;
   color: var(--p11y-text-muted);
   font-style: italic;
+  /* Quite long text like image URLs need to wrap: e. g. src="https://picsum.photos/seed/store/300/200" */
+  overflow-wrap: anywhere;
 }
 
 /* Violations */
