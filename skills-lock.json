@@ -11,6 +11,11 @@
       "source": "./skills/create-challenge",
       "sourceType": "local",
       "computedHash": "e3b55466f87cadef10bce3a5325552bee74421940fe49bc529f828d6cf503bd0"
+    },
+    "evaluate-challenge": {
+      "source": "./skills/evaluate-challenge",
+      "sourceType": "local",
+      "computedHash": "876bf63f0763420fde69478dbcf482e0cf3b9d29e5abf19b6be121ba4be7defe"
     }
   }
 }
