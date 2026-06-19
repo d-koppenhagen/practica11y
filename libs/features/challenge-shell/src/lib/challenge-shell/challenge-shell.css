@@ -66,6 +66,36 @@
   gap: 0.75rem;
 }
 
+/* Mobile: override inline flex styles so panels take natural height */
+@media (max-width: 1023px) {
+  a11y-shell-panel,
+  .shell-right,
+  .shell-right-top,
+  .shell-right-bottom {
+    flex: none !important;
+  }
+
+  /* Mobile: editor panels need explicit height since editor uses height: 100% */
+  .shell-editor-panel {
+    min-height: 300px;
+  }
+
+  .shell-editor ::ng-deep .panel-body--no-scroll {
+    min-height: 300px;
+  }
+
+  /* Mobile: feedback action area needs height since button is position:absolute */
+  .shell-feedback-action {
+    min-height: 4rem;
+  }
+
+  /* Mobile: feedback panel body needs to grow */
+  .shell-feedback ::ng-deep .panel-body {
+    flex: none;
+    min-height: 4rem;
+  }
+}
+
 /* Hide resizers on mobile */
 a11y-shell-resizer {
   display: none;
@@ -315,6 +345,11 @@ a11y-shell-resizer {
   min-height: 0;
   position: relative;
   overflow: hidden;
+}
+
+.shell-editor-panel ng-catbee-monaco-editor {
+  position: absolute;
+  inset: 0;
 }
 
 .shell-editor-panel--hidden {
