@@ -95,6 +95,14 @@ export class ChallengeShell {
   protected readonly screenReaderRate = computed(
     () => this.layoutStore.layout().screenReaderRate,
   );
+  /** Virtual screen reader speech enabled — persisted via the layout store. */
+  protected readonly screenReaderSpeechEnabled = computed(
+    () => this.layoutStore.layout().screenReaderSpeechEnabled,
+  );
+  /** Virtual screen reader highlight enabled — persisted via the layout store. */
+  protected readonly screenReaderHighlightEnabled = computed(
+    () => this.layoutStore.layout().screenReaderHighlightEnabled,
+  );
   protected readonly challengeCompleted = signal(false);
 
   protected readonly editorOptions = computed<MonacoEditorOptions>(() => ({
@@ -405,6 +413,14 @@ export class ChallengeShell {
 
   protected updateScreenReaderRate(rate: number): void {
     this.layoutStore.setScreenReaderRate(rate);
+  }
+
+  protected updateScreenReaderSpeechEnabled(enabled: boolean): void {
+    this.layoutStore.setScreenReaderSpeechEnabled(enabled);
+  }
+
+  protected updateScreenReaderHighlightEnabled(enabled: boolean): void {
+    this.layoutStore.setScreenReaderHighlightEnabled(enabled);
   }
 
   protected onTreeTabKeydown(event: KeyboardEvent, tab: TreeTab): void {

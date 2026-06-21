@@ -307,6 +307,10 @@
             [visible]="activeTreeTab() === 'screen-reader'"
             [rate]="screenReaderRate()"
             (rateChange)="updateScreenReaderRate($event)"
+            [speechEnabled]="screenReaderSpeechEnabled()"
+            (speechEnabledChange)="updateScreenReaderSpeechEnabled($event)"
+            [highlightEnabled]="screenReaderHighlightEnabled()"
+            (highlightEnabledChange)="updateScreenReaderHighlightEnabled($event)"
           />
         </div>
       </a11y-shell-panel>

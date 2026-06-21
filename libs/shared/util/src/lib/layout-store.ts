@@ -28,6 +28,10 @@ export interface ShellLayout {
   activeTreeTab: TreeTab;
   /** Virtual screen reader playback rate (0.5–2). */
   screenReaderRate: number;
+  /** Whether the virtual screen reader speech output is enabled. */
+  screenReaderSpeechEnabled: boolean;
+  /** Whether the virtual screen reader highlight overlay is enabled. */
+  screenReaderHighlightEnabled: boolean;
 }
 
 function getDefaultLayout(): ShellLayout {
@@ -43,6 +47,8 @@ function getDefaultLayout(): ShellLayout {
     },
     activeTreeTab: 'tree',
     screenReaderRate: 1,
+    screenReaderSpeechEnabled: true,
+    screenReaderHighlightEnabled: true,
   };
 }
 
@@ -101,6 +107,16 @@ export class LayoutStore {
   /** Update the virtual screen reader playback rate */
   setScreenReaderRate(screenReaderRate: number): void {
     this.layout.update((l) => ({ ...l, screenReaderRate }));
+  }
+
+  /** Update the virtual screen reader speech enabled state */
+  setScreenReaderSpeechEnabled(screenReaderSpeechEnabled: boolean): void {
+    this.layout.update((l) => ({ ...l, screenReaderSpeechEnabled }));
+  }
+
+  /** Update the virtual screen reader highlight enabled state */
+  setScreenReaderHighlightEnabled(screenReaderHighlightEnabled: boolean): void {
+    this.layout.update((l) => ({ ...l, screenReaderHighlightEnabled }));
   }
 
   private async init(): Promise<void> {

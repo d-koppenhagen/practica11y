@@ -60,6 +60,18 @@ export class VirtualScreenReader {
    */
   readonly rate = model<number>(1);
 
+  /**
+   * Whether spoken audio output is enabled. Exposed as a two-way model so the
+   * host can persist the user's preference.
+   */
+  readonly speechEnabled = model<boolean>(true);
+
+  /**
+   * Whether the highlight overlay in the preview is enabled. Exposed as a
+   * two-way model so the host can persist the user's preference.
+   */
+  readonly highlightEnabled = model<boolean>(true);
+
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly steps = signal<SpokenStep[]>([]);
@@ -68,8 +80,6 @@ export class VirtualScreenReader {
   );
   protected readonly currentIndex = signal<number>(-1);
   protected readonly isPlaying = signal<boolean>(false);
-  protected readonly speechEnabled = signal<boolean>(true);
-  protected readonly highlightEnabled = signal<boolean>(true);
   protected readonly status = signal<PlayerStatus>('idle');
 
   protected readonly minRate = MIN_RATE;
