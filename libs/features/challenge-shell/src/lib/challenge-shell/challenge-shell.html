@@ -304,6 +304,7 @@
           <a11y-virtual-screen-reader
             [sandboxDocument]="sandboxDocument()"
             [revision]="srRevision()"
+            [visible]="activeTreeTab() === 'screen-reader'"
             [rate]="screenReaderRate()"
             (rateChange)="updateScreenReaderRate($event)"
           />

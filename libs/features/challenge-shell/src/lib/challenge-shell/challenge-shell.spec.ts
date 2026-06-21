@@ -74,6 +74,7 @@ class MockChallengeFeedback {
 class MockVirtualScreenReader {
   readonly sandboxDocument = input<Document | null>(null);
   readonly revision = input<number>(0);
+  readonly visible = input<boolean>(false);
   readonly rate = input<number>(1);
   readonly rateChange = output<number>();
 }

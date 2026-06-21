@@ -12,7 +12,7 @@ import {
   viewChild,
 } from '@angular/core';
 
-import { generateSpokenPhrases } from './screen-reader-engine';
+import { generateSpokenSteps, type SpokenStep } from './screen-reader-engine';
 
 type PlayerStatus = 'idle' | 'generating' | 'ready' | 'empty' | 'error';
 
@@ -48,6 +48,13 @@ export class VirtualScreenReader {
   readonly revision = input<number>(0);
 
   /**
+   * Whether this tab is currently visible. The highlight overlay is only shown
+   * when the component is active/visible to avoid visual noise while the user
+   * is on a different tab.
+   */
+  readonly visible = input<boolean>(false);
+
+  /**
    * Playback rate (0.5–2). Exposed as a two-way model so the host can persist
    * and restore the user's preferred speed.
    */
@@ -55,10 +62,14 @@ export class VirtualScreenReader {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  protected readonly phrases = signal<string[]>([]);
+  protected readonly steps = signal<SpokenStep[]>([]);
+  protected readonly phrases = computed(() =>
+    this.steps().map((step) => step.phrase),
+  );
   protected readonly currentIndex = signal<number>(-1);
   protected readonly isPlaying = signal<boolean>(false);
   protected readonly speechEnabled = signal<boolean>(true);
+  protected readonly highlightEnabled = signal<boolean>(true);
   protected readonly status = signal<PlayerStatus>('idle');
 
   protected readonly minRate = MIN_RATE;
@@ -95,11 +106,27 @@ export class VirtualScreenReader {
   private autoPlayTimer: ReturnType<typeof setTimeout> | null = null;
   private generationToken = 0;
 
+  /** Highlight overlay rendered inside the preview document, and its owner doc. */
+  private highlightEl: HTMLElement | null = null;
+  private highlightDoc: Document | null = null;
+
+  /** Last document reference used to detect actual document swaps vs. revision bumps. */
+  private lastDoc: Document | null = null;
+
   constructor() {
     effect(() => {
       const doc = this.sandboxDocument();
-      // Track the revision so in-place DOM mutations re-trigger generation.
+
+      // Subscribe to revision so the effect re-evaluates when it changes, but
+      // only regenerate when the Document reference itself changes (i.e. code
+      // was edited and the iframe reloaded). Revision bumps caused by in-preview
+      // interactions (focus, input, DOM mutations) should never reset playback.
       this.revision();
+
+      if (doc === this.lastDoc) {
+        return;
+      }
+      this.lastDoc = doc;
       void this.regenerate(doc);
     });
 
@@ -110,11 +137,27 @@ export class VirtualScreenReader {
       const active = container?.querySelector<HTMLElement>(
         '.vsr-log-item--active',
       );
-      active?.scrollIntoView({ block: 'nearest' });
+      active?.scrollIntoView?.({ block: 'nearest' });
+    });
+
+    // Highlight the announced element in the preview for the active step.
+    effect(() => {
+      const index = this.currentIndex();
+      const isVisible = this.visible();
+      const isEnabled = this.highlightEnabled();
+      const node = this.steps()[index]?.node ?? null;
+
+      if (!isVisible || !isEnabled) {
+        this.hideHighlight();
+        return;
+      }
+
+      this.updateHighlight(this.sandboxDocument(), node);
     });
 
     this.destroyRef.onDestroy(() => {
       this.pause();
+      this.removeHighlight();
       this.generationToken++;
     });
   }
@@ -186,6 +229,14 @@ export class VirtualScreenReader {
     }
   }
 
+  protected toggleHighlight(): void {
+    const next = !this.highlightEnabled();
+    this.highlightEnabled.set(next);
+    if (!next) {
+      this.hideHighlight();
+    }
+  }
+
   private goTo(index: number): void {
     this.currentIndex.set(index);
     this.speak(this.phrases()[index] ?? '');
@@ -247,12 +298,112 @@ export class VirtualScreenReader {
     }
   }
 
+  /**
+   * Draws (or moves) the highlight overlay over the element announced for the
+   * active step. The overlay lives in the preview document so it tracks the
+   * content's own scroll position. It is appended to `body` — a sibling of the
+   * sandbox's `#user-content` — so it never triggers the sandbox mutation
+   * observer that would otherwise re-run generation and interrupt playback.
+   */
+  private updateHighlight(doc: Document | null, node: Node | null): void {
+    // Drop a stale overlay if the preview document was swapped (full reload).
+    if (this.highlightDoc && this.highlightDoc !== doc) {
+      this.removeHighlight();
+    }
+
+    const element =
+      node?.nodeType === Node.ELEMENT_NODE
+        ? (node as Element)
+        : (node?.parentElement ?? null);
+
+    // Ignore nodes that belong to a different (e.g. previous) document.
+    if (!doc?.body || !element || element.ownerDocument !== doc) {
+      this.hideHighlight();
+      return;
+    }
+
+    const overlay = this.ensureHighlight(doc);
+    if (!overlay) {
+      return;
+    }
+
+    const view = doc.defaultView;
+    const rect = element.getBoundingClientRect();
+    const scrollX = view?.scrollX ?? 0;
+    const scrollY = view?.scrollY ?? 0;
+
+    overlay.style.display = 'block';
+    overlay.style.top = `${rect.top + scrollY}px`;
+    overlay.style.left = `${rect.left + scrollX}px`;
+    overlay.style.width = `${rect.width}px`;
+    overlay.style.height = `${rect.height}px`;
+
+    element.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+  }
+
+  private ensureHighlight(doc: Document): HTMLElement | null {
+    if (this.highlightEl && this.highlightDoc === doc) {
+      return this.highlightEl;
+    }
+    if (!doc.body) {
+      return null;
+    }
+
+    const overlay = doc.createElement('div');
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.dataset['p11ySrCursor'] = '';
+    Object.assign(overlay.style, {
+      position: 'absolute',
+      top: '0',
+      left: '0',
+      margin: '0',
+      padding: '0',
+      boxSizing: 'border-box',
+      pointerEvents: 'none',
+      zIndex: '2147483647',
+      border: '2px solid #4f46e5',
+      outline: '2px solid rgba(255, 255, 255, 0.9)',
+      borderRadius: '2px',
+      backgroundColor: 'rgba(79, 70, 229, 0.15)',
+      boxShadow: '0 0 0 2px rgba(79, 70, 229, 0.35)',
+      display: 'none',
+    } satisfies Partial<CSSStyleDeclaration>);
+
+    // Animate position changes unless the user prefers reduced motion.
+    const mql = doc.defaultView?.matchMedia?.(
+      '(prefers-reduced-motion: reduce)',
+    );
+    const reduceMotion = mql?.matches ?? false;
+    if (!reduceMotion) {
+      overlay.style.transition =
+        'top 0.12s ease, left 0.12s ease, width 0.12s ease, height 0.12s ease';
+    }
+
+    doc.body.appendChild(overlay);
+    this.highlightEl = overlay;
+    this.highlightDoc = doc;
+    return overlay;
+  }
+
+  private hideHighlight(): void {
+    if (this.highlightEl) {
+      this.highlightEl.style.display = 'none';
+    }
+  }
+
+  private removeHighlight(): void {
+    this.highlightEl?.remove();
+    this.highlightEl = null;
+    this.highlightDoc = null;
+  }
+
   private async regenerate(doc: Document | null): Promise<void> {
     this.pause();
+    this.removeHighlight();
     const token = ++this.generationToken;
 
     if (!doc?.body) {
-      this.phrases.set([]);
+      this.steps.set([]);
       this.currentIndex.set(-1);
       this.status.set('idle');
       return;
@@ -261,11 +412,11 @@ export class VirtualScreenReader {
     this.status.set('generating');
 
     try {
-      const log = await generateSpokenPhrases(doc.body, doc.defaultView);
+      const log = await generateSpokenSteps(doc.body, doc.defaultView);
       if (token !== this.generationToken) {
         return;
       }
-      this.phrases.set(log);
+      this.steps.set(log);
       this.currentIndex.set(log.length > 0 ? 0 : -1);
       this.status.set(log.length > 0 ? 'ready' : 'empty');
     } catch (error) {
@@ -276,7 +427,7 @@ export class VirtualScreenReader {
         '[VirtualScreenReader] Failed to generate spoken phrases:',
         error,
       );
-      this.phrases.set([]);
+      this.steps.set([]);
       this.currentIndex.set(-1);
       this.status.set('error');
     }
