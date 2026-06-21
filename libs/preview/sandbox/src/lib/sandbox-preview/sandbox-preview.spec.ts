@@ -194,14 +194,14 @@ describe('SandboxPreview', () => {
       expect(iframe).toBeTruthy();
     });
 
-    it('should set sandbox attribute to allow-scripts allow-same-origin allow-modals', () => {
+    it('should set sandbox attribute to allow scripts, same-origin, modals and forms', () => {
       fixture.detectChanges();
 
       const iframe = fixture.nativeElement.querySelector(
         'iframe',
       ) as HTMLIFrameElement;
       expect(iframe.getAttribute('sandbox')).toBe(
-        'allow-scripts allow-same-origin allow-modals',
+        'allow-scripts allow-same-origin allow-modals allow-forms',
       );
     });
 

@@ -11,9 +11,8 @@ starter:
   js: starter.js
   css: starter.css
 validators:
-  - form-labels
-  - keyboard-accessible
   - aria-invalid-errors
+  - error-focus-management
 links:
   - text: 'MDN: aria-invalid'
     url: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-invalid'
@@ -35,6 +34,8 @@ Make the form error handling accessible so that:
 - Error messages are associated with their fields using `aria-describedby` (or `aria-errormessage`)
 - After submitting an invalid form, focus moves to the first invalid field
 - Screen readers can announce the error state and the error message
+
+Because the error message is linked with `aria-describedby` and focus moves to the first invalid field, screen readers announce both the invalid state and the message text automatically. Using `role="alert"` on the error message (so it is announced immediately, before focus lands) is a nice enhancement but optional.
 
 ## Tips
 

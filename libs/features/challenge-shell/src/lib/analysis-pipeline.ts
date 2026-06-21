@@ -31,6 +31,7 @@ import {
   imageAriaDescribedby,
   reducedMotion,
   ariaInvalidErrors,
+  errorFocusManagement,
   videoHasCaptions,
   liveRegionPattern,
   noDisabledSubmit,
@@ -83,6 +84,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(imageAriaDescribedby);
     this.challengeValidator.registerValidator(reducedMotion);
     this.challengeValidator.registerValidator(ariaInvalidErrors);
+    this.challengeValidator.registerValidator(errorFocusManagement);
     this.challengeValidator.registerValidator(videoHasCaptions);
     this.challengeValidator.registerValidator(liveRegionPattern);
     this.challengeValidator.registerValidator(noDisabledSubmit);

@@ -18,6 +18,7 @@ export { imageAltTextLimit } from './lib/image-alt-text-limit';
 export { imageAriaDescribedby } from './lib/image-aria-describedby';
 export { reducedMotion } from './lib/reduced-motion';
 export { ariaInvalidErrors } from './lib/aria-invalid-errors';
+export { errorFocusManagement } from './lib/error-focus-management';
 export { videoHasCaptions } from './lib/video-has-captions';
 export { liveRegionPattern } from './lib/live-region-pattern';
 export { noDisabledSubmit } from './lib/no-disabled-submit';
