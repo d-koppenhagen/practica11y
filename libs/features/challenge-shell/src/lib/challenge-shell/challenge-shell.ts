@@ -19,6 +19,7 @@ import { SandboxPreview, SandboxAxeViolation } from '@practica11y/sandbox';
 import { AccessibilityTree } from '@practica11y/accessibility-tree';
 import { VirtualScreenReader } from '@practica11y/virtual-screen-reader';
 import { ChallengeFeedback } from '@practica11y/challenge-feedback';
+import { ColorContrastPanel } from '@practica11y/color-contrast-checker';
 import { ChallengeLoader } from '@practica11y/loader';
 import {
   AccessibilityNode,
@@ -54,6 +55,7 @@ type EditorTab = 'html' | 'js' | 'css' | 'vtt';
     AccessibilityTree,
     VirtualScreenReader,
     ChallengeFeedback,
+    ColorContrastPanel,
     ShellPanel,
     ShellResizer,
   ],
@@ -184,6 +186,9 @@ export class ChallengeShell {
   );
 
   protected readonly sandboxPageTitle = signal<string | null>(null);
+
+  /** Iframe element reference passed to the ColorContrastPanel for sending messages. */
+  protected readonly previewIframe = signal<HTMLIFrameElement | null>(null);
 
   /** Live preview document, exposed to the virtual screen reader. */
   protected readonly sandboxDocument = signal<Document | null>(null);
@@ -361,6 +366,13 @@ export class ChallengeShell {
       this.sandboxDocument.set(doc);
       this.srRevision.update((value) => value + 1);
     }
+
+    // Capture iframe reference for the color contrast panel
+    const host = this.hostRef.nativeElement as HTMLElement;
+    const iframe = host.querySelector(
+      '.shell-preview iframe',
+    ) as HTMLIFrameElement | null;
+    this.previewIframe.set(iframe);
   }
 
   protected checkSolution(): void {
@@ -453,7 +465,7 @@ export class ChallengeShell {
       return;
     }
     event.preventDefault();
-    const tabs: TreeTab[] = ['tree', 'screen-reader'];
+    const tabs: TreeTab[] = ['tree', 'screen-reader', 'color-contrast'];
     const currentIndex = tabs.indexOf(tab);
     const nextIndex =
       event.key === 'ArrowRight'

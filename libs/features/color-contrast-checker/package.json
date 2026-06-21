@@ -1,0 +1,10 @@
+{
+  "name": "@practica11y/color-contrast-checker",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "catalog:",
+    "@practica11y/types": "workspace:*",
+    "colorjs.io": "catalog:"
+  },
+  "sideEffects": false
+}

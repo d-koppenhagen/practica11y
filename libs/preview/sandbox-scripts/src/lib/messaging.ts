@@ -27,8 +27,31 @@ export interface AxeViolationPayload {
   nodes: { html: string; target: string[]; failureSummary: string }[];
 }
 
+export interface EnableColorPickerMessage {
+  type: 'enable-color-picker';
+}
+
+export interface DisableColorPickerMessage {
+  type: 'disable-color-picker';
+}
+
+export interface ColorPickPayload {
+  foregroundColor: string; // CSS color string, e.g. "rgb(0, 0, 0)"
+  backgroundColor: string; // CSS color string, e.g. "rgb(255, 255, 255)"
+  fontSizePx: number; // Computed font-size in pixels
+  fontWeight: number; // Numeric CSS font-weight (e.g. 400, 700)
+}
+
+export interface ColorPickResultMessage {
+  type: 'color-pick-result';
+  payload: ColorPickPayload;
+}
+
 export type SandboxMessage =
   | DomReadyMessage
   | RunAnalysisMessage
   | AxeResultMessage
-  | AxeErrorMessage;
+  | AxeErrorMessage
+  | EnableColorPickerMessage
+  | DisableColorPickerMessage
+  | ColorPickResultMessage;

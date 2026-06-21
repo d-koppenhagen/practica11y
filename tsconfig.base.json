@@ -40,7 +40,10 @@
       ],
       "@practica11y/ui": ["./libs/shared/ui/src/index.ts"],
       "@practica11y/util": ["./libs/shared/util/src/index.ts"],
-      "@practica11y/types": ["./libs/shared/types/src/index.ts"]
+      "@practica11y/types": ["./libs/shared/types/src/index.ts"],
+      "@practica11y/color-contrast-checker": [
+        "./libs/features/color-contrast-checker/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

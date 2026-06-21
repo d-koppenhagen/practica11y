@@ -16,7 +16,8 @@
     "@practica11y/sandbox": "workspace:*",
     "@practica11y/accessibility-tree": "workspace:*",
     "@practica11y/virtual-screen-reader": "workspace:*",
-    "@practica11y/challenge-feedback": "workspace:*"
+    "@practica11y/challenge-feedback": "workspace:*",
+    "@practica11y/color-contrast-checker": "workspace:*"
   },
   "sideEffects": false
 }

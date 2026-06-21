@@ -113,6 +113,40 @@ sequenceDiagram
 - User code is **never** executed in the Angular context
 - Errors in user code are caught inside the iframe and communicated via `postMessage`
 
+## Color Contrast Checker Flow
+
+The Color Contrast Checker allows learners to pick elements in the live preview and inspect their foreground/background contrast against WCAG 2.1 thresholds:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Panel as ColorContrastPanel
+    participant Iframe as Sandbox iframe
+    participant ColorJS as colorjs.io
+
+    User->>Panel: Click "Pick element"
+    Panel->>Iframe: postMessage({ type: 'enable-color-picker' })
+    Iframe->>Iframe: Add hover highlight + crosshair cursor
+    User->>Iframe: Click element
+    Iframe->>Iframe: Extract foreground (getComputedStyle)
+    Iframe->>Iframe: Resolve background (DOM walk + alpha blend)
+    Iframe->>Panel: postMessage({ type: 'color-pick-result', payload })
+    Panel->>Panel: Deactivate picker mode
+    Panel->>ColorJS: Calculate contrast ratio
+    ColorJS-->>Panel: Ratio value
+    Panel->>Panel: Determine WCAG conformance (AA/AAA)
+    Panel->>User: Display swatches, ratio, pass/fail indicators
+```
+
+### Detailed Flow
+
+1. **Picker activation**: User clicks the "Pick element" button → panel sends `enable-color-picker` to the iframe
+2. **Element selection**: Iframe adds hover highlight and intercepts clicks. On click, it extracts `color` and resolves the effective `background-color` by walking the DOM tree and alpha-blending ancestors
+3. **Result message**: Iframe sends `color-pick-result` with foreground color, background color, font-size, and font-weight to the parent window
+4. **Calculation**: The panel uses `colorjs.io` to calculate the WCAG 2.1 contrast ratio and determines AA/AAA conformance for both normal and large text
+5. **Display**: Swatches, hex values, formatted ratio, and pass/fail indicators are rendered. An `aria-live` region announces the result to screen readers
+6. **Reset**: When the iframe reloads (`dom-ready` message), the panel returns to its empty state
+
 ## Virtual Screen Reader Flow
 
 Alongside the Accessibility Tree, the Challenge Shell exposes a **Virtual Screen Reader** tab that simulates how a screen reader would announce the live preview content:

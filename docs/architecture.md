@@ -13,6 +13,7 @@ graph TD
     B --> D[Live Preview - Sandbox iframe]
     B --> E[Accessibility Tree View]
     B --> P[Virtual Screen Reader]
+    B --> CC[Color Contrast Checker]
     B --> F[Feedback Panel]
 
     C -->|Signal: codeContent| G[Analysis Pipeline]
@@ -50,6 +51,7 @@ graph LR
         FF[challenge-feedback]
         FAT[accessibility-tree]
         FVSR[virtual-screen-reader]
+        FCC[color-contrast-checker]
     end
 
     subgraph libs/challenge
@@ -81,6 +83,7 @@ graph LR
     FS --> FF
     FS --> FAT
     FS --> FVSR
+    FS --> FCC
     FS --> CM
     FL --> CM
     FL --> CL

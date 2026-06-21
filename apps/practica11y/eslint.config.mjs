@@ -6,6 +6,9 @@ export default [
   ...nx.configs['flat/angular-template'],
   ...baseConfig,
   {
+    ignores: ['**/public/assets/sandbox-analysis.js'],
+  },
+  {
     files: ['**/*.ts'],
     rules: {
       '@angular-eslint/directive-selector': [

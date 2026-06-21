@@ -81,6 +81,15 @@ class MockVirtualScreenReader {
   readonly highlightEnabled = model<boolean>(true);
 }
 
+@Component({
+  selector: 'a11y-color-contrast-panel',
+  standalone: true,
+  template: '<div class="mock-color-contrast-panel"></div>',
+})
+class MockColorContrastPanel {
+  readonly sandboxIframe = input<HTMLIFrameElement | null>(null);
+}
+
 // --- Mock AnalysisPipeline ---
 
 class MockAnalysisPipeline {
@@ -156,6 +165,7 @@ describe('ChallengeShell', () => {
             MockAccessibilityTree,
             MockChallengeFeedback,
             MockVirtualScreenReader,
+            MockColorContrastPanel,
             ShellPanel,
             ShellResizer,
             Confetti,

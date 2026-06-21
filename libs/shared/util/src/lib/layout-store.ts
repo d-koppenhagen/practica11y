@@ -18,7 +18,7 @@ export interface PanelCollapsedState {
 }
 
 /** Active tab of the accessibility output panel (tree vs. virtual screen reader). */
-export type TreeTab = 'tree' | 'screen-reader';
+export type TreeTab = 'tree' | 'screen-reader' | 'color-contrast';
 
 export interface ShellLayout {
   colWidths: [number, number, number];

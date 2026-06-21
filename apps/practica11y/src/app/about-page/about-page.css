@@ -65,6 +65,40 @@
   border-radius: 2px;
 }
 
+/* Features list */
+.about-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.about-features li {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--p11y-text-secondary);
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.about-features li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--p11y-primary);
+  opacity: 0.6;
+}
+
+.about-features li strong {
+  color: var(--p11y-text);
+}
+
 /* Social links */
 .about-links {
   list-style: none;

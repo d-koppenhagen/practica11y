@@ -426,6 +426,10 @@ a11y-shell-resizer {
   padding: 0.75rem;
 }
 
+#tree-panel-color-contrast {
+  padding: 0;
+}
+
 .shell-tree-panel[hidden] {
   display: none;
 }

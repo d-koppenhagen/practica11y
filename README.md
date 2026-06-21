@@ -88,6 +88,7 @@ libs/
     challenge-feedback/     # Feedback panel
     accessibility-tree/     # Tree visualization
     virtual-screen-reader/  # Screen reader announcement simulator (Guidepup)
+    color-contrast-checker/ # Color contrast inspection panel (colorjs.io)
 
   shared/
     ui/                     # Shared UI components
@@ -104,6 +105,7 @@ libs/
 - **Monaco Editor** (Code editor)
 - **axe-core** + **dom-accessibility-api** (Accessibility analysis)
 - **@guidepup/virtual-screen-reader** (Screen reader announcement simulation)
+- **colorjs.io** (WCAG 2.1 contrast ratio calculation)
 - **TypeScript** (strict mode)
 - **pnpm** (Package manager)
 

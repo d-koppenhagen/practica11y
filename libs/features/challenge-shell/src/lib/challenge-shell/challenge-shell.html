@@ -313,6 +313,18 @@
           >
             Virtual Screen Reader
           </button>
+          <button
+            id="tree-tab-color-contrast"
+            role="tab"
+            [attr.aria-selected]="activeTreeTab() === 'color-contrast'"
+            [attr.aria-controls]="'tree-panel-color-contrast'"
+            [class]="'shell-tab' + (activeTreeTab() === 'color-contrast' ? ' shell-tab--active' : '')"
+            [tabindex]="activeTreeTab() === 'color-contrast' ? 0 : -1"
+            (click)="switchTreeTab('color-contrast')"
+            (keydown)="onTreeTabKeydown($event, 'color-contrast')"
+          >
+            Color Contrast
+          </button>
         </div>
         <div
           id="tree-panel-tree"
@@ -344,6 +356,15 @@
             [highlightEnabled]="screenReaderHighlightEnabled()"
             (highlightEnabledChange)="updateScreenReaderHighlightEnabled($event)"
           />
+        </div>
+        <div
+          id="tree-panel-color-contrast"
+          role="tabpanel"
+          aria-labelledby="tree-tab-color-contrast"
+          class="shell-tree-panel"
+          [hidden]="activeTreeTab() !== 'color-contrast'"
+        >
+          <a11y-color-contrast-panel [sandboxIframe]="previewIframe()" />
         </div>
       </a11y-shell-panel>
 

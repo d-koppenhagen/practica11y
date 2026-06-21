@@ -1,0 +1,150 @@
+<div
+  class="color-contrast-panel"
+  [class.has-result]="!!colorResult() || !!errorState()"
+>
+  @if (!colorResult() && !errorState()) {
+  <div class="empty-action">
+    <svg
+      class="empty-bg-icon"
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M2 22l1-1h3l9-9" />
+      <path d="M3 21v-3l9-9" />
+      <path
+        d="M14.5 5.5l4-4a1.414 1.414 0 0 1 2 0l2 2a1.414 1.414 0 0 1 0 2l-4 4"
+      />
+      <path d="M9.5 10.5l4 4" />
+    </svg>
+    <button
+      class="pick-button-full"
+      [class.active]="pickerActive()"
+      [attr.aria-pressed]="pickerActive()"
+      (click)="togglePicker()"
+    >
+      Pick element
+    </button>
+  </div>
+  } @else {
+  <div class="panel-header">
+    @if (colorResult()) {
+    <div class="color-swatches">
+      <div class="swatch-group">
+        <span class="swatch-title">Foreground</span>
+        <div class="swatch-row">
+          <span
+            class="color-swatch"
+            [style.background-color]="colorResult()!.foregroundColor"
+            [attr.aria-label]="'Foreground color: ' + foregroundHex()"
+            role="img"
+          ></span>
+          <span class="swatch-label">{{ foregroundHex() }}</span>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <span class="swatch-title">Background</span>
+        <div class="swatch-row">
+          <span
+            class="color-swatch"
+            [style.background-color]="colorResult()!.backgroundColor"
+            [attr.aria-label]="'Background color: ' + backgroundHex()"
+            role="img"
+          ></span>
+          <span class="swatch-label">{{ backgroundHex() }}</span>
+        </div>
+      </div>
+    </div>
+    }
+
+    <button
+      class="pick-button"
+      [class.active]="pickerActive()"
+      [attr.aria-pressed]="pickerActive()"
+      (click)="togglePicker()"
+    >
+      <svg
+        class="pick-icon"
+        aria-hidden="true"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M2 22l1-1h3l9-9" />
+        <path d="M3 21v-3l9-9" />
+        <path
+          d="M14.5 5.5l4-4a1.414 1.414 0 0 1 2 0l2 2a1.414 1.414 0 0 1 0 2l-4 4"
+        />
+        <path d="M9.5 10.5l4 4" />
+      </svg>
+      Pick element
+    </button>
+  </div>
+
+  @if (errorState()) {
+  <div class="error-state" role="alert">
+    <p>{{ errorState() }}</p>
+  </div>
+  } @if (formattedRatio()) {
+  <div class="ratio-display" aria-live="polite" aria-atomic="true">
+    <span class="ratio-value">{{ formattedRatio() }}</span>
+    @if (isLargeText()) {
+    <span class="large-text-badge">Large Text</span>
+    }
+  </div>
+
+  <div class="conformance-grid">
+    @if (conformance(); as conf) {
+    <div
+      class="conformance-item"
+      [class.pass]="conf.aaNormal"
+      [class.fail]="!conf.aaNormal"
+    >
+      <span class="conformance-level">AA Normal</span>
+      <span class="conformance-result"
+        >{{ conf.aaNormal ? 'Pass' : 'Fail' }}</span
+      >
+    </div>
+    <div
+      class="conformance-item"
+      [class.pass]="conf.aaLarge"
+      [class.fail]="!conf.aaLarge"
+    >
+      <span class="conformance-level">AA Large</span>
+      <span class="conformance-result"
+        >{{ conf.aaLarge ? 'Pass' : 'Fail' }}</span
+      >
+    </div>
+    <div
+      class="conformance-item"
+      [class.pass]="conf.aaaNormal"
+      [class.fail]="!conf.aaaNormal"
+    >
+      <span class="conformance-level">AAA Normal</span>
+      <span class="conformance-result"
+        >{{ conf.aaaNormal ? 'Pass' : 'Fail' }}</span
+      >
+    </div>
+    <div
+      class="conformance-item"
+      [class.pass]="conf.aaaLarge"
+      [class.fail]="!conf.aaaLarge"
+    >
+      <span class="conformance-level">AAA Large</span>
+      <span class="conformance-result"
+        >{{ conf.aaaLarge ? 'Pass' : 'Fail' }}</span
+      >
+    </div>
+    }
+  </div>
+  } }
+</div>

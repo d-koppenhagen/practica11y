@@ -47,6 +47,10 @@ Switch to the **Virtual Screen Reader** tab to hear (or read) how a screen reade
 
 Click **Check Solution** to run an automated accessibility audit (powered by axe-core). It reports WCAG violations found in your code.
 
+### Color Contrast Checker
+
+Switch to the **Color Contrast** tab to inspect foreground and background color contrast of any element. Click **Pick element**, then select an element in the preview to see the contrast ratio and WCAG AA/AAA conformance levels at a glance.
+
 > **Important:** Passing an automated check does not guarantee real accessibility. Automated tools catch roughly 30–50% of barriers. True accessibility requires manual testing with keyboard navigation, screen readers, and real users with disabilities.
 
 ## Ideas to Try

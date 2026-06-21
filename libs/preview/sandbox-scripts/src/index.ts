@@ -1,18 +1,34 @@
 import { runAxeAnalysis } from './lib/axe-runner';
+import { enableColorPicker, disableColorPicker } from './lib/color-picker';
 
 // Signal DOM is ready
 window.parent.postMessage({ type: 'dom-ready' }, '*');
 
-// Listen for analysis requests from parent
+// Listen for messages from parent
 window.addEventListener('message', async (event: MessageEvent) => {
-  if (!event.data || event.data.type !== 'run-analysis') return;
+  if (!event.data || !event.data.type) return;
 
-  try {
-    const payload = await runAxeAnalysis();
-    window.parent.postMessage({ type: 'axe-result', payload }, '*');
-  } catch (e) {
-    const message = e instanceof Error ? e.message : 'Unknown error';
-    window.parent.postMessage({ type: 'axe-error', payload: { message } }, '*');
+  switch (event.data.type) {
+    case 'run-analysis':
+      try {
+        const payload = await runAxeAnalysis();
+        window.parent.postMessage({ type: 'axe-result', payload }, '*');
+      } catch (e) {
+        const message = e instanceof Error ? e.message : 'Unknown error';
+        window.parent.postMessage(
+          { type: 'axe-error', payload: { message } },
+          '*',
+        );
+      }
+      break;
+
+    case 'enable-color-picker':
+      enableColorPicker();
+      break;
+
+    case 'disable-color-picker':
+      disableColorPicker();
+      break;
   }
 });
 
