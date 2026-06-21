@@ -41,6 +41,7 @@ class MockSandboxPreview {
   readonly htmlContent = input.required<string>();
   readonly jsContent = input<string>('');
   readonly cssContent = input<string>('');
+  readonly vttContent = input<string>('');
   readonly previewTitle = input<string>('Preview');
   readonly domReady = output<MessageEvent>();
   readonly axeResult = output<SandboxAxeViolation[]>();
@@ -114,6 +115,7 @@ const mockChallenge: Challenge = {
     html: '<div onclick="alert()">Click me</div>',
     js: '',
     css: 'div { color: red; }',
+    vtt: '',
   },
   validatorIds: ['axe-no-violations'],
   previewTitle: 'Challenge: Test Challenge | Preview',

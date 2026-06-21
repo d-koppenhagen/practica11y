@@ -49,7 +49,7 @@ describe('AnalysisPipeline', () => {
     tags: ['semantics'],
     points: 50,
     description: 'A test challenge',
-    starter: { html: '<div></div>', js: '', css: '' },
+    starter: { html: '<div></div>', js: '', css: '', vtt: '' },
     validatorIds: ['axe-no-violations', 'has-landmarks'],
     previewTitle: 'Challenge: Test Challenge | Preview',
     links: [],
