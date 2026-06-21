@@ -44,7 +44,7 @@ import {
 
 const GITHUB_REPO_URL = 'https://github.com/d-koppenhagen/practica11y';
 
-type EditorTab = 'html' | 'js' | 'css';
+type EditorTab = 'html' | 'js' | 'css' | 'vtt';
 
 @Component({
   selector: 'a11y-challenge-shell',
@@ -86,6 +86,7 @@ export class ChallengeShell {
   protected readonly htmlContent = signal<string>('');
   protected readonly jsContent = signal<string>('');
   protected readonly cssContent = signal<string>('');
+  protected readonly vttContent = signal<string>('');
   protected readonly activeEditorTab = signal<EditorTab>('html');
   /** Active accessibility output tab — persisted via the layout store. */
   protected readonly activeTreeTab = computed(
@@ -214,6 +215,7 @@ export class ChallengeShell {
       this.htmlContent.set(challenge.starter.html);
       this.jsContent.set(challenge.starter.js);
       this.cssContent.set(challenge.starter.css);
+      this.vttContent.set(challenge.starter.vtt);
       this.feedbackVisible.set(false);
       this.pipeline.setChallenge(challenge);
       this.pipeline.updateCode(
@@ -345,6 +347,11 @@ export class ChallengeShell {
     this.pipeline.updateCode(this.htmlContent(), this.jsContent(), content);
   }
 
+  protected onVttContentChange(content: string): void {
+    this.vttContent.set(content);
+    this.feedbackVisible.set(false);
+  }
+
   protected onDomReady(): void {
     const doc = this.getSandboxDocument();
     if (doc) {
@@ -388,7 +395,22 @@ export class ChallengeShell {
     const html = this.htmlContent();
     const js = this.jsContent();
     const css = this.cssContent();
-    const srcdoc = `<!DOCTYPE html><html><head><style>${css}</style></head><body>${html}<script>${js}</script></body></html>`;
+    const vtt = this.vttContent();
+
+    const vttScript = vtt
+      ? `<script>(function() {
+    var vttContent = ${JSON.stringify(vtt)};
+    var blob = new Blob([vttContent], { type: 'text/vtt' });
+    var blobUrl = URL.createObjectURL(blob);
+    document.querySelectorAll('track[src]').forEach(function(track) {
+      if (track.getAttribute('src').endsWith('.vtt')) {
+        track.setAttribute('src', blobUrl);
+      }
+    });
+  })();</script>`
+      : '';
+
+    const srcdoc = `<!DOCTYPE html><html><head><style>${css}</style></head><body>${html}${vttScript}<script>${js}</script></body></html>`;
     const blob = new Blob([srcdoc], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');
@@ -400,6 +422,9 @@ export class ChallengeShell {
       tabs.push('js');
     }
     tabs.push('css');
+    if (this.challenge().starter.vtt) {
+      tabs.push('vtt');
+    }
     return tabs;
   });
 

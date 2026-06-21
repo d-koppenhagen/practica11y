@@ -9,6 +9,7 @@ points: 125
 starter:
   html: starter.html
   css: starter.css
+  vtt: starter.vtt
 validators:
   - video-has-captions
 links:
@@ -32,6 +33,8 @@ Add captions to the video so that:
 - The `kind` attribute is set to `"captions"`
 - A `srclang` and `label` attribute are provided for the language
 - Optionally mark the track as `default` to show captions automatically
+
+A pre-filled `captions.vtt` file is provided in the VTT tab. You can edit it and reference it from your `<track>` element using `src="captions.vtt"`.
 
 ## Tips
 

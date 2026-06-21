@@ -21,6 +21,13 @@ video {
   background-color: #000000;
 }
 
+video::cue {
+  font-size: 1rem;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  font-family: system-ui, sans-serif;
+}
+
 .video-description {
   margin-top: 1.5rem;
 }

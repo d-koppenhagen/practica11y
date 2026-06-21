@@ -121,6 +121,20 @@
           >
             CSS
           </button>
+          @if (challenge().starter.vtt) {
+          <button
+            id="editor-tab-vtt"
+            role="tab"
+            [attr.aria-selected]="activeEditorTab() === 'vtt'"
+            [attr.aria-controls]="'editor-panel-vtt'"
+            [class]="'shell-tab' + (activeEditorTab() === 'vtt' ? ' shell-tab--active' : '')"
+            [tabindex]="activeEditorTab() === 'vtt' ? 0 : -1"
+            (click)="switchEditorTab('vtt')"
+            (keydown)="onEditorTabKeydown($event, 'vtt')"
+          >
+            VTT
+          </button>
+          }
         </div>
         <div
           id="editor-panel-html"
@@ -169,6 +183,23 @@
             (valueChange)="onCssContentChange($event)"
           />
         </div>
+        @if (challenge().starter.vtt) {
+        <div
+          id="editor-panel-vtt"
+          role="tabpanel"
+          aria-labelledby="editor-tab-vtt"
+          [class]="'shell-editor-panel' + (activeEditorTab() !== 'vtt' ? ' shell-editor-panel--hidden' : '')"
+        >
+          <ng-catbee-monaco-editor
+            [language]="'plaintext'"
+            [options]="editorOptions()"
+            [height]="'100%'"
+            [width]="'100%'"
+            [(value)]="vttContent"
+            (valueChange)="onVttContentChange($event)"
+          />
+        </div>
+        }
       </a11y-shell-panel>
 
       <!-- Vertical resizer between col 2 and col 3 -->
@@ -221,6 +252,7 @@
           [htmlContent]="htmlContent()"
           [jsContent]="jsContent()"
           [cssContent]="cssContent()"
+          [vttContent]="vttContent()"
           [previewTitle]="challenge().previewTitle"
           (domReady)="onDomReady()"
           (axeResult)="onAxeResult($event)"

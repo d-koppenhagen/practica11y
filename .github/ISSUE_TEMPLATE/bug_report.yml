@@ -36,6 +36,7 @@ body:
         - Fifty Shades of Gray (color-contrast-fail)
         - Chill Out (reduced-motion)
         - Silent Treatment (invalid-form-error)
+        - Lost for Words (missing-video-captions)
         - Other / not listed here
     validations:
       required: false

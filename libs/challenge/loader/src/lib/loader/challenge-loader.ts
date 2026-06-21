@@ -120,7 +120,7 @@ export class ChallengeLoader {
       tags: meta.tags,
       points: meta.points,
       description: '',
-      starter: { html: '', js: '', css: '' },
+      starter: { html: '', js: '', css: '', vtt: '' },
       validatorIds: [],
       previewTitle: meta.previewTitle ?? `Challenge: ${meta.title} | Preview`,
       links: meta.links ?? [],
@@ -210,7 +210,7 @@ export class ChallengeLoader {
   }
 
   /**
-   * Loads starter code files (HTML, optionally JS, and optionally CSS) for a challenge.
+   * Loads starter code files (HTML, optionally JS, optionally CSS, optionally VTT) for a challenge.
    */
   private async loadStarterCode(
     challengeId: string,
@@ -252,7 +252,19 @@ export class ChallengeLoader {
       }
     }
 
-    return { html, js, css };
+    let vtt = '';
+    if (starter.vtt) {
+      const vttPath = `${basePath}/${starter.vtt}`;
+      try {
+        vtt = await this.fetchText(vttPath);
+      } catch (error) {
+        throw new Error(
+          `Failed to load starter VTT for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+        );
+      }
+    }
+
+    return { html, js, css, vtt };
   }
 
   /**

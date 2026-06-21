@@ -164,6 +164,16 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
       'Invalid field "starter.js": Must be a string (file path) if provided.',
     );
   }
+  if (
+    'vtt' in starter &&
+    starter['vtt'] !== undefined &&
+    starter['vtt'] !== null &&
+    typeof starter['vtt'] !== 'string'
+  ) {
+    throw new Error(
+      'Invalid field "starter.vtt": Must be a string (file path) if provided.',
+    );
+  }
 
   // Validators
   if (
@@ -190,6 +200,7 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
       html: starter['html'] as string,
       ...(starter['js'] ? { js: starter['js'] as string } : {}),
       ...(starter['css'] ? { css: starter['css'] as string } : {}),
+      ...(starter['vtt'] ? { vtt: starter['vtt'] as string } : {}),
     },
     validators: data['validators'] as string[],
     ...(typeof data['previewTitle'] === 'string' &&

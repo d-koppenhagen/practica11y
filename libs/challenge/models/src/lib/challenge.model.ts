@@ -13,6 +13,7 @@ export interface StarterCode {
   html: string;
   js: string;
   css: string;
+  vtt: string;
 }
 
 /**
@@ -48,6 +49,7 @@ export interface ChallengeMeta {
     html: string; // Dateipfad
     js?: string; // Dateipfad
     css?: string; // Dateipfad
+    vtt?: string; // Dateipfad
   };
   validators: string[];
   /** Optional custom title for the preview iframe. Defaults to "Challenge: {title} | Preview" */

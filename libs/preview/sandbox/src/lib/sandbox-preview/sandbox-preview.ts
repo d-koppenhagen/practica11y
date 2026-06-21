@@ -32,6 +32,7 @@ export class SandboxPreview {
   readonly htmlContent = input.required<string>();
   readonly jsContent = input<string>('');
   readonly cssContent = input<string>('');
+  readonly vttContent = input<string>('');
   readonly previewTitle = input<string>('Preview');
   readonly domReady: OutputEmitterRef<MessageEvent> = output<MessageEvent>();
   readonly axeResult: OutputEmitterRef<SandboxAxeViolation[]> =
@@ -48,10 +49,11 @@ export class SandboxPreview {
     const html = this.htmlContent();
     const js = this.jsContent();
     const css = this.cssContent();
+    const vtt = this.vttContent();
     const theme = this.themeService.theme();
     const title = this.previewTitle();
     return this.sanitizer.bypassSecurityTrustHtml(
-      this.buildSrcdoc(html, js, css, theme, title),
+      this.buildSrcdoc(html, js, css, vtt, theme, title),
     );
   });
 
@@ -91,6 +93,7 @@ export class SandboxPreview {
     html: string,
     js: string,
     css: string,
+    vtt: string,
     theme: 'light' | 'dark',
     title: string,
   ): string {
@@ -98,6 +101,23 @@ export class SandboxPreview {
     const scrollbarThumbHover = theme === 'dark' ? '#718096' : '#a0aec0';
 
     const userScript = js ? `\n  <script>${js}</script>` : '';
+
+    // Script that creates a blob URL for the VTT content and patches all <track> elements
+    // whose src ends in .vtt to use the blob URL instead. Also sets track mode to "showing"
+    // so that cues are rendered visibly on the video.
+    const vttScript = vtt
+      ? `\n  <script>(function() {
+    var vttContent = ${JSON.stringify(vtt)};
+    var blob = new Blob([vttContent], { type: 'text/vtt' });
+    var blobUrl = URL.createObjectURL(blob);
+    document.querySelectorAll('track[src]').forEach(function(track) {
+      if (track.getAttribute('src').endsWith('.vtt')) {
+        track.setAttribute('src', blobUrl);
+        track.track.mode = 'showing';
+      }
+    });
+  })();</script>`
+      : '';
 
     return `<!DOCTYPE html>
 <html lang="en">
@@ -117,7 +137,7 @@ export class SandboxPreview {
   </style>
 </head>
 <body>
-  <div id="user-content">${html}</div>${userScript}
+  <div id="user-content">${html}</div>${vttScript}${userScript}
   <script src="/assets/axe.min.js"></script>
   <script src="/assets/sandbox-analysis.js"></script>
 </body>
