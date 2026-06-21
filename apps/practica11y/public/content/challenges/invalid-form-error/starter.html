@@ -2,6 +2,11 @@
   <h1>Registration</h1>
   <form id="reg-form" novalidate>
     <div class="form-field">
+      <label for="name">Name</label>
+      <input type="text" id="name" />
+      <span class="error-text" id="name-error"></span>
+    </div>
+    <div class="form-field">
       <label for="email">Email</label>
       <input type="email" id="email" />
       <span class="error-text" id="email-error"></span>
@@ -11,6 +16,6 @@
       <input type="password" id="password" />
       <span class="error-text" id="password-error"></span>
     </div>
-    <button type="submit">Register</button>
+    <button type="submit" disabled>Register</button>
   </form>
 </main>

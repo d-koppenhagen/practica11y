@@ -40,6 +40,7 @@ input.error {
 }
 
 button[type='submit'] {
+  margin-top: 0.5rem;
   padding: 0.625rem 1.25rem;
   background-color: #2563eb;
   color: #ffffff;
@@ -49,6 +50,11 @@ button[type='submit'] {
   cursor: pointer;
 }
 
-button[type='submit']:hover {
+button[type='submit']:hover:not(:disabled) {
   background-color: #1d4ed8;
+}
+
+button[type='submit']:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
 }
