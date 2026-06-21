@@ -132,12 +132,15 @@ export class VirtualScreenReader {
 
     // Keep the active phrase visible while stepping or auto-playing.
     effect(() => {
-      this.currentIndex();
+      const index = this.currentIndex();
       const container = this.logRef()?.nativeElement;
-      const active = container?.querySelector<HTMLElement>(
-        '.vsr-log-item--active',
-      );
-      active?.scrollIntoView?.({ block: 'nearest' });
+      if (!container || index < 0) {
+        return;
+      }
+      // Address the element directly by index rather than relying on the
+      // active CSS class which may not yet be rendered.
+      const item = container.children[index] as HTMLElement | undefined;
+      item?.scrollIntoView?.({ block: 'nearest' });
     });
 
     // Highlight the announced element in the preview for the active step.

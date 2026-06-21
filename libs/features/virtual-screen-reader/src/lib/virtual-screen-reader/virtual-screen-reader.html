@@ -24,6 +24,7 @@
         class="vsr-btn"
         (click)="restart()"
         aria-label="Restart from the beginning"
+        aria-controls="vsr-phrase-log"
         title="Restart"
       >
         <svg
@@ -42,6 +43,7 @@
         (click)="goToPrevious()"
         [disabled]="currentIndex() <= 0"
         aria-label="Previous announcement"
+        aria-controls="vsr-phrase-log"
         title="Previous"
       >
         <svg
@@ -60,6 +62,7 @@
         (click)="togglePlay()"
         [attr.aria-pressed]="isPlaying()"
         [attr.aria-label]="isPlaying() ? 'Pause' : 'Play'"
+        aria-controls="vsr-phrase-log"
         [title]="isPlaying() ? 'Pause' : 'Play'"
       >
         @if (isPlaying()) {
@@ -90,6 +93,7 @@
         (click)="goToNext()"
         [disabled]="currentIndex() >= phrases().length - 1"
         aria-label="Next announcement"
+        aria-controls="vsr-phrase-log"
         title="Next"
       >
         <svg
@@ -209,7 +213,7 @@
     <span class="vsr-current-phrase">{{ currentPhrase() }}</span>
   </output>
 
-  <ol #log class="vsr-log" aria-label="Spoken phrase log">
+  <ol #log id="vsr-phrase-log" class="vsr-log" aria-label="Spoken phrase log">
     @for (phrase of phrases(); track $index) {
     <li>
       <button
