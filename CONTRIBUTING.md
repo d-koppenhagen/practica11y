@@ -343,14 +343,22 @@ Step by step to create a new accessibility challenge:
 
    Add `{ "id": "<challenge-id>" }` to `apps/practica11y/public/content/challenges/registry.json`.
 
-5. **Validator** — either use an existing one or create a new one:
+5. **Add the challenge to the issue templates:**
+
+   Append the challenge to the `challenge` dropdown in `.github/ISSUE_TEMPLATE/bug_report.yml`, right before the `Other / not listed here` option. Use the exact `Title (id)` format so the in-app success dialog can pre-select it via the issue URL:
+
+   ```yaml
+   - Descriptive Title (<challenge-id>)
+   ```
+
+6. **Validator** — either use an existing one or create a new one:
    - Create the validator in `libs/challenge/validators/src/lib/<validator-id>.ts`
    - Export from `libs/challenge/validators/src/index.ts`
    - Register in `libs/features/challenge-shell/src/lib/analysis-pipeline.ts`
 
    See `.agents/skills/create-challenge/SKILL.md` for the `Validator` interface, available validators, and full examples.
 
-6. **Test locally:**
+7. **Test locally:**
 
    ```bash
    pnpm start

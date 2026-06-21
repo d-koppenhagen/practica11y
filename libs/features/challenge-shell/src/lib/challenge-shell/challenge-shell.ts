@@ -441,6 +441,7 @@ export class ChallengeShell {
       previousChallenge: prev ? { id: prev.id, title: prev.title } : null,
       nextChallenge: next ? { id: next.id, title: next.title } : null,
       issueUrl: this.buildFeedbackIssueUrl(challenge),
+      issueChooserUrl: `${GITHUB_REPO_URL}/issues/new/choose`,
     };
 
     this.dialog.open<void, ChallengeSuccessDialogData>(ChallengeSuccessDialog, {
@@ -453,20 +454,16 @@ export class ChallengeShell {
     });
   }
 
-  /** Builds a pre-filled GitHub "new issue" URL for challenge feedback. */
+  /**
+   * Builds a pre-filled GitHub "new issue" URL for challenge feedback.
+   * Targets the bug report issue form and pre-selects the current challenge in
+   * the "Related challenge" dropdown. The value must match the dropdown option
+   * label defined in `.github/ISSUE_TEMPLATE/bug_report.yml` exactly.
+   */
   private buildFeedbackIssueUrl(challenge: Challenge): string {
-    const body = [
-      `**Challenge:** ${challenge.title} (\`${challenge.id}\`)`,
-      '',
-      '**What happened / what could be improved?**',
-      '',
-      '<!-- Describe any problems, confusing instructions, or improvement suggestions here. -->',
-    ].join('\n');
-
     const params = new URLSearchParams({
-      title: `Feedback: ${challenge.title}`,
-      body,
-      labels: 'feedback',
+      template: 'bug_report.yml',
+      challenge: `${challenge.title} (${challenge.id})`,
     });
 
     return `${GITHUB_REPO_URL}/issues/new?${params.toString()}`;

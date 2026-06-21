@@ -165,6 +165,20 @@
   text-decoration: underline;
 }
 
+.success-dialog-feedback-secondary {
+  margin: 0.625rem 0 0;
+  font-size: var(--font-size-xs, 0.75rem);
+}
+
+.success-dialog-feedback-secondary a {
+  color: var(--p11y-info-text);
+  text-decoration: underline;
+}
+
+.success-dialog-feedback-secondary a:hover {
+  color: var(--p11y-link-hover);
+}
+
 .success-dialog-actions {
   display: flex;
   justify-content: center;
@@ -190,6 +204,7 @@
 .success-dialog-close:focus-visible,
 .success-dialog-nav-link:focus-visible,
 .success-dialog-feedback-link:focus-visible,
+.success-dialog-feedback-secondary a:focus-visible,
 .success-dialog-dismiss:focus-visible {
   outline: 2px solid var(--p11y-primary);
   outline-offset: 2px;

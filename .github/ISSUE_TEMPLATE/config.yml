@@ -1,0 +1,7 @@
+# Allow free-form issues in addition to the structured forms below, so
+# contributors are never forced to pick a template or select a challenge.
+blank_issues_enabled: true
+contact_links:
+  - name: 📚 Practica11y
+    url: https://practica11y.dev
+    about: Try the challenges or read more about the project.

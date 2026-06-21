@@ -1,8 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { RouterLink } from '@angular/router';
 
@@ -26,8 +22,10 @@ export interface ChallengeSuccessDialogData {
   readonly previousChallenge: { id: string; title: string } | null;
   /** Next challenge for navigation, or null when none exists. */
   readonly nextChallenge: { id: string; title: string } | null;
-  /** Pre-filled GitHub "new issue" URL for feedback. */
+  /** Pre-filled GitHub "new issue" URL (bug report) for this challenge. */
   readonly issueUrl: string;
+  /** GitHub issue-template chooser URL, for picking a different template. */
+  readonly issueChooserUrl: string;
 }
 
 /**

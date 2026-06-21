@@ -1,0 +1,81 @@
+name: 🐞 Bug report
+description: Report a problem with the app or a specific challenge.
+title: '[Bug]: '
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the sections
+        below so we can reproduce and fix the issue. Selecting a challenge is
+        optional — leave it blank for general problems.
+  - type: dropdown
+    id: challenge
+    attributes:
+      label: Related challenge
+      description: >-
+        Which challenge does this affect? Choose "Not challenge-specific" for
+        general app issues, or "Other / not listed here" if your challenge is
+        missing from the list.
+      options:
+        - Not challenge-specific
+        - Div and Conquer (clickable-div)
+        - A Picture Says Nothing (missing-alt-text)
+        - Head Over Levels (heading-chaos)
+        - Name That Field (missing-label)
+        - Escape Room (focus-trap)
+        - Lost Without a Map (missing-landmarks)
+        - No Shortcut Home (no-skip-link)
+        - Click Bait (button-vs-link)
+        - Out of Focus (focus-outline-removed)
+        - Ghost Cursor (lost-focus-navigation)
+        - The Nameless Page (missing-page-title)
+        - Breaking News (live-region-dynamic)
+        - Lost in Translation (image-bar-chart)
+        - Fifty Shades of Gray (color-contrast-fail)
+        - Chill Out (reduced-motion)
+        - Silent Treatment (invalid-form-error)
+        - Other / not listed here
+    validations:
+      required: false
+  - type: input
+    id: challenge_other
+    attributes:
+      label: Other challenge
+      description: If you picked "Other / not listed here", name the challenge.
+      placeholder: e.g. My New Challenge (my-new-challenge)
+    validations:
+      required: false
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce the behaviour?
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: false
+  - type: input
+    id: environment
+    attributes:
+      label: Browser / OS
+      placeholder: e.g. Firefox 130 on macOS 15
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and didn't find a duplicate.
+          required: true
