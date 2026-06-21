@@ -43,6 +43,7 @@ export class App {
     viewChild<ElementRef<HTMLElement>>('mainContent');
   protected readonly isFullWidth = signal(false);
   protected readonly currentChallengeId = signal<string | null>(null);
+  protected readonly isPlayground = signal(false);
 
   protected readonly currentLevel = this.gamification.currentLevel;
   protected readonly currentXP = this.gamification.currentXP;
@@ -54,6 +55,12 @@ export class App {
     const level = this.currentLevel();
     const threshold = LEVEL_THRESHOLDS.find((t) => t.level === level);
     return threshold ? `${threshold.emoji} ${threshold.label}` : '🌱 Hatchling';
+  });
+
+  protected readonly firstChallengeId = computed<string | null>(() => {
+    const challenges = this.challengeLoader.availableChallenges();
+    if (challenges.length === 0) return null;
+    return challenges[0].id;
   });
 
   protected readonly previousChallenge = computed<{
@@ -137,6 +144,7 @@ export class App {
       .subscribe((event) => {
         const url = (event as NavigationEnd).urlAfterRedirects;
         this.isFullWidth.set(url.startsWith('/challenges/'));
+        this.isPlayground.set(url === '/challenges/playground');
 
         // Extract challenge ID from URL
         const match = url.match(/^\/challenges\/([^/?#]+)/);

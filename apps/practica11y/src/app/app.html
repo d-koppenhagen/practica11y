@@ -20,7 +20,28 @@
 
     @if (isFullWidth()) {
     <nav class="app-challenge-nav" aria-label="Challenge navigation">
-      @if (previousChallenge(); as prev) {
+      @if (isPlayground()) { @if (firstChallengeId(); as firstId) {
+      <a
+        class="app-challenge-nav-link app-challenge-nav-link--cta"
+        [routerLink]="['/challenges', firstId]"
+        aria-label="Start a Challenge?"
+      >
+        <span class="app-challenge-nav-label">Start a Challenge?</span>
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </a>
+      } } @else { @if (previousChallenge(); as prev) {
       <a
         class="app-challenge-nav-link"
         [routerLink]="['/challenges', prev.id]"
@@ -102,7 +123,7 @@
           <polyline points="9 18 15 12 9 6" />
         </svg>
       </span>
-      }
+      } }
     </nav>
     }
 

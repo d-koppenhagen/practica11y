@@ -205,6 +205,23 @@
   pointer-events: none;
 }
 
+.app-challenge-nav-link--cta {
+  background-color: var(--p11y-primary);
+  border-color: var(--p11y-primary);
+  color: var(--p11y-primary-text);
+  font-weight: 600;
+}
+
+.app-challenge-nav-link--cta:hover {
+  background-color: var(--p11y-primary-hover);
+  border-color: var(--p11y-primary-hover);
+}
+
+.app-challenge-nav-link--cta:focus-visible {
+  outline: 2px solid var(--p11y-primary);
+  outline-offset: 2px;
+}
+
 .app-challenge-nav-label {
   overflow: hidden;
   text-overflow: ellipsis;
