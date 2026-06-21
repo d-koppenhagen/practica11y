@@ -70,7 +70,8 @@ export const errorFocusManagement: Validator = {
     return {
       validatorId: 'error-focus-management',
       passed: true,
-      message: 'Focus moves to the first invalid field after an invalid submit.',
+      message:
+        'Focus moves to the first invalid field after an invalid submit.',
     };
   },
 };

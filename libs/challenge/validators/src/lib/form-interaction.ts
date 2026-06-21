@@ -1,9 +1,4 @@
-const NON_VALUE_INPUT_TYPES = new Set([
-  'submit',
-  'button',
-  'reset',
-  'hidden',
-]);
+const NON_VALUE_INPUT_TYPES = new Set(['submit', 'button', 'reset', 'hidden']);
 
 /**
  * Simulates submitting every form on the page with invalid (empty) field
