@@ -27,6 +27,9 @@ import { LEVEL_THRESHOLDS } from '@practica11y/types';
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.is-full-width]': 'isFullWidth()',
+  },
 })
 export class App {
   private readonly progressStore = inject(ProgressStore);

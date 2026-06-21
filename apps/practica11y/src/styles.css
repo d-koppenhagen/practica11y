@@ -263,6 +263,30 @@ body {
     color 0.2s ease;
 }
 
+/* Prevent page-level scroll when challenge view fills the viewport on desktop */
+@media (min-width: 1024px) {
+  html:has(app-root.is-full-width),
+  body:has(app-root.is-full-width) {
+    overflow: hidden;
+  }
+
+  /* Challenge detail: main becomes a grid so routed component fills the space */
+  app-root.is-full-width .app-main--full-width {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  app-root.is-full-width .app-main--full-width > router-outlet {
+    display: none;
+  }
+
+  app-root.is-full-width .app-main--full-width > *:not(router-outlet) {
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   * {

@@ -23,6 +23,16 @@ import { ErrorService, Seo } from '@practica11y/util';
       <p class="text-red-600 p-4" role="alert">{{ error() }}</p>
     }
   `,
+  styles: `
+    :host {
+      display: block;
+    }
+    @media (min-width: 1024px) {
+      :host {
+        height: 100%;
+      }
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChallengeDetailPage {

@@ -1,3 +1,16 @@
+/* Host layout — flex column fills viewport on desktop challenge views */
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  :host(.is-full-width) {
+    height: 100dvh;
+    overflow: hidden;
+  }
+}
+
 /* Skip link */
 .skip-link {
   position: absolute;
@@ -273,8 +286,9 @@
 
 @media (min-width: 1024px) {
   .app-main--full-width {
+    flex: 1;
+    min-height: 0;
     overflow: hidden;
-    height: calc(100dvh - var(--app-header-height, 4rem));
   }
 }
 
