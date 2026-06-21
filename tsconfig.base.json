@@ -35,6 +35,9 @@
       "@practica11y/accessibility-tree": [
         "./libs/features/accessibility-tree/src/index.ts"
       ],
+      "@practica11y/virtual-screen-reader": [
+        "./libs/features/virtual-screen-reader/src/index.ts"
+      ],
       "@practica11y/ui": ["./libs/shared/ui/src/index.ts"],
       "@practica11y/util": ["./libs/shared/util/src/index.ts"],
       "@practica11y/types": ["./libs/shared/types/src/index.ts"]

@@ -240,7 +240,7 @@
 
     <!-- Bottom row -->
     <div class="shell-right-bottom" [style.flex]="bottomRowFlex()">
-      <!-- Col 2, Row 2: Accessibility Tree -->
+      <!-- Col 2, Row 2: Accessibility Tree + Virtual Screen Reader -->
       <a11y-shell-panel
         #treePanel
         class="shell-tree"
@@ -250,11 +250,64 @@
         [attr.aria-labelledby]="'a11y-tree-heading'"
         [style.flex]="colWidths()[1]"
       >
-        <h2 panelHeader id="a11y-tree-heading">Accessibility Tree</h2>
-        <a11y-accessibility-tree
-          [tree]="accessibilityTree()"
-          [pageTitle]="sandboxPageTitle()"
-        />
+        <h2 id="a11y-tree-heading" class="sr-only">Accessibility Output</h2>
+        <div
+          panelHeader
+          role="tablist"
+          aria-label="Accessibility output view"
+          class="shell-tabs"
+        >
+          <button
+            id="tree-tab-tree"
+            role="tab"
+            [attr.aria-selected]="activeTreeTab() === 'tree'"
+            [attr.aria-controls]="'tree-panel-tree'"
+            [class]="'shell-tab' + (activeTreeTab() === 'tree' ? ' shell-tab--active' : '')"
+            [tabindex]="activeTreeTab() === 'tree' ? 0 : -1"
+            (click)="switchTreeTab('tree')"
+            (keydown)="onTreeTabKeydown($event, 'tree')"
+          >
+            Accessibility Tree
+          </button>
+          <button
+            id="tree-tab-screen-reader"
+            role="tab"
+            [attr.aria-selected]="activeTreeTab() === 'screen-reader'"
+            [attr.aria-controls]="'tree-panel-screen-reader'"
+            [class]="'shell-tab' + (activeTreeTab() === 'screen-reader' ? ' shell-tab--active' : '')"
+            [tabindex]="activeTreeTab() === 'screen-reader' ? 0 : -1"
+            (click)="switchTreeTab('screen-reader')"
+            (keydown)="onTreeTabKeydown($event, 'screen-reader')"
+          >
+            Virtual Screen Reader
+          </button>
+        </div>
+        <div
+          id="tree-panel-tree"
+          role="tabpanel"
+          aria-labelledby="tree-tab-tree"
+          class="shell-tree-panel"
+          [hidden]="activeTreeTab() !== 'tree'"
+        >
+          <a11y-accessibility-tree
+            [tree]="accessibilityTree()"
+            [pageTitle]="sandboxPageTitle()"
+          />
+        </div>
+        <div
+          id="tree-panel-screen-reader"
+          role="tabpanel"
+          aria-labelledby="tree-tab-screen-reader"
+          class="shell-tree-panel shell-tree-panel--sr"
+          [hidden]="activeTreeTab() !== 'screen-reader'"
+        >
+          <a11y-virtual-screen-reader
+            [sandboxDocument]="sandboxDocument()"
+            [revision]="srRevision()"
+            [rate]="screenReaderRate()"
+            (rateChange)="updateScreenReaderRate($event)"
+          />
+        </div>
       </a11y-shell-panel>
 
       <!-- Vertical resizer between col 2 and col 3 (bottom row) -->

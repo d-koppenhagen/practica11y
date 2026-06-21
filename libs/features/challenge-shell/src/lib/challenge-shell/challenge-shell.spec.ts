@@ -66,6 +66,18 @@ class MockChallengeFeedback {
   readonly result = input<AnalysisPipelineResult | null>(null);
 }
 
+@Component({
+  selector: 'a11y-virtual-screen-reader',
+  standalone: true,
+  template: '<div class="mock-virtual-screen-reader"></div>',
+})
+class MockVirtualScreenReader {
+  readonly sandboxDocument = input<Document | null>(null);
+  readonly revision = input<number>(0);
+  readonly rate = input<number>(1);
+  readonly rateChange = output<number>();
+}
+
 // --- Mock AnalysisPipeline ---
 
 class MockAnalysisPipeline {
@@ -139,6 +151,7 @@ describe('ChallengeShell', () => {
             MockSandboxPreview,
             MockAccessibilityTree,
             MockChallengeFeedback,
+            MockVirtualScreenReader,
             ShellPanel,
             ShellResizer,
             Confetti,
@@ -176,7 +189,9 @@ describe('ChallengeShell', () => {
   });
 
   it('should render editor tab buttons', () => {
-    const tabs = fixture.debugElement.queryAll(By.css('[role="tab"]'));
+    const tabs = fixture.debugElement.queryAll(
+      By.css('[aria-label="Editor language"] [role="tab"]'),
+    );
     expect(tabs.length).toBe(2);
     expect(tabs[0].nativeElement.textContent.trim()).toBe('HTML');
     expect(tabs[1].nativeElement.textContent.trim()).toBe('CSS');

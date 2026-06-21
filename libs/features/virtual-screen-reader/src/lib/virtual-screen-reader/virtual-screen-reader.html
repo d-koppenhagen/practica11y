@@ -1,0 +1,190 @@
+<div class="vsr" role="group" aria-label="Virtual screen reader">
+  @switch (status()) { @case ('generating') {
+  <p class="vsr-message" role="status" aria-live="polite">
+    <span class="vsr-spinner" aria-hidden="true"></span>
+    Generating screen reader output…
+  </p>
+  } @case ('idle') {
+  <p class="vsr-message vsr-message--muted">
+    Run the preview to simulate how a screen reader announces the content.
+  </p>
+  } @case ('empty') {
+  <p class="vsr-message vsr-message--muted">
+    The screen reader produced no output for this content.
+  </p>
+  } @case ('error') {
+  <p class="vsr-message vsr-message--error" role="alert">
+    Could not generate the screen reader output for this content.
+  </p>
+  } @case ('ready') {
+  <div class="vsr-toolbar">
+    <div class="vsr-transport" role="group" aria-label="Playback controls">
+      <button
+        type="button"
+        class="vsr-btn"
+        (click)="restart()"
+        aria-label="Restart from the beginning"
+        title="Restart"
+      >
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="vsr-btn"
+        (click)="goToPrevious()"
+        [disabled]="currentIndex() <= 0"
+        aria-label="Previous announcement"
+        title="Previous"
+      >
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M6 5h2v14H6zm3.5 7 8.5 7V5z" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="vsr-btn vsr-btn--primary"
+        (click)="togglePlay()"
+        [attr.aria-pressed]="isPlaying()"
+        [attr.aria-label]="isPlaying() ? 'Pause' : 'Play'"
+        [title]="isPlaying() ? 'Pause' : 'Play'"
+      >
+        @if (isPlaying()) {
+        <svg
+          aria-hidden="true"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M6 5h4v14H6zm8 0h4v14h-4z" />
+        </svg>
+        } @else {
+        <svg
+          aria-hidden="true"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M7 5v14l12-7z" />
+        </svg>
+        }
+      </button>
+      <button
+        type="button"
+        class="vsr-btn"
+        (click)="goToNext()"
+        [disabled]="currentIndex() >= phrases().length - 1"
+        aria-label="Next announcement"
+        title="Next"
+      >
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M16 5h2v14h-2zM6 5v14l8.5-7z" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="vsr-speed">
+      <label for="vsr-speed-input">Speed</label>
+      <input
+        #speed
+        id="vsr-speed-input"
+        type="range"
+        [min]="minRate"
+        [max]="maxRate"
+        [step]="rateStep"
+        [value]="rate()"
+        [attr.aria-valuetext]="rateLabel()"
+        (input)="onRateInput(speed.value)"
+      />
+      <span class="vsr-speed-value" aria-hidden="true">{{ rateLabel() }}</span>
+    </div>
+
+    @if (speechSupported) {
+    <button
+      type="button"
+      class="vsr-btn vsr-btn--toggle"
+      (click)="toggleSpeech()"
+      [attr.aria-pressed]="speechEnabled()"
+      [attr.aria-label]="
+              speechEnabled() ? 'Mute spoken audio' : 'Enable spoken audio'
+            "
+      [title]="speechEnabled() ? 'Mute audio' : 'Enable audio'"
+    >
+      @if (speechEnabled()) {
+      <svg
+        aria-hidden="true"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path
+          d="M3 9v6h4l5 5V4L7 9zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"
+        />
+      </svg>
+      } @else {
+      <svg
+        aria-hidden="true"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path
+          d="M3 9v6h4l5 5V4L7 9zm15 1.5L16.5 9 15 10.5 16.5 12 15 13.5 16.5 15 18 13.5 19.5 15 21 13.5 19.5 12 21 10.5 19.5 9z"
+        />
+      </svg>
+      }
+    </button>
+    }
+  </div>
+
+  <output
+    class="vsr-current"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+  >
+    <span class="vsr-position">{{ positionLabel() }}</span>
+    <span class="vsr-current-phrase">{{ currentPhrase() }}</span>
+  </output>
+
+  <ol #log class="vsr-log" aria-label="Spoken phrase log">
+    @for (phrase of phrases(); track $index) {
+    <li>
+      <button
+        type="button"
+        class="vsr-log-item"
+        [class.vsr-log-item--active]="$index === currentIndex()"
+        [attr.aria-current]="$index === currentIndex() ? 'true' : null"
+        (click)="jumpTo($index)"
+      >
+        <span class="vsr-log-index" aria-hidden="true">{{ $index + 1 }}</span>
+        <span class="vsr-log-text">{{ phrase }}</span>
+      </button>
+    </li>
+    }
+  </ol>
+  } }
+</div>

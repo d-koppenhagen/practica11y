@@ -70,5 +70,6 @@ catalog:
   yaml: 2.9.0
   '@ng-catbee/monaco-editor': 21.0.3
   monaco-editor: 0.55.1
+  '@guidepup/virtual-screen-reader': 0.32.1
 
 catalogMode: strict

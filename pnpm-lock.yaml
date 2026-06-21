@@ -48,6 +48,9 @@ catalogs:
     '@eslint/js':
       specifier: 9.8.0
       version: 9.8.0
+    '@guidepup/virtual-screen-reader':
+      specifier: 0.32.1
+      version: 0.32.1
     '@ng-catbee/monaco-editor':
       specifier: 21.0.3
       version: 21.0.3
@@ -200,6 +203,9 @@ importers:
       '@angular/router':
         specifier: 'catalog:'
         version: 21.2.16(@angular/common@21.2.16(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))(@angular/platform-browser@21.2.16(@angular/common@21.2.16(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)))(rxjs@7.8.2)
+      '@guidepup/virtual-screen-reader':
+        specifier: 'catalog:'
+        version: 0.32.1
       '@ng-catbee/monaco-editor':
         specifier: 'catalog:'
         version: 21.0.3
@@ -461,9 +467,15 @@ importers:
 
   libs/features/challenge-shell:
     dependencies:
+      '@angular/cdk':
+        specifier: 'catalog:'
+        version: 21.2.14(@angular/common@21.2.16(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))(@angular/platform-browser@21.2.16(@angular/common@21.2.16(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)))(rxjs@7.8.2)
       '@angular/core':
         specifier: 'catalog:'
         version: 21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)
+      '@angular/router':
+        specifier: 'catalog:'
+        version: 21.2.16(@angular/common@21.2.16(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))(@angular/platform-browser@21.2.16(@angular/common@21.2.16(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)))(rxjs@7.8.2)
       '@ng-catbee/monaco-editor':
         specifier: '*'
         version: 21.0.3
@@ -476,6 +488,9 @@ importers:
       '@practica11y/challenge-feedback':
         specifier: workspace:*
         version: link:../challenge-feedback
+      '@practica11y/loader':
+        specifier: workspace:*
+        version: link:../../challenge/loader
       '@practica11y/models':
         specifier: workspace:*
         version: link:../../challenge/models
@@ -491,9 +506,21 @@ importers:
       '@practica11y/validators':
         specifier: workspace:*
         version: link:../../challenge/validators
+      '@practica11y/virtual-screen-reader':
+        specifier: workspace:*
+        version: link:../virtual-screen-reader
       rxjs:
         specifier: 'catalog:'
         version: 7.8.2
+
+  libs/features/virtual-screen-reader:
+    dependencies:
+      '@angular/core':
+        specifier: 'catalog:'
+        version: 21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)
+      '@guidepup/virtual-screen-reader':
+        specifier: 'catalog:'
+        version: 0.32.1
 
   libs/preview/sandbox:
     dependencies:
@@ -1785,6 +1812,10 @@ packages:
   '@gar/promise-retry@1.0.3':
     resolution: {integrity: sha512-GmzA9ckNokPypTg10pgpeHNQe7ph+iIKKmhKu3Ob9ANkswreCx7R3cKmY781K8QK3AqVL3xVh9A42JvIAbkkSA==}
     engines: {node: ^20.17.0 || >=22.9.0}
+
+  '@guidepup/virtual-screen-reader@0.32.1':
+    resolution: {integrity: sha512-QoxyFmIkE4em+Up0VJ+cchpVndHbwMGUztbTWasNbjWfxT28Sf5XYq3U+ueM1sENk7AV4+0N7ahoYxjcFVAo8w==}
+    engines: {node: '>=20'}
 
   '@harperfast/extended-iterable@1.0.3':
     resolution: {integrity: sha512-sSAYhQca3rDWtQUHSAPeO7axFIUJOI6hn1gjRC5APVE1a90tuyT8f5WIgRsFhhWA7htNkju2veB9eWL6YHi/Lw==}
@@ -3454,6 +3485,12 @@ packages:
     resolution: {integrity: sha512-o4PXJQidqJl82ckFaXUeoAW+XysPLauYI43Abki5hABd853iMhitooc6znOnczgbTYmEP6U6/y1ZyKAIsvMKGg==}
     engines: {node: '>=18'}
 
+  '@testing-library/user-event@14.6.1':
+    resolution: {integrity: sha512-vq7fv0rnt+QTXgPxr5Hjc210p6YKq2kmdziLgnsZGgLJ9e6VAShx1pACLuRjd/AS/sr7phAR58OIIpf0LlmQNw==}
+    engines: {node: '>=12', npm: '>=6'}
+    peerDependencies:
+      '@testing-library/dom': '>=7.21.4'
+
   '@tufjs/canonical-json@2.0.0':
     resolution: {integrity: sha512-yVtV8zsdo8qFHe+/3kw81dSLyF7D576A5cCFCi4X7B39tWT7SekaEFUnvnWJHz+9qO7qJTah1JbrDjWKqFtdWA==}
     engines: {node: ^16.14.0 || >=18.0.0}
@@ -5008,6 +5045,9 @@ packages:
 
   hpack.js@2.1.6:
     resolution: {integrity: sha512-zJxVehUdMGIKsRaNt7apO2Gqp0BdqW5yaiGHXXmbpvxgBYVZnAql+BJb4RO5ad2MgpbZKn5G6nMnegrH1FcNYQ==}
+
+  html-aria@0.5.3:
+    resolution: {integrity: sha512-2SkCacsjXJu0e6D5vLSHlLs7KEdPZ7pIJqLh9EFedPqrAaywthe7jJWQ+PjEyB7bpmWMMOsBJuV4WlYd9WRiug==}
 
   html-encoding-sniffer@3.0.0:
     resolution: {integrity: sha512-oWv4T4yJ52iKrufjnyZPkrN0CH3QnrUqdB6In1g5Fe1mia8GmF36gnfNySxoZtxD5+NmYw1EElVXiBk93UeskA==}
@@ -9077,6 +9117,13 @@ snapshots:
 
   '@gar/promise-retry@1.0.3': {}
 
+  '@guidepup/virtual-screen-reader@0.32.1':
+    dependencies:
+      '@testing-library/dom': 10.4.1
+      '@testing-library/user-event': 14.6.1(@testing-library/dom@10.4.1)
+      dom-accessibility-api: 0.7.1
+      html-aria: 0.5.3
+
   '@harperfast/extended-iterable@1.0.3':
     optional: true
 
@@ -10997,6 +11044,10 @@ snapshots:
       picocolors: 1.1.1
       pretty-format: 27.5.1
 
+  '@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1)':
+    dependencies:
+      '@testing-library/dom': 10.4.1
+
   '@tufjs/canonical-json@2.0.0': {}
 
   '@tufjs/models@4.1.0':
@@ -12804,6 +12855,8 @@ snapshots:
       obuf: 1.1.2
       readable-stream: 2.3.8
       wbuf: 1.7.3
+
+  html-aria@0.5.3: {}
 
   html-encoding-sniffer@3.0.0:
     dependencies:

@@ -17,6 +17,7 @@ import {
 } from '@ng-catbee/monaco-editor';
 import { SandboxPreview, SandboxAxeViolation } from '@practica11y/sandbox';
 import { AccessibilityTree } from '@practica11y/accessibility-tree';
+import { VirtualScreenReader } from '@practica11y/virtual-screen-reader';
 import { ChallengeFeedback } from '@practica11y/challenge-feedback';
 import { ChallengeLoader } from '@practica11y/loader';
 import {
@@ -30,6 +31,7 @@ import {
   LayoutStore,
   ProgressStore,
   ThemeService,
+  TreeTab,
 } from '@practica11y/util';
 
 import { AnalysisPipeline } from '../analysis-pipeline';
@@ -50,6 +52,7 @@ type EditorTab = 'html' | 'js' | 'css';
     CatbeeMonacoEditor,
     SandboxPreview,
     AccessibilityTree,
+    VirtualScreenReader,
     ChallengeFeedback,
     ShellPanel,
     ShellResizer,
@@ -84,6 +87,14 @@ export class ChallengeShell {
   protected readonly jsContent = signal<string>('');
   protected readonly cssContent = signal<string>('');
   protected readonly activeEditorTab = signal<EditorTab>('html');
+  /** Active accessibility output tab — persisted via the layout store. */
+  protected readonly activeTreeTab = computed(
+    () => this.layoutStore.layout().activeTreeTab,
+  );
+  /** Virtual screen reader playback rate — persisted via the layout store. */
+  protected readonly screenReaderRate = computed(
+    () => this.layoutStore.layout().screenReaderRate,
+  );
   protected readonly challengeCompleted = signal(false);
 
   protected readonly editorOptions = computed<MonacoEditorOptions>(() => ({
@@ -164,6 +175,12 @@ export class ChallengeShell {
   );
 
   protected readonly sandboxPageTitle = signal<string | null>(null);
+
+  /** Live preview document, exposed to the virtual screen reader. */
+  protected readonly sandboxDocument = signal<Document | null>(null);
+
+  /** Bumped whenever the preview DOM changes, to re-run the screen reader. */
+  protected readonly srRevision = signal<number>(0);
 
   protected readonly feedbackVisible = signal<boolean>(false);
 
@@ -326,6 +343,8 @@ export class ChallengeShell {
       this.pipeline.setSandboxDocument(doc);
       this.pipeline.runTreeAnalysis(doc);
       this.sandboxPageTitle.set(doc.title || null);
+      this.sandboxDocument.set(doc);
+      this.srRevision.update((value) => value + 1);
     }
   }
 
@@ -352,6 +371,8 @@ export class ChallengeShell {
     if (doc) {
       this.pipeline.updateTreeOnly(doc);
       this.sandboxPageTitle.set(doc.title || null);
+      this.sandboxDocument.set(doc);
+      this.srRevision.update((value) => value + 1);
     }
   }
 
@@ -376,6 +397,33 @@ export class ChallengeShell {
 
   protected switchEditorTab(tab: EditorTab): void {
     this.activeEditorTab.set(tab);
+  }
+
+  protected switchTreeTab(tab: TreeTab): void {
+    this.layoutStore.setActiveTreeTab(tab);
+  }
+
+  protected updateScreenReaderRate(rate: number): void {
+    this.layoutStore.setScreenReaderRate(rate);
+  }
+
+  protected onTreeTabKeydown(event: KeyboardEvent, tab: TreeTab): void {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
+      return;
+    }
+    event.preventDefault();
+    const tabs: TreeTab[] = ['tree', 'screen-reader'];
+    const currentIndex = tabs.indexOf(tab);
+    const nextIndex =
+      event.key === 'ArrowRight'
+        ? (currentIndex + 1) % tabs.length
+        : (currentIndex - 1 + tabs.length) % tabs.length;
+    const nextTab = tabs[nextIndex];
+    this.switchTreeTab(nextTab);
+    const el = (event.target as HTMLElement)
+      .closest('[role="tablist"]')
+      ?.querySelector(`#tree-tab-${nextTab}`) as HTMLElement | null;
+    el?.focus();
   }
 
   protected onEditorTabKeydown(event: KeyboardEvent, tab: EditorTab): void {

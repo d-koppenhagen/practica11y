@@ -1,0 +1,33 @@
+{
+  "name": "virtual-screen-reader",
+  "sourceRoot": "libs/features/virtual-screen-reader/src",
+  "prefix": "a11y",
+  "projectType": "library",
+  "tags": ["scope:features"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/features/virtual-screen-reader/ng-package.json",
+        "tsConfig": "libs/features/virtual-screen-reader/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/features/virtual-screen-reader/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/angular:unit-test",
+      "options": {
+        "watch": false
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

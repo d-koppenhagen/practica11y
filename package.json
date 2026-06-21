@@ -35,6 +35,7 @@
   "private": true,
   "dependencies": {
     "@angular/cdk": "catalog:",
+    "@guidepup/virtual-screen-reader": "catalog:",
     "@angular/common": "catalog:",
     "@angular/compiler": "catalog:",
     "@angular/core": "catalog:",

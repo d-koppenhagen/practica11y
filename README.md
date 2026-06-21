@@ -87,10 +87,11 @@ libs/
     challenge-list/         # Challenge overview list
     challenge-feedback/     # Feedback panel
     accessibility-tree/     # Tree visualization
+    virtual-screen-reader/  # Screen reader announcement simulator (Guidepup)
 
   shared/
     ui/                     # Shared UI components
-    util/                   # Gamification, ProgressStore, ErrorHandler
+    util/                   # Gamification, ProgressStore, LayoutStore, ErrorHandler
     types/                  # Shared TypeScript types
 ```
 
@@ -102,6 +103,7 @@ libs/
 - **Vitest** (Unit and integration tests)
 - **Monaco Editor** (Code editor)
 - **axe-core** + **dom-accessibility-api** (Accessibility analysis)
+- **@guidepup/virtual-screen-reader** (Screen reader announcement simulation)
 - **TypeScript** (strict mode)
 - **pnpm** (Package manager)
 

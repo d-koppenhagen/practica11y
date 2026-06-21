@@ -12,6 +12,7 @@ graph TD
     B --> C[Monaco Editor - @ng-catbee/monaco-editor]
     B --> D[Live Preview - Sandbox iframe]
     B --> E[Accessibility Tree View]
+    B --> P[Virtual Screen Reader]
     B --> F[Feedback Panel]
 
     C -->|Signal: codeContent| G[Analysis Pipeline]
@@ -24,6 +25,8 @@ graph TD
     H -->|Results| M[Validator Service]
     M -->|ValidationResult| F
     H -->|AccessibilityNode Tree| E
+    D -->|sandboxDocument| P
+    P -->|Guidepup spoken phrase log| Q[Web Speech API]
 
     N[Gamification Service] -->|XP, Level, Achievements| O[Progress Store]
     M -->|Challenge completed| N
@@ -46,6 +49,7 @@ graph LR
         FL[challenge-list]
         FF[challenge-feedback]
         FAT[accessibility-tree]
+        FVSR[virtual-screen-reader]
     end
 
     subgraph libs/challenge
@@ -76,6 +80,7 @@ graph LR
     FS --> PS
     FS --> FF
     FS --> FAT
+    FS --> FVSR
     FS --> CM
     FL --> CM
     FL --> CL

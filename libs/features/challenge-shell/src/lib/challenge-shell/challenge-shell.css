@@ -407,8 +407,33 @@ a11y-shell-resizer {
    Tree overrides
    =================================================================== */
 
+.shell-tree ::ng-deep .panel-header {
+  padding: 0;
+  border-bottom: none;
+}
+
 .shell-tree ::ng-deep .panel-body {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.shell-tree-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
   padding: 0.75rem;
+}
+
+.shell-tree-panel[hidden] {
+  display: none;
+}
+
+/* The screen reader manages its own internal scrolling. */
+.shell-tree-panel--sr {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* ===================================================================

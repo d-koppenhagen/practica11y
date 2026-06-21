@@ -1,0 +1,6 @@
+{
+  "dest": "../../../dist/libs/features/virtual-screen-reader",
+  "lib": {
+    "entryFile": "src/index.ts"
+  }
+}

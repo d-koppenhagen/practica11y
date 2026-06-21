@@ -2,7 +2,9 @@
 
 ## Purpose
 
-Feature component for the challenge workspace. Orchestrates editor, live preview, accessibility tree, and feedback panel. Contains the `AnalysisPipeline` that coordinates the data flow from code change to validation result (with 300ms debounce).
+Feature component for the challenge workspace. Orchestrates editor, live preview, accessibility tree, virtual screen reader, and feedback panel. Contains the `AnalysisPipeline` that coordinates the data flow from code change to validation result (with 300ms debounce).
+
+The accessibility output panel exposes two tabs — Accessibility Tree and Virtual Screen Reader. The selected tab and the screen reader playback rate are persisted via `LayoutStore`, so they are restored across sessions.
 
 ## Public API
 
@@ -35,11 +37,12 @@ Feature component for the challenge workspace. Orchestrates editor, live preview
 - `@ng-catbee/monaco-editor` — Editor component
 - `@practica11y/sandbox` — Preview component
 - `@practica11y/accessibility-tree` — Tree visualization
+- `@practica11y/virtual-screen-reader` — Screen reader announcement simulator
 - `@practica11y/challenge-feedback` — Feedback panel
 - `@practica11y/axe` — AccessibilityEngine
 - `@practica11y/validators` — ChallengeValidator
 - `@practica11y/types` — AnalysisPipelineResult
-- `@practica11y/util` — Gamification, ProgressStore
+- `@practica11y/util` — Gamification, ProgressStore, LayoutStore
 
 ## Usage Example
 

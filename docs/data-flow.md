@@ -112,3 +112,37 @@ sequenceDiagram
 - The iframe uses `sandbox="allow-scripts"` — no access to parent DOM, no navigation
 - User code is **never** executed in the Angular context
 - Errors in user code are caught inside the iframe and communicated via `postMessage`
+
+## Virtual Screen Reader Flow
+
+Alongside the Accessibility Tree, the Challenge Shell exposes a **Virtual Screen Reader** tab that simulates how a screen reader would announce the live preview content:
+
+```mermaid
+sequenceDiagram
+    participant Shell as Challenge Shell
+    participant Sandbox as Sandbox iframe
+    participant VSR as Virtual Screen Reader
+    participant Guidepup as Guidepup Virtual
+    participant Speech as Web Speech API
+
+    Sandbox->>Shell: dom-ready / in-place DOM mutation
+    Shell->>VSR: sandboxDocument + revision (bumped on change)
+    VSR->>Guidepup: start({ container: body, window })
+    loop until "end of document" (max 5000 steps)
+        Guidepup->>Guidepup: next()
+    end
+    Guidepup->>VSR: spokenPhraseLog()
+    VSR->>VSR: Render player (step / play / speed controls)
+    VSR->>Speech: speak(currentPhrase) when supported & enabled
+```
+
+### Detailed Flow
+
+1. **Document handoff**: On `dom-ready` (reload) or an in-place DOM mutation, the shell sets `sandboxDocument` and bumps `srRevision` to re-trigger the simulation.
+2. **Phrase generation**: The `screen-reader-engine` runs Guidepup's `Virtual` across the preview `body`, stepping through the content until it reaches `end of document` (guarded by a `MAX_STEPS` limit), then collects the full spoken phrase log.
+3. **Playback**: The component renders an accessible player — users can step forward/backward, jump to a phrase, play the announcement once (stopping automatically at the end) and adjust the playback rate (0.5×–2×). Pressing play again restarts from the beginning.
+4. **Voicing**: When the Web Speech API is available and enabled, each active phrase is voiced through `SpeechSynthesis` at the selected rate.
+
+The selected output tab (Accessibility Tree vs. Virtual Screen Reader) and the playback rate are persisted via the `LayoutStore` (IndexedDB), so they are restored across sessions.
+
+> The simulation runs entirely client-side and is purely read-only — it never mutates the preview document.

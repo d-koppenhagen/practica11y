@@ -3,15 +3,19 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/core": "catalog:",
+    "@angular/cdk": "catalog:",
+    "@angular/router": "catalog:",
     "@ng-catbee/monaco-editor": "*",
     "rxjs": "catalog:",
     "@practica11y/axe": "workspace:*",
+    "@practica11y/loader": "workspace:*",
     "@practica11y/models": "workspace:*",
     "@practica11y/types": "workspace:*",
     "@practica11y/util": "workspace:*",
     "@practica11y/validators": "workspace:*",
     "@practica11y/sandbox": "workspace:*",
     "@practica11y/accessibility-tree": "workspace:*",
+    "@practica11y/virtual-screen-reader": "workspace:*",
     "@practica11y/challenge-feedback": "workspace:*"
   },
   "sideEffects": false

@@ -1,0 +1,9 @@
+{
+  "name": "@practica11y/virtual-screen-reader",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "catalog:",
+    "@guidepup/virtual-screen-reader": "catalog:"
+  },
+  "sideEffects": false
+}

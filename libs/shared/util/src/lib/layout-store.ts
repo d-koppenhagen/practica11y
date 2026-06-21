@@ -17,10 +17,17 @@ export interface PanelCollapsedState {
   feedback: boolean;
 }
 
+/** Active tab of the accessibility output panel (tree vs. virtual screen reader). */
+export type TreeTab = 'tree' | 'screen-reader';
+
 export interface ShellLayout {
   colWidths: [number, number, number];
   rowHeights: [number, number];
   collapsed: PanelCollapsedState;
+  /** Selected tab of the accessibility output panel. */
+  activeTreeTab: TreeTab;
+  /** Virtual screen reader playback rate (0.5–2). */
+  screenReaderRate: number;
 }
 
 function getDefaultLayout(): ShellLayout {
@@ -34,6 +41,8 @@ function getDefaultLayout(): ShellLayout {
       tree: false,
       feedback: false,
     },
+    activeTreeTab: 'tree',
+    screenReaderRate: 1,
   };
 }
 
@@ -84,6 +93,16 @@ export class LayoutStore {
     }));
   }
 
+  /** Update the active accessibility output tab */
+  setActiveTreeTab(activeTreeTab: TreeTab): void {
+    this.layout.update((l) => ({ ...l, activeTreeTab }));
+  }
+
+  /** Update the virtual screen reader playback rate */
+  setScreenReaderRate(screenReaderRate: number): void {
+    this.layout.update((l) => ({ ...l, screenReaderRate }));
+  }
+
   private async init(): Promise<void> {
     if (this.tryIndexedDB()) {
       try {
@@ -91,7 +110,14 @@ export class LayoutStore {
         this.storageAvailable = true;
         const stored = await this.idbGet<ShellLayout>(LAYOUT_STORE, LAYOUT_KEY);
         if (stored) {
-          this.layout.set(stored);
+          // Merge with defaults so layouts persisted before new fields were
+          // added still receive sensible values for the missing properties.
+          const defaults = getDefaultLayout();
+          this.layout.set({
+            ...defaults,
+            ...stored,
+            collapsed: { ...defaults.collapsed, ...stored.collapsed },
+          });
         }
       } catch {
         // IndexedDB failed — stay with defaults
