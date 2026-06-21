@@ -9,6 +9,7 @@ import {
   ElementRef,
   viewChild,
 } from '@angular/core';
+import { Dialog } from '@angular/cdk/dialog';
 import { Challenge } from '@practica11y/models';
 import {
   CatbeeMonacoEditor,
@@ -17,9 +18,15 @@ import {
 import { SandboxPreview, SandboxAxeViolation } from '@practica11y/sandbox';
 import { AccessibilityTree } from '@practica11y/accessibility-tree';
 import { ChallengeFeedback } from '@practica11y/challenge-feedback';
-import { AccessibilityNode, AxeViolation } from '@practica11y/types';
+import { ChallengeLoader } from '@practica11y/loader';
+import {
+  AccessibilityNode,
+  AxeViolation,
+  LEVEL_THRESHOLDS,
+} from '@practica11y/types';
 import {
   renderMarkdown,
+  Gamification,
   LayoutStore,
   ProgressStore,
   ThemeService,
@@ -28,7 +35,12 @@ import {
 import { AnalysisPipeline } from '../analysis-pipeline';
 import { ShellPanel } from '../shell-panel/shell-panel';
 import { ShellResizer } from '../shell-resizer/shell-resizer';
-import { Confetti } from '../confetti/confetti';
+import {
+  ChallengeSuccessDialog,
+  ChallengeSuccessDialogData,
+} from '../challenge-success-dialog/challenge-success-dialog';
+
+const GITHUB_REPO_URL = 'https://github.com/d-koppenhagen/practica11y';
 
 type EditorTab = 'html' | 'js' | 'css';
 
@@ -41,7 +53,6 @@ type EditorTab = 'html' | 'js' | 'css';
     ChallengeFeedback,
     ShellPanel,
     ShellResizer,
-    Confetti,
   ],
   providers: [AnalysisPipeline],
   templateUrl: './challenge-shell.html',
@@ -55,6 +66,19 @@ export class ChallengeShell {
   private readonly layoutStore = inject(LayoutStore);
   private readonly progressStore = inject(ProgressStore);
   private readonly themeService = inject(ThemeService);
+  private readonly dialog = inject(Dialog);
+  private readonly gamification = inject(Gamification);
+  private readonly challengeLoader = inject(ChallengeLoader);
+
+  /** Timestamp of the analysis result for which the success dialog was shown. */
+  private lastSuccessDialogTimestamp = 0;
+
+  /** Human-readable current level label, e.g. "🌱 Hatchling". */
+  protected readonly levelDisplay = computed(() => {
+    const level = this.gamification.currentLevel();
+    const threshold = LEVEL_THRESHOLDS.find((t) => t.level === level);
+    return threshold ? `${threshold.emoji} ${threshold.label}` : '🌱 Hatchling';
+  });
 
   protected readonly htmlContent = signal<string>('');
   protected readonly jsContent = signal<string>('');
@@ -155,12 +179,6 @@ export class ChallengeShell {
     },
   );
 
-  protected readonly showConfetti = computed(
-    () =>
-      this.feedbackVisible() &&
-      (this.pipeline.analysisResult()?.challengeCompleted ?? false),
-  );
-
   protected readonly renderedDescription = computed(() =>
     renderMarkdown(this.challenge().description),
   );
@@ -191,6 +209,19 @@ export class ChallengeShell {
     effect(() => {
       if (this.pipeline.analysisResult()?.challengeCompleted) {
         this.challengeCompleted.set(true);
+      }
+    });
+
+    // Show the success dialog once per fresh, user-triggered completion.
+    effect(() => {
+      const result = this.pipeline.analysisResult();
+      if (
+        result?.challengeCompleted &&
+        this.feedbackVisible() &&
+        result.timestamp !== this.lastSuccessDialogTimestamp
+      ) {
+        this.lastSuccessDialogTimestamp = result.timestamp;
+        this.openSuccessDialog();
       }
     });
 
@@ -389,5 +420,55 @@ export class ChallengeShell {
     } catch {
       return null;
     }
+  }
+
+  /** Opens the accessible success dialog with score and navigation actions. */
+  private openSuccessDialog(): void {
+    const challenge = this.challenge();
+    const challenges = this.challengeLoader.availableChallenges();
+    const idx = challenges.findIndex((c) => c.id === challenge.id);
+
+    const prev = idx > 0 ? challenges[idx - 1] : null;
+    const next =
+      idx >= 0 && idx < challenges.length - 1 ? challenges[idx + 1] : null;
+
+    const data: ChallengeSuccessDialogData = {
+      challengeTitle: challenge.title,
+      challengeId: challenge.id,
+      pointsAwarded: challenge.points,
+      currentXP: this.gamification.currentXP(),
+      levelLabel: this.levelDisplay(),
+      previousChallenge: prev ? { id: prev.id, title: prev.title } : null,
+      nextChallenge: next ? { id: next.id, title: next.title } : null,
+      issueUrl: this.buildFeedbackIssueUrl(challenge),
+    };
+
+    this.dialog.open<void, ChallengeSuccessDialogData>(ChallengeSuccessDialog, {
+      data,
+      ariaModal: true,
+      ariaLabelledBy: 'challenge-success-title',
+      autoFocus: 'dialog',
+      restoreFocus: true,
+      panelClass: 'success-dialog-panel',
+    });
+  }
+
+  /** Builds a pre-filled GitHub "new issue" URL for challenge feedback. */
+  private buildFeedbackIssueUrl(challenge: Challenge): string {
+    const body = [
+      `**Challenge:** ${challenge.title} (\`${challenge.id}\`)`,
+      '',
+      '**What happened / what could be improved?**',
+      '',
+      '<!-- Describe any problems, confusing instructions, or improvement suggestions here. -->',
+    ].join('\n');
+
+    const params = new URLSearchParams({
+      title: `Feedback: ${challenge.title}`,
+      body,
+      labels: 'feedback',
+    });
+
+    return `${GITHUB_REPO_URL}/issues/new?${params.toString()}`;
   }
 }

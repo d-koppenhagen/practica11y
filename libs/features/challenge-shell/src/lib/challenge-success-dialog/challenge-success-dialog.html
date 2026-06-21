@@ -1,0 +1,137 @@
+<a11y-confetti [trigger]="true" />
+
+<div class="success-dialog">
+  <button
+    type="button"
+    class="success-dialog-close"
+    aria-label="Close dialog"
+    (click)="close()"
+  >
+    <svg
+      aria-hidden="true"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  </button>
+
+  <div class="success-dialog-header">
+    <span class="success-dialog-icon" aria-hidden="true">🎉</span>
+    <h2 id="challenge-success-title" class="success-dialog-title">
+      Challenge solved!
+    </h2>
+    <p class="success-dialog-subtitle">
+      Nicely done — you completed
+      <strong>{{ data.challengeTitle }}</strong>.
+    </p>
+  </div>
+
+  <dl class="success-dialog-score">
+    <div class="success-dialog-score-item">
+      <dt>Points earned</dt>
+      <dd>+{{ data.pointsAwarded }}</dd>
+    </div>
+    <div class="success-dialog-score-item">
+      <dt>Total score</dt>
+      <dd>{{ data.currentXP }} XP</dd>
+    </div>
+    <div class="success-dialog-score-item">
+      <dt>Level</dt>
+      <dd>{{ data.levelLabel }}</dd>
+    </div>
+  </dl>
+
+  <nav class="success-dialog-nav" aria-label="Challenge navigation">
+    @if (data.previousChallenge; as prev) {
+    <a
+      class="success-dialog-nav-link"
+      [routerLink]="['/challenges', prev.id]"
+      [attr.aria-label]="'Previous challenge: ' + prev.title"
+      (click)="close()"
+    >
+      <svg
+        aria-hidden="true"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+      <span class="success-dialog-nav-text">
+        <span class="success-dialog-nav-hint">Previous</span>
+        <span class="success-dialog-nav-title">{{ prev.title }}</span>
+      </span>
+    </a>
+    } @if (data.nextChallenge; as next) {
+    <a
+      class="success-dialog-nav-link success-dialog-nav-link--next"
+      [routerLink]="['/challenges', next.id]"
+      [attr.aria-label]="'Next challenge: ' + next.title"
+      (click)="close()"
+    >
+      <span class="success-dialog-nav-text">
+        <span class="success-dialog-nav-hint">Next</span>
+        <span class="success-dialog-nav-title">{{ next.title }}</span>
+      </span>
+      <svg
+        aria-hidden="true"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </a>
+    }
+  </nav>
+
+  <div class="success-dialog-feedback">
+    <p class="success-dialog-feedback-text">
+      Something didn't work as expected, or do you have suggestions to improve
+      this challenge?
+    </p>
+    <a
+      class="success-dialog-feedback-link"
+      [href]="data.issueUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <svg
+        aria-hidden="true"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path
+          d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.21 3.44 9.63 8.21 11.19.6.11.82-.25.82-.56 0-.28-.01-1.02-.02-2-3.34.71-4.04-1.58-4.04-1.58-.55-1.36-1.34-1.73-1.34-1.73-1.09-.73.08-.72.08-.72 1.2.08 1.84 1.21 1.84 1.21 1.07 1.8 2.81 1.28 3.5.98.11-.76.42-1.28.76-1.58-2.67-.3-5.47-1.31-5.47-5.83 0-1.29.47-2.34 1.24-3.17-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.21a11.6 11.6 0 016 0c2.29-1.53 3.3-1.21 3.3-1.21.66 1.65.24 2.87.12 3.17.77.83 1.24 1.88 1.24 3.17 0 4.53-2.81 5.53-5.49 5.82.43.36.81 1.08.81 2.18 0 1.58-.01 2.85-.01 3.24 0 .31.22.68.83.56A12.01 12.01 0 0024 12.29C24 5.78 18.63.5 12 .5z"
+        />
+      </svg>
+      Give feedback on GitHub
+    </a>
+  </div>
+
+  <div class="success-dialog-actions">
+    <button type="button" class="success-dialog-dismiss" (click)="close()">
+      Keep exploring
+    </button>
+  </div>
+</div>
