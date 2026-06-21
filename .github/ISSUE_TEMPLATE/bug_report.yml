@@ -37,6 +37,7 @@ body:
         - Chill Out (reduced-motion)
         - Silent Treatment (invalid-form-error)
         - Lost for Words (missing-video-captions)
+        - Now You See Me... (placeholder-as-label)
         - Other / not listed here
     validations:
       required: false

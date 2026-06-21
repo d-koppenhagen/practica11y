@@ -17,6 +17,6 @@
     { "id": "reduced-motion" },
     { "id": "invalid-form-error" },
     { "id": "missing-video-captions" },
-    { "id": "placeholder-as-label", "disabled": true }
+    { "id": "placeholder-as-label" }
   ]
 }
