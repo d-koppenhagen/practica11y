@@ -151,3 +151,50 @@
   outline-offset: 2px;
   border-radius: 2px;
 }
+
+/* Licenses accordion */
+.licenses-accordion {
+  margin-top: 1rem;
+  border: 1px solid var(--p11y-border);
+  border-radius: var(--p11y-radius-sm);
+}
+
+.licenses-summary {
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--p11y-text);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s;
+}
+
+.licenses-summary:hover {
+  background-color: var(--p11y-bg-muted);
+}
+
+.licenses-summary:focus-visible {
+  outline: 2px solid var(--p11y-primary);
+  outline-offset: -2px;
+  border-radius: var(--p11y-radius-sm);
+}
+
+.licenses-content {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--p11y-border);
+}
+
+.licenses-text {
+  max-height: 24rem;
+  overflow: auto;
+  padding: 0.75rem;
+  background-color: var(--p11y-bg);
+  border: 1px solid var(--p11y-border);
+  border-radius: var(--p11y-radius-sm);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--p11y-text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}

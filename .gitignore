@@ -69,3 +69,4 @@ vitest.config.*.timestamp*
 # Generated sandbox assets (built by Nx targets)
 apps/practica11y/public/assets/sandbox-analysis.js
 apps/practica11y/public/assets/axe.min.js
+apps/practica11y/public/3rdpartylicenses.txt

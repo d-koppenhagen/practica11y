@@ -69,6 +69,13 @@
         "command": "cp node_modules/axe-core/axe.min.js apps/practica11y/public/assets/axe.min.js"
       }
     },
+    "copy-licenses": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "cp dist/apps/practica11y/3rdpartylicenses.txt dist/apps/practica11y/browser/3rdpartylicenses.txt"
+      }
+    },
     "serve": {
       "continuous": true,
       "dependsOn": [

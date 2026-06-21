@@ -189,6 +189,67 @@
     </p>
   </section>
 
+  <section class="about-section">
+    <h2 class="about-section-title">Credits</h2>
+    <p class="about-text">
+      Practica11y is built with
+      <a href="https://angular.dev" target="_blank" rel="noopener noreferrer"
+        >Angular</a
+      >
+      for the UI framework,
+      <a href="https://nx.dev" target="_blank" rel="noopener noreferrer">Nx</a>
+      for monorepo tooling,
+      <a
+        href="https://tailwindcss.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Tailwind CSS</a
+      >
+      for styling,
+      <a href="https://vitest.dev" target="_blank" rel="noopener noreferrer"
+        >Vitest</a
+      >
+      for testing,
+      <a
+        href="https://microsoft.github.io/monaco-editor/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Monaco Editor</a
+      >
+      for the code editor,
+      <a
+        href="https://github.com/dequelabs/axe-core"
+        target="_blank"
+        rel="noopener noreferrer"
+        >axe-core</a
+      >
+      for accessibility analysis, and
+      <a
+        href="https://www.guidepup.dev"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Guidepup</a
+      >
+      for virtual screen reader simulation.
+    </p>
+
+    <details class="licenses-accordion" (toggle)="loadLicenses()">
+      <summary class="licenses-summary">Third-Party Licenses</summary>
+      <div class="licenses-content">
+        @if (licensesLoading()) {
+        <p class="about-text">Loading licenses…</p>
+        } @else if (licensesError()) {
+        <p class="about-text">
+          Could not load the licenses file. It is only available in the
+          production build.
+        </p>
+        } @else if (licensesText(); as text) {
+        <pre class="licenses-text">{{ text }}</pre>
+        }
+      </div>
+    </details>
+  </section>
+
   <a routerLink="/challenges" class="about-back-link">
     <svg
       aria-hidden="true"
