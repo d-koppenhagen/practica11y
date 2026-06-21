@@ -107,6 +107,7 @@ a11y-shell-resizer {
     flex-direction: row;
     gap: 0;
     height: 100%;
+    min-width: 100vw;
     overflow: hidden;
   }
 
