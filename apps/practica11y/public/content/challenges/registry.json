@@ -16,7 +16,7 @@
     { "id": "color-contrast-fail" },
     { "id": "reduced-motion" },
     { "id": "invalid-form-error" },
-    { "id": "missing-video-captions", "disabled": true },
+    { "id": "missing-video-captions" },
     { "id": "placeholder-as-label", "disabled": true }
   ]
 }

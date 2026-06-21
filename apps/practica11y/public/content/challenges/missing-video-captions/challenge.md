@@ -16,6 +16,8 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video'
   - text: 'MDN: The Track element'
     url: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track'
+  - text: 'MDN: WebVTT API'
+    url: 'https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API'
   - text: 'WCAG: Captions (Prerecorded)'
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/captions-prerecorded.html'
 ---
@@ -39,3 +41,4 @@ Add captions to the video so that:
 - You can add multiple `<track>` elements for different languages
 - `kind="captions"` is for deaf/hard-of-hearing; `kind="subtitles"` is for translations
 - Add the `default` attribute to auto-enable a specific track
+- Check out the [MDN WebVTT API documentation](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API) for a complete example of how to add captions to a video
