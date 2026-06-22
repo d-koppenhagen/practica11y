@@ -71,5 +71,6 @@
         "testMode": "watch"
       }
     }
-  ]
+  ],
+  "neverConnectToCloud": true
 }

@@ -98,7 +98,7 @@ libs/
 
 ## Tech Stack
 
-- **Angular** 22+ (Standalone Components, Signals, Zoneless Change Detection)
+- **Angular** (Standalone Components, Signals, Zoneless Change Detection)
 - **Nx** (Monorepo build system)
 - **Tailwind CSS** 4
 - **Vitest** (Unit and integration tests)
