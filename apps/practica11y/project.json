@@ -1,5 +1,6 @@
 {
   "name": "practica11y",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/practica11y/src",
@@ -10,9 +11,13 @@
       "executor": "@angular/build:application",
       "dependsOn": [
         "copy-axe",
-        { "projects": ["sandbox-scripts"], "target": "build" }
+        {
+          "projects": ["sandbox-scripts"],
+          "target": "build"
+        }
       ],
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/practica11y",
         "browser": "apps/practica11y/src/main.ts",
@@ -54,8 +59,7 @@
           "extractLicenses": false,
           "sourceMap": true
         }
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "copy-axe": {
       "executor": "nx:run-commands",
@@ -80,9 +84,13 @@
       "continuous": true,
       "dependsOn": [
         "copy-axe",
-        { "projects": ["sandbox-scripts"], "target": "build" }
+        {
+          "projects": ["sandbox-scripts"],
+          "target": "build"
+        }
       ],
       "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
       "configurations": {
         "production": {
           "buildTarget": "practica11y:build:production"
@@ -90,11 +98,7 @@
         "development": {
           "buildTarget": "practica11y:build:development"
         }
-      },
-      "defaultConfiguration": "development"
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
+      }
     },
     "test": {
       "executor": "@angular/build:unit-test",

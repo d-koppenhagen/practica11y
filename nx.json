@@ -70,6 +70,32 @@
         "ciTargetName": "test-ci",
         "testMode": "watch"
       }
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      },
+      "include": [
+        "apps/practica11y/**/*",
+        "libs/accessibility/axe/**/*",
+        "libs/accessibility/focus/**/*",
+        "libs/accessibility/keyboard/**/*",
+        "libs/accessibility/tree/**/*",
+        "libs/challenge/loader/**/*",
+        "libs/challenge/models/**/*",
+        "libs/challenge/validators/**/*",
+        "libs/features/accessibility-tree/**/*",
+        "libs/features/challenge-feedback/**/*",
+        "libs/features/challenge-list/**/*",
+        "libs/features/challenge-shell/**/*",
+        "libs/features/color-contrast-checker/**/*",
+        "libs/features/virtual-screen-reader/**/*",
+        "libs/preview/sandbox/**/*",
+        "libs/shared/types/**/*",
+        "libs/shared/ui/**/*",
+        "libs/shared/util/**/*"
+      ]
     }
   ],
   "neverConnectToCloud": true

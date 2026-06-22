@@ -37,6 +37,7 @@ export function parseFrontmatter(raw: string): ChallengeMeta {
   } catch (e) {
     throw new Error(
       `Invalid frontmatter: Failed to parse YAML. ${e instanceof Error ? e.message : String(e)}`,
+      { cause: e },
     );
   }
 

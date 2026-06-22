@@ -165,6 +165,7 @@ export class ChallengeLoader {
       }
       throw new Error(
         `Failed to load challenge registry from "${REGISTRY_PATH}": ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       );
     }
   }
@@ -192,6 +193,7 @@ export class ChallengeLoader {
       }
       throw new Error(
         `Failed to load challenge file "${path}": ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       );
     }
   }
@@ -205,6 +207,7 @@ export class ChallengeLoader {
     } catch (error) {
       throw new Error(
         `Failed to parse challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       );
     }
   }
@@ -225,6 +228,7 @@ export class ChallengeLoader {
     } catch (error) {
       throw new Error(
         `Failed to load starter HTML for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       );
     }
 
@@ -236,6 +240,7 @@ export class ChallengeLoader {
       } catch (error) {
         throw new Error(
           `Failed to load starter JS for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+          { cause: error },
         );
       }
     }
@@ -248,6 +253,7 @@ export class ChallengeLoader {
       } catch (error) {
         throw new Error(
           `Failed to load starter CSS for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+          { cause: error },
         );
       }
     }
@@ -260,6 +266,7 @@ export class ChallengeLoader {
       } catch (error) {
         throw new Error(
           `Failed to load starter VTT for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+          { cause: error },
         );
       }
     }

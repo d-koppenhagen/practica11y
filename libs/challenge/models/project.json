@@ -9,6 +9,7 @@
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "defaultConfiguration": "production",
       "options": {
         "project": "libs/challenge/models/ng-package.json",
         "tsConfig": "libs/challenge/models/tsconfig.lib.json"
@@ -18,11 +19,7 @@
           "tsConfig": "libs/challenge/models/tsconfig.lib.prod.json"
         },
         "development": {}
-      },
-      "defaultConfiguration": "production"
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
+      }
     }
   }
 }
