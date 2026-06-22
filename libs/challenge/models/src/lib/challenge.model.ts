@@ -34,6 +34,8 @@ export interface Challenge {
   links: ChallengeLink[];
   /** Whether this challenge is disabled and not yet available */
   disabled?: boolean;
+  /** Optional URL to the GitHub Discussions thread for this challenge */
+  discussionUrl?: string;
 }
 
 /**
@@ -56,4 +58,6 @@ export interface ChallengeMeta {
   previewTitle?: string;
   /** Optional external reference links */
   links?: { text: string; url: string }[];
+  /** Optional URL to the GitHub Discussions thread for this challenge */
+  discussionUrl?: string;
 }

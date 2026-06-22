@@ -20,6 +20,7 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions'
   - text: 'Deque: aria-live'
     url: 'https://dequeuniversity.com/rules/axe/4.10/aria-live-region'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/18'
 ---
 
 In this challenge, a notification is created dynamically with `aria-live` set at the same time the content is added. This is a common mistake: screen readers need the live region to already exist in the DOM **before** its content changes. Creating the element and setting `aria-live` simultaneously means the announcement is missed.

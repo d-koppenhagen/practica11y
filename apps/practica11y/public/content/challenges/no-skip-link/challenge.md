@@ -18,6 +18,7 @@ links:
     url: 'https://webaim.org/techniques/skipnav/'
   - text: 'Deque: bypass'
     url: 'https://dequeuniversity.com/rules/axe/4.10/bypass'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/13'
 ---
 
 In this challenge you see a page with a long navigation bar. Keyboard users must tab through every single navigation link before reaching the main content. There is no way to skip the navigation.

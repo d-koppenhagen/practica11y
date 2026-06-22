@@ -61,6 +61,7 @@ links:
     url: 'https://developer.mozilla.org/...'
   - text: 'WCAG: Matching Success Criterion'
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/...'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/<number>'
 ---
 
 Describe the problem here — what is broken and why is it an accessibility issue?
@@ -93,10 +94,11 @@ Explain clearly and concisely what the user needs to fix:
 
 **Optional fields:**
 
-| Field          | Type              | Description                                       |
-| -------------- | ----------------- | ------------------------------------------------- |
-| `previewTitle` | `string`          | Custom title for the preview iframe               |
-| `links`        | `{ text, url }[]` | External reference links (MDN, WCAG, Deque, etc.) |
+| Field           | Type              | Description                                             |
+| --------------- | ----------------- | ------------------------------------------------------- |
+| `previewTitle`  | `string`          | Custom title for the preview iframe                     |
+| `links`         | `{ text, url }[]` | External reference links (MDN, WCAG, Deque, etc.)       |
+| `discussionUrl` | `string`          | URL to the GitHub Discussions thread for this challenge |
 
 #### 2.2 `starter.html` — The Broken HTML Code (Required)
 
@@ -148,9 +150,40 @@ Add the challenge to `apps/practica11y/public/content/challenges/registry.json`:
 
 The order determines the display order in the challenge list.
 
-### 4. Create or Reuse a Validator
+### 4. Create a GitHub Discussion Thread
 
-#### 4.1 Check if an existing validator fits
+Each challenge has a linked discussion thread where learners can ask questions,
+share hints, and discuss approaches.
+
+**Create the discussion using the GitHub CLI:**
+
+```bash
+gh discussion create \
+  --category "Challenges" \
+  --title "Challenge: <Challenge Title>" \
+  --body "Discuss the **<Challenge Title>** challenge.
+
+🔗 [Open challenge on practica11y.dev](https://practica11y.dev/challenges/<challenge-id>)
+
+Share your approach, ask questions, or help others. Please use \`<details>\` tags for code spoilers."
+```
+
+The command outputs the discussion URL (e.g. `https://github.com/d-koppenhagen/practica11y/discussions/42`).
+
+**Add the URL to the challenge frontmatter:**
+
+```yaml
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/42'
+```
+
+The discussion link appears in:
+
+- The **Feedback panel header** (speech bubble icon with "Discuss" label)
+- The **Success dialog** shown after solving the challenge
+
+### 5. Create or Reuse a Validator
+
+#### 5.1 Check if an existing validator fits
 
 Available validators in `libs/challenge/validators/src/index.ts`:
 
@@ -172,7 +205,7 @@ Available validators in `libs/challenge/validators/src/index.ts`:
 | `valid-html-syntax`      | Valid HTML                     |
 | `page-title`             | Page title present             |
 
-#### 4.2 Create a new validator
+#### 5.2 Create a new validator
 
 Create a file at `libs/challenge/validators/src/lib/<validator-id>.ts`:
 
@@ -227,7 +260,7 @@ interface ValidationResult {
 - Provide clear, helpful error messages in `message` and `details`
 - The export name is camelCase (e.g. `imageAltText`, `buttonLinkSemantics`)
 
-#### 4.3 Export the validator
+#### 5.3 Export the validator
 
 Add the export to `libs/challenge/validators/src/index.ts`:
 
@@ -235,7 +268,7 @@ Add the export to `libs/challenge/validators/src/index.ts`:
 export { myValidator } from './lib/my-validator';
 ```
 
-#### 4.4 Register the validator in the AnalysisPipeline
+#### 5.4 Register the validator in the AnalysisPipeline
 
 In `libs/features/challenge-shell/src/lib/analysis-pipeline.ts`:
 
@@ -251,7 +284,7 @@ import { myValidator } from '@practica11y/validators';
 this.challengeValidator.registerValidator(myValidator);
 ```
 
-### 5. Test Locally
+### 6. Test Locally
 
 ```bash
 pnpm start
@@ -266,7 +299,7 @@ pnpm start
    - Validator fails on unmodified code
    - After applying the correct fix: validator reports success
 
-### 6. Write Tests (optional, recommended for new validators)
+### 7. Write Tests (optional, recommended for new validators)
 
 Create `libs/challenge/validators/src/lib/__tests__/<validator-id>.spec.ts`:
 
@@ -308,6 +341,7 @@ pnpm nx test validators
 - [ ] `starter.html` with realistic, broken code
 - [ ] Optional: `starter.css` and/or `starter.js`
 - [ ] Entry added to `registry.json`
+- [ ] GitHub Discussion created via `gh discussion create --category "Challenges"` and `discussionUrl` added to frontmatter
 - [ ] Validator available (existing or newly created)
 - [ ] If new validator: export in `index.ts` + registration in `AnalysisPipeline`
 - [ ] Tested locally — challenge loads, validation works

@@ -14,6 +14,7 @@ Thank you for your interest in Practica11y! This document describes how you can 
 - [Creating a New Challenge](#creating-a-new-challenge)
 - [Testing Guidelines](#testing-guidelines)
 - [Pull Request Process](#pull-request-process)
+- [Discussion Threads](#discussion-threads)
 
 ---
 
@@ -468,6 +469,67 @@ Every MR should include:
 
 - Delete the branch (auto-deleted if configured in GitLab)
 - Close related issues if applicable
+
+---
+
+## Discussion Threads
+
+This project uses **GitHub Discussions** to provide a community space for each challenge. Learners can ask questions, share hints, and discuss accessibility approaches without spoiling the solution for others.
+
+### Challenge Discussions Category
+
+The repository has a "Challenge Discussions" category configured with the **Announcement** format. This means:
+
+- Only **maintainers** can create new discussion threads
+- **Participants** reply to existing threads
+
+All challenge-related discussions live in this category, keeping them separate from general project discussions.
+
+### Creating a Discussion Thread
+
+When publishing a new challenge, create a corresponding discussion thread:
+
+1. Go to the repository's **Discussions** tab → **Challenge Discussions** category
+2. Create a new thread with the title format:
+
+   ```text
+   Challenge: {challenge title}
+   ```
+
+3. In the thread body, include a link back to the challenge:
+
+   ```text
+   https://practica11y.dev/challenges/{challenge-id}
+   ```
+
+4. After creating the thread, add the `discussionUrl` field to the challenge's frontmatter in `challenge.md`:
+
+   ```yaml
+   discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/{id}'
+   ```
+
+### Spoiler Policy
+
+To preserve the learning experience, follow these rules in discussion threads:
+
+- **Use `<details>` tags** for any code snippets that reveal partial or complete solutions
+- **Do NOT** post complete working solutions outside of collapsible tags
+- **Encourage** sharing hints, explaining concepts, and linking to relevant documentation rather than providing direct answers
+
+#### Example: Wrapping a Code Spoiler
+
+````markdown
+<details>
+<summary>Hint: Example solution (click to reveal)</summary>
+
+```html
+<img src="photo.jpg" alt="A golden retriever playing in a park" />
+```
+
+</details>
+````
+
+This keeps discussions helpful while letting learners choose when they want to see solution code.
 
 ---
 

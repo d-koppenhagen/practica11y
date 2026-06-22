@@ -21,6 +21,7 @@ links:
     url: 'https://www.w3.org/WAI/tutorials/images/complex/'
   - text: 'Deque: Image Alt Text'
     url: 'https://dequeuniversity.com/rules/axe/4.10/image-alt'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/19'
 ---
 
 This chart image has an alt text that is far too long. For complex images like charts, the `alt` attribute should provide a brief summary (max 150 characters), while a detailed description belongs in a separate element referenced via `aria-describedby`.

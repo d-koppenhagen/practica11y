@@ -17,6 +17,7 @@ links:
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html'
   - text: 'Deque: Image Alt Text'
     url: 'https://dequeuniversity.com/rules/axe/4.10/image-alt'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/8'
 ---
 
 In this challenge you see an image that has no alternative text (`alt` attribute). Without alt text, screen readers cannot convey the image content — blind users won't know what is being displayed.

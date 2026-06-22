@@ -17,6 +17,7 @@ links:
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/labels-or-instructions.html'
   - text: 'Deque: Form Labels'
     url: 'https://dequeuniversity.com/rules/axe/4.10/label'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/10'
 ---
 
 In this challenge you see a form with input fields that have no associated labels. Without labels, screen reader users don't know what information should be entered in a field.

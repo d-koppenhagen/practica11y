@@ -17,6 +17,7 @@ links:
     url: 'https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/'
   - text: 'MDN: ARIA: dialog role'
     url: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/11'
 ---
 
 In this challenge you see a modal dialog that is visible but has no focus management. When you navigate through the page with Tab, the focus leaves the dialog — this is a major problem for keyboard users.

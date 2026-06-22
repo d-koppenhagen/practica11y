@@ -191,6 +191,25 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
     throw new Error('Invalid field "validators": All items must be strings.');
   }
 
+  // discussionUrl (optional)
+  if (
+    'discussionUrl' in data &&
+    data['discussionUrl'] !== undefined &&
+    data['discussionUrl'] !== null &&
+    data['discussionUrl'] !== ''
+  ) {
+    if (typeof data['discussionUrl'] !== 'string') {
+      throw new Error('Invalid field "discussionUrl": Must be a string.');
+    }
+    try {
+      new URL(data['discussionUrl'] as string);
+    } catch {
+      throw new Error(
+        'Invalid field "discussionUrl": Must be a well-formed URL.',
+      );
+    }
+  }
+
   return {
     id: data['id'] as string,
     title: data['title'] as string,
@@ -210,6 +229,10 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
       : {}),
     ...(Array.isArray(data['links']) && data['links'].length > 0
       ? { links: validateLinks(data['links']) }
+      : {}),
+    ...(typeof data['discussionUrl'] === 'string' &&
+    data['discussionUrl'].trim() !== ''
+      ? { discussionUrl: data['discussionUrl'] as string }
       : {}),
   };
 }

@@ -18,6 +18,7 @@ links:
     url: 'https://webaim.org/resources/contrastchecker/'
   - text: 'Deque: Color Contrast'
     url: 'https://dequeuniversity.com/rules/axe/4.10/color-contrast'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/20'
 ---
 
 In this challenge you see a page where the text color has insufficient contrast against its background. The design looks "modern and minimal" but is hard to read for users with low vision or in bright environments.

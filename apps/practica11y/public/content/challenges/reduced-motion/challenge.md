@@ -18,6 +18,7 @@ links:
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/animation-from-interactions.html'
   - text: 'WebA11y: Designing With Reduced Motion'
     url: 'https://www.smashingmagazine.com/2020/09/design-reduced-motion-sensitivities/'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/21'
 ---
 
 In this challenge you see a promotional banner that pulses continuously. For users with vestibular disorders or motion sensitivity, such repetitive animations can cause dizziness or nausea.

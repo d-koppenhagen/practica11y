@@ -229,6 +229,7 @@
             aria-label="Open preview in new tab"
             title="Open in new tab"
           >
+            <span class="panel-btn-label">Open</span>
             <svg
               aria-hidden="true"
               width="14"
@@ -386,7 +387,36 @@
         [attr.aria-labelledby]="'feedback-heading'"
         [style.flex]="colWidths()[2]"
       >
-        <h2 panelHeader id="feedback-heading">Feedback</h2>
+        <div panelHeader class="feedback-header">
+          <h2 id="feedback-heading">Feedback</h2>
+          @if (challenge().discussionUrl) {
+          <a
+            class="feedback-discussion-btn"
+            [href]="challenge().discussionUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Discuss this challenge"
+            title="Discuss this challenge"
+          >
+            <span class="panel-btn-label">Discuss</span>
+            <svg
+              aria-hidden="true"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              />
+            </svg>
+          </a>
+          }
+        </div>
         @switch (feedbackState()) { @case ('button') {
         <div class="shell-feedback-action">
           <button class="check-solution-btn" (click)="checkSolution()">

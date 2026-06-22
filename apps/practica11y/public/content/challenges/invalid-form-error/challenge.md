@@ -28,6 +28,7 @@ links:
     url: 'https://www.deque.com/blog/anatomy-of-accessible-forms-error-messages/'
   - text: 'MDN: Client-side form validation'
     url: 'https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/22'
 ---
 
 In this challenge you see a registration form with two accessibility problems:

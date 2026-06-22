@@ -18,6 +18,7 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible'
   - text: 'Deque: Focus Indicator'
     url: 'https://dequeuniversity.com/rules/axe/4.10/focus-order-semantics'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/15'
 ---
 
 In this challenge, the CSS removes all focus outlines from interactive elements. When navigating with the keyboard (Tab key), there is no visible indicator of which element currently has focus. Keyboard users are completely lost.

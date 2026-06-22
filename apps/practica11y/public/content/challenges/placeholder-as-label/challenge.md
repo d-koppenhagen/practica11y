@@ -17,6 +17,7 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#placeholder'
   - text: 'Deque: Placeholder as Label'
     url: 'https://www.deque.com/blog/accessible-forms-the-problem-with-placeholders/'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/24'
 ---
 
 In this challenge you see a form that uses placeholder text as the only indicator of what should be entered. Once users start typing, the placeholder disappears and they can't remember what the field is for. Screen readers may not reliably announce placeholders as the field's accessible name.

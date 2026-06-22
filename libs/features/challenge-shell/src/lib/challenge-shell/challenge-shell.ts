@@ -549,6 +549,7 @@ export class ChallengeShell {
       nextChallenge: next ? { id: next.id, title: next.title } : null,
       issueUrl: this.buildFeedbackIssueUrl(challenge),
       issueChooserUrl: `${GITHUB_REPO_URL}/issues/new/choose`,
+      discussionUrl: challenge.discussionUrl,
     };
 
     this.dialog.open<void, ChallengeSuccessDialogData>(ChallengeSuccessDialog, {

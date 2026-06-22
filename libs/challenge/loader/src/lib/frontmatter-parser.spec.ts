@@ -211,6 +211,138 @@ starter:
       'Missing required field: validators',
     );
   });
+
+  describe('discussionUrl handling', () => {
+    it('should accept frontmatter with a valid discussionUrl and return it correctly', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+validators:
+  - test-validator
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/42'
+---
+
+Body`;
+
+      const result = parseFrontmatter(raw);
+      expect(result.discussionUrl).toBe(
+        'https://github.com/d-koppenhagen/practica11y/discussions/42',
+      );
+    });
+
+    it('should return undefined for discussionUrl when the field is omitted', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+validators:
+  - test-validator
+---
+
+Body`;
+
+      const result = parseFrontmatter(raw);
+      expect(result.discussionUrl).toBeUndefined();
+    });
+
+    it('should treat empty string discussionUrl as absent (returns undefined)', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+validators:
+  - test-validator
+discussionUrl: ''
+---
+
+Body`;
+
+      const result = parseFrontmatter(raw);
+      expect(result.discussionUrl).toBeUndefined();
+    });
+
+    it('should throw error when discussionUrl is not a string (number)', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+validators:
+  - test-validator
+discussionUrl: 12345
+---
+
+Body`;
+
+      expect(() => parseFrontmatter(raw)).toThrow(
+        'Invalid field "discussionUrl": Must be a string.',
+      );
+    });
+
+    it('should throw error when discussionUrl is not a string (boolean)', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+validators:
+  - test-validator
+discussionUrl: true
+---
+
+Body`;
+
+      expect(() => parseFrontmatter(raw)).toThrow(
+        'Invalid field "discussionUrl": Must be a string.',
+      );
+    });
+
+    it('should throw error when discussionUrl is not a well-formed URL', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+validators:
+  - test-validator
+discussionUrl: 'not-a-valid-url'
+---
+
+Body`;
+
+      expect(() => parseFrontmatter(raw)).toThrow(
+        'Invalid field "discussionUrl": Must be a well-formed URL.',
+      );
+    });
+  });
 });
 
 describe('parseMarkdownBody', () => {

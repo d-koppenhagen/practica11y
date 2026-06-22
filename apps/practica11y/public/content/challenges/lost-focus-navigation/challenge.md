@@ -20,6 +20,7 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-current'
   - text: 'Deque: Focus Management in SPAs'
     url: 'https://www.deque.com/blog/accessible-client-side-routing/'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/16'
 ---
 
 In this challenge you see a single-page application (SPA) with client-side navigation. When you click a navigation link, the page content updates — but the focus stays on the navigation link. Screen reader users don't know that new content appeared, and they can't tell which page is currently active.

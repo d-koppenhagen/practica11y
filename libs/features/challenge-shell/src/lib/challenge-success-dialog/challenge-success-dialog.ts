@@ -26,6 +26,8 @@ export interface ChallengeSuccessDialogData {
   readonly issueUrl: string;
   /** GitHub issue-template chooser URL, for picking a different template. */
   readonly issueChooserUrl: string;
+  /** Optional URL to the GitHub Discussions thread for this challenge. */
+  readonly discussionUrl?: string;
 }
 
 /**

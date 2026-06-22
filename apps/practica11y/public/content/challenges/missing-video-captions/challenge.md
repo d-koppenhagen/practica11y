@@ -21,6 +21,7 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API'
   - text: 'WCAG: Captions (Prerecorded)'
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/captions-prerecorded.html'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/23'
 ---
 
 In this challenge you see a video element without captions or subtitles. Deaf or hard-of-hearing users cannot access the spoken content. Users in noisy environments or who speak a different language also benefit from captions.

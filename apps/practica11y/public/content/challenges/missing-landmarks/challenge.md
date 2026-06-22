@@ -18,6 +18,7 @@ links:
     url: 'https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/'
   - text: 'Deque: Landmark Regions'
     url: 'https://dequeuniversity.com/rules/axe/4.10/landmark-one-main'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/12'
 ---
 
 In this challenge you see a page structure built entirely with `<div>` elements and CSS classes. Screen reader users cannot navigate the page structure because landmarks are missing.

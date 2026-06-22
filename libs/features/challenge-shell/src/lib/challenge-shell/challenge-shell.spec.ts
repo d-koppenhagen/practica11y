@@ -578,4 +578,69 @@ describe('ChallengeShell', () => {
       });
     });
   });
+
+  describe('discussion link', () => {
+    const challengeWithDiscussion: Challenge = {
+      ...mockChallenge,
+      discussionUrl:
+        'https://github.com/d-koppenhagen/practica11y/discussions/42',
+    };
+
+    it('should render discussion button in feedback header when discussionUrl is present', async () => {
+      fixture.componentRef.setInput('challenge', challengeWithDiscussion);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const link = fixture.debugElement.query(
+        By.css('.feedback-discussion-btn'),
+      );
+      expect(link).toBeTruthy();
+    });
+
+    it('should NOT render discussion button when discussionUrl is undefined', () => {
+      // mockChallenge has no discussionUrl
+      const link = fixture.debugElement.query(
+        By.css('.feedback-discussion-btn'),
+      );
+      expect(link).toBeFalsy();
+    });
+
+    it('should have target="_blank" and rel="noopener noreferrer" attributes', async () => {
+      fixture.componentRef.setInput('challenge', challengeWithDiscussion);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const link = fixture.debugElement.query(
+        By.css('.feedback-discussion-btn'),
+      );
+      expect(link.nativeElement.getAttribute('target')).toBe('_blank');
+      expect(link.nativeElement.getAttribute('rel')).toBe(
+        'noopener noreferrer',
+      );
+    });
+
+    it('should have an accessible aria-label', async () => {
+      fixture.componentRef.setInput('challenge', challengeWithDiscussion);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const link = fixture.debugElement.query(
+        By.css('.feedback-discussion-btn'),
+      );
+      expect(link.nativeElement.getAttribute('aria-label')).toBe(
+        'Discuss this challenge',
+      );
+    });
+
+    it('should be a semantic <a> element (keyboard-focusable by default)', async () => {
+      fixture.componentRef.setInput('challenge', challengeWithDiscussion);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const link = fixture.debugElement.query(
+        By.css('.feedback-discussion-btn'),
+      );
+      expect(link.nativeElement.tagName.toLowerCase()).toBe('a');
+    });
+  });
 });

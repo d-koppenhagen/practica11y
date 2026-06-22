@@ -20,6 +20,7 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title'
   - text: 'Deque: document-title'
     url: 'https://dequeuniversity.com/rules/axe/4.10/document-title'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/17'
 ---
 
 In this challenge you see a single-page application called "MyPage" where the `document.title` never changes when navigating between pages. All browser tabs look the same, and screen readers always announce the same generic title regardless of which page the user is on.

@@ -100,6 +100,7 @@ export class ChallengeLoader {
       validatorIds: meta.validators,
       previewTitle: meta.previewTitle ?? `Challenge: ${meta.title} | Preview`,
       links: meta.links ?? [],
+      discussionUrl: meta.discussionUrl,
     };
   }
 
@@ -125,6 +126,7 @@ export class ChallengeLoader {
       previewTitle: meta.previewTitle ?? `Challenge: ${meta.title} | Preview`,
       links: meta.links ?? [],
       disabled: true,
+      discussionUrl: meta.discussionUrl,
     };
   }
 

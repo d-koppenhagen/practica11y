@@ -19,6 +19,7 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button'
   - text: 'Deque: Links vs. Buttons'
     url: 'https://www.deque.com/blog/links-buttons-submits-divs/'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/14'
 ---
 
 In this challenge, buttons and links are used incorrectly. Buttons are used for navigation (going to a different page), and links are used for actions (adding to cart). This confuses assistive technology and keyboard users.

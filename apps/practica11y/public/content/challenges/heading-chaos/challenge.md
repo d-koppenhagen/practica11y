@@ -17,6 +17,7 @@ links:
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/headings-and-labels.html'
   - text: 'Deque: Heading Order'
     url: 'https://dequeuniversity.com/rules/axe/4.10/heading-order'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/9'
 ---
 
 In this challenge you see a page with jumbled heading levels. The hierarchy is wrong: levels are skipped and the order doesn't make sense.

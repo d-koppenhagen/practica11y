@@ -103,6 +103,38 @@
     }
   </nav>
 
+  @if (data.discussionUrl) {
+  <div class="success-dialog-discussion">
+    <a
+      class="success-dialog-discussion-link"
+      [href]="data.discussionUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <svg
+        aria-hidden="true"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path
+          d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+        />
+      </svg>
+      Discuss this challenge
+      <span class="sr-only">(opens in new tab)</span>
+    </a>
+    <p class="success-dialog-discussion-hint">
+      Share your approach, ask questions, or help others
+    </p>
+  </div>
+  }
+
   <div class="success-dialog-feedback">
     <p class="success-dialog-feedback-text">
       Something didn't work as expected, or do you have suggestions to improve

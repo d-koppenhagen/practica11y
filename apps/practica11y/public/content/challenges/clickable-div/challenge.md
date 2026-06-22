@@ -17,6 +17,7 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button'
   - text: 'APG: Button Pattern'
     url: 'https://www.w3.org/WAI/ARIA/apg/patterns/button/'
+discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/7'
 ---
 
 In this challenge you see a `<div>` element styled as a clickable button. The problem: for screen readers and keyboard users, this element is invisible or not operable.
