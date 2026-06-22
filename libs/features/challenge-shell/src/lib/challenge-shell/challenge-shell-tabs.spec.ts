@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { Challenge } from '@practica11y/models';
 import { AccessibilityNode, AnalysisPipelineResult } from '@practica11y/types';
 import { SandboxAxeViolation } from '@practica11y/sandbox';
-import { TreeTab } from '@practica11y/util';
+import { LayoutStore, TreeTab } from '@practica11y/util';
 
 import { ChallengeShell } from './challenge-shell';
 import { AnalysisPipeline } from '../analysis-pipeline';
@@ -431,6 +431,78 @@ describe('ChallengeShell tab integration', () => {
       const treePanel = fixture.debugElement.query(By.css('#tree-panel-tree'));
       expect(colorPanel.nativeElement.hidden).toBe(true);
       expect(treePanel.nativeElement.hidden).toBe(false);
+    });
+  });
+
+  describe('Panel expand on tab switch', () => {
+    let layoutStore: LayoutStore;
+
+    beforeEach(() => {
+      layoutStore = TestBed.inject(LayoutStore);
+    });
+
+    it('should expand the tree panel when a tree tab is clicked while collapsed', () => {
+      // Collapse the tree panel
+      layoutStore.setPanelCollapsed('tree', true);
+      fixture.detectChanges();
+
+      // Click a tree tab
+      const colorTab = fixture.debugElement.query(
+        By.css('#tree-tab-color-contrast'),
+      );
+      colorTab.nativeElement.click();
+      fixture.detectChanges();
+
+      // Panel should be expanded
+      expect(layoutStore.layout().collapsed.tree).toBe(false);
+    });
+
+    it('should expand the editor panel when an editor tab is clicked while collapsed', () => {
+      // Collapse the editor panel
+      layoutStore.setPanelCollapsed('editor', true);
+      fixture.detectChanges();
+
+      // Click a CSS tab
+      const cssTab = fixture.debugElement.query(By.css('#editor-tab-css'));
+      cssTab.nativeElement.click();
+      fixture.detectChanges();
+
+      // Panel should be expanded
+      expect(layoutStore.layout().collapsed.editor).toBe(false);
+    });
+
+    it('should not affect tree panel state when already expanded', () => {
+      // Ensure tree panel is expanded
+      expect(layoutStore.layout().collapsed.tree).toBe(false);
+
+      // Click a tree tab
+      const srTab = fixture.debugElement.query(
+        By.css('#tree-tab-screen-reader'),
+      );
+      srTab.nativeElement.click();
+      fixture.detectChanges();
+
+      // Panel should remain expanded
+      expect(layoutStore.layout().collapsed.tree).toBe(false);
+    });
+
+    it('should expand tree panel on keyboard navigation while collapsed', () => {
+      // Collapse the tree panel
+      layoutStore.setPanelCollapsed('tree', true);
+      fixture.detectChanges();
+
+      // ArrowRight from tree tab (keyboard navigation also calls switchTreeTab)
+      const treeTab = fixture.debugElement.query(By.css('#tree-tab-tree'));
+      const event = new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        bubbles: true,
+        cancelable: true,
+      });
+      treeTab.nativeElement.dispatchEvent(event);
+      fixture.detectChanges();
+
+      // Panel should be expanded
+      expect(layoutStore.layout().collapsed.tree).toBe(false);
     });
   });
 });

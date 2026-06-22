@@ -442,10 +442,16 @@ export class ChallengeShell {
 
   protected switchEditorTab(tab: EditorTab): void {
     this.activeEditorTab.set(tab);
+    if (this.layoutStore.layout().collapsed.editor) {
+      this.layoutStore.setPanelCollapsed('editor', false);
+    }
   }
 
   protected switchTreeTab(tab: TreeTab): void {
     this.layoutStore.setActiveTreeTab(tab);
+    if (this.layoutStore.layout().collapsed.tree) {
+      this.layoutStore.setPanelCollapsed('tree', false);
+    }
   }
 
   protected updateScreenReaderRate(rate: number): void {
