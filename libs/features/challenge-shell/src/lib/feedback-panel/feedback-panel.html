@@ -9,18 +9,6 @@
 </div>
 } @case ('results') {
 <div aria-live="polite" aria-atomic="true" class="feedback-results">
-  @defer (on interaction) {
   <a11y-challenge-feedback [result]="analysisResult()" />
-  } @placeholder {
-  <div class="defer-placeholder" role="status" aria-live="polite">
-    <span class="shell-spinner"></span>
-    <span>Loading feedback…</span>
-  </div>
-  } @loading (minimum 200ms) {
-  <div class="defer-placeholder" role="status" aria-live="polite">
-    <span class="shell-spinner"></span>
-    <span>Loading feedback…</span>
-  </div>
-  }
 </div>
 } }

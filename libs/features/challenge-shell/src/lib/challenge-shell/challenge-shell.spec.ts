@@ -491,13 +491,6 @@ describe('ChallengeShell', () => {
       mockPipeline.analysisResult.set(mockResult);
       fixture.detectChanges();
 
-      // Render nested @defer blocks that appear after state change
-      const deferBlocks = await fixture.getDeferBlocks();
-      for (const block of deferBlocks) {
-        await block.render(DeferBlockState.Complete);
-      }
-      fixture.detectChanges();
-
       // Find the ChallengeFeedback component and verify its result input
       const feedbackDebugEl = fixture.debugElement.query(
         By.directive(MockChallengeFeedback),
@@ -552,13 +545,6 @@ describe('ChallengeShell', () => {
         }
       ).feedbackVisible.set(true);
       mockPipeline.isAnalyzing.set(false);
-      fixture.detectChanges();
-
-      // Render nested @defer blocks that appear after state change
-      const deferBlocks = await fixture.getDeferBlocks();
-      for (const block of deferBlocks) {
-        await block.render(DeferBlockState.Complete);
-      }
       fixture.detectChanges();
 
       // Step 6: Verify ChallengeFeedback received the updated result

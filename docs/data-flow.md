@@ -113,6 +113,18 @@ sequenceDiagram
 - User code is **never** executed in the Angular context
 - Errors in user code are caught inside the iframe and communicated via `postMessage`
 
+### Script Loading & Caching
+
+The sandbox iframe includes two static scripts (`axe.min.js` and `sandbox-analysis.js`) via `<script src="...">` tags in the generated `srcdoc`. Because `srcdoc` is a computed signal, **every content change** (debounced at 300ms) replaces the entire iframe document, causing the browser to re-request both scripts.
+
+This is **by design** and not a performance concern:
+
+- **HTTP 304 responses**: The browser sends conditional requests (If-None-Match), receives a header-only 304 (no body transfer), and serves from disk/memory cache. The network cost is ~2-3ms per script.
+- **Clean execution environment**: Each srcdoc replacement guarantees a fresh JavaScript context with no state leaks between runs — critical for accurate accessibility analysis.
+- **Script re-evaluation**: While the scripts are re-parsed and executed on each reload, `sandbox-analysis.js` is minimal (~2KB bundled) and `axe.min.js` evaluation is fast from warm cache.
+
+An alternative approach (injecting scripts once via Blob URLs and updating content via `postMessage`) would eliminate re-evaluation but sacrifice the isolation guarantee and significantly increase architectural complexity. The current trade-off favors correctness and simplicity over marginal performance gains.
+
 ## Color Contrast Checker Flow
 
 The Color Contrast Checker allows learners to pick elements in the live preview and inspect their foreground/background contrast against WCAG 2.1 thresholds:
