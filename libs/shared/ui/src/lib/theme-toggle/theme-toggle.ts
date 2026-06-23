@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ThemeService } from '@practica11y/util';
 
 @Component({
-  selector: 'lib-theme-toggle',
+  selector: 'a11y-theme-toggle',
   template: `
     <button
       type="button"

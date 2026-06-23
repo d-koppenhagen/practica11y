@@ -15,10 +15,9 @@ import {
   CatbeeMonacoEditor,
   MonacoEditorOptions,
 } from '@ng-catbee/monaco-editor';
-import { SandboxPreview, SandboxAxeViolation } from '@practica11y/sandbox';
+import { SandboxAxeViolation } from '@practica11y/sandbox';
 import { AccessibilityTree } from '@practica11y/accessibility-tree';
 import { VirtualScreenReader } from '@practica11y/virtual-screen-reader';
-import { ChallengeFeedback } from '@practica11y/challenge-feedback';
 import { ColorContrastPanel } from '@practica11y/color-contrast-checker';
 import { ChallengeLoader } from '@practica11y/loader';
 import {
@@ -27,17 +26,22 @@ import {
   LEVEL_THRESHOLDS,
 } from '@practica11y/types';
 import {
-  renderMarkdown,
   Gamification,
   LayoutStore,
   ProgressStore,
   ThemeService,
   TreeTab,
 } from '@practica11y/util';
+import { MarkdownContent } from '@practica11y/ui';
 
 import { AnalysisPipeline } from '../analysis-pipeline';
+import { ShellLayout } from '../shell-layout';
 import { ShellPanel } from '../shell-panel/shell-panel';
 import { ShellResizer } from '../shell-resizer/shell-resizer';
+import { EditorTabs } from '../editor-tabs/editor-tabs';
+import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
+import { FeedbackPanel } from '../feedback-panel/feedback-panel';
+import { PreviewPanel } from '../preview-panel/preview-panel';
 import {
   ChallengeSuccessDialog,
   ChallengeSuccessDialogData,
@@ -51,15 +55,18 @@ type EditorTab = 'html' | 'js' | 'css' | 'vtt';
   selector: 'a11y-challenge-shell',
   imports: [
     CatbeeMonacoEditor,
-    SandboxPreview,
     AccessibilityTree,
     VirtualScreenReader,
-    ChallengeFeedback,
     ColorContrastPanel,
     ShellPanel,
     ShellResizer,
+    EditorTabs,
+    InvestigationToolTabs,
+    FeedbackPanel,
+    PreviewPanel,
+    MarkdownContent,
   ],
-  providers: [AnalysisPipeline],
+  providers: [AnalysisPipeline, ShellLayout],
   templateUrl: './challenge-shell.html',
   styleUrl: './challenge-shell.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -68,6 +75,7 @@ export class ChallengeShell {
   readonly challenge = input.required<Challenge>();
 
   protected readonly pipeline = inject(AnalysisPipeline);
+  protected readonly shellLayout = inject(ShellLayout);
   private readonly layoutStore = inject(LayoutStore);
   private readonly progressStore = inject(ProgressStore);
   private readonly themeService = inject(ThemeService);
@@ -123,61 +131,47 @@ export class ChallengeShell {
   protected readonly treePanel = viewChild<ShellPanel>('treePanel');
   protected readonly feedbackPanel = viewChild<ShellPanel>('feedbackPanel');
 
-  /** Column widths — reads from layout store */
-  protected readonly colWidths = computed(
-    () => this.layoutStore.layout().colWidths,
-  );
+  /** Column widths — delegated to ShellLayout */
+  protected readonly colWidths = this.shellLayout.colWidths;
 
-  /** Row heights — reads from layout store */
-  protected readonly rowHeights = computed(
-    () => this.layoutStore.layout().rowHeights,
-  );
+  /** Row heights — delegated to ShellLayout */
+  protected readonly rowHeights = this.shellLayout.rowHeights;
 
   /** Separator position as percentage for col1 resizer (left / total) */
-  protected readonly col1SeparatorPercent = computed(() => {
-    const [l, m, r] = this.colWidths();
-    return Math.round((l / (l + m + r)) * 100);
-  });
+  protected readonly col1SeparatorPercent =
+    this.shellLayout.col1SeparatorPercent;
 
   /** Separator position as percentage for col2 resizer (middle / (middle + right)) */
-  protected readonly col2SeparatorPercent = computed(() => {
-    const [, m, r] = this.colWidths();
-    return Math.round((m / (m + r)) * 100);
-  });
+  protected readonly col2SeparatorPercent =
+    this.shellLayout.col2SeparatorPercent;
 
   /** Separator position as percentage for row resizer (top / total) */
-  protected readonly rowSeparatorPercent = computed(() => {
-    const [t, b] = this.rowHeights();
-    return Math.round((t / (t + b)) * 100);
-  });
+  protected readonly rowSeparatorPercent = this.shellLayout.rowSeparatorPercent;
 
   /** Compute effective description flex: collapse to auto when panel is collapsed */
   protected readonly descriptionFlex = computed(() => {
     const panel = this.descriptionPanel();
-    if (panel?.collapsed()) {
-      return '0 0 auto';
-    }
-    return String(this.colWidths()[0]);
+    return this.shellLayout.descriptionFlex(panel?.collapsed() ?? false);
   });
 
   /** Compute effective top row flex: if both editor+preview are collapsed, row shrinks */
   protected readonly topRowFlex = computed(() => {
     const editor = this.editorPanel();
     const preview = this.previewPanel();
-    if (editor?.collapsed() && preview?.collapsed()) {
-      return '0 0 auto';
-    }
-    return String(this.rowHeights()[0]);
+    return this.shellLayout.topRowFlex(
+      editor?.collapsed() ?? false,
+      preview?.collapsed() ?? false,
+    );
   });
 
   /** Compute effective bottom row flex: if both tree+feedback are collapsed, row shrinks */
   protected readonly bottomRowFlex = computed(() => {
     const tree = this.treePanel();
     const feedback = this.feedbackPanel();
-    if (tree?.collapsed() && feedback?.collapsed()) {
-      return '0 0 auto';
-    }
-    return String(this.rowHeights()[1]);
+    return this.shellLayout.bottomRowFlex(
+      tree?.collapsed() ?? false,
+      feedback?.collapsed() ?? false,
+    );
   });
 
   protected readonly accessibilityTree = computed<AccessibilityNode | null>(
@@ -208,10 +202,6 @@ export class ChallengeShell {
       }
       return 'results';
     },
-  );
-
-  protected readonly renderedDescription = computed(() =>
-    renderMarkdown(this.challenge().description),
   );
 
   constructor() {
@@ -302,36 +292,21 @@ export class ChallengeShell {
     const el = this.hostRef.nativeElement as HTMLElement;
     const gridWidth =
       el.querySelector('.shell-grid')?.clientWidth ?? el.clientWidth;
-    const [l, m, r] = this.colWidths();
-    const total = l + m + r;
-    const frDelta = (delta / gridWidth) * total;
-    const newL = Math.max(0.5, l + frDelta);
-    const newM = Math.max(0.5, m - frDelta);
-    this.layoutStore.setColWidths([newL, newM, r]);
+    this.shellLayout.resizeCol1(delta, gridWidth);
   }
 
   protected onResizeCol2(delta: number): void {
     const el = this.hostRef.nativeElement as HTMLElement;
     const gridWidth =
       el.querySelector('.shell-grid')?.clientWidth ?? el.clientWidth;
-    const [l, m, r] = this.colWidths();
-    const total = l + m + r;
-    const frDelta = (delta / gridWidth) * total;
-    const newM = Math.max(0.5, m + frDelta);
-    const newR = Math.max(0.5, r - frDelta);
-    this.layoutStore.setColWidths([l, newM, newR]);
+    this.shellLayout.resizeCol2(delta, gridWidth);
   }
 
   protected onResizeRow(delta: number): void {
     const el = this.hostRef.nativeElement as HTMLElement;
     const gridHeight =
       el.querySelector('.shell-grid')?.clientHeight ?? el.clientHeight;
-    const [t, b] = this.rowHeights();
-    const total = t + b;
-    const frDelta = (delta / gridHeight) * total;
-    const newT = Math.max(0.3, t + frDelta);
-    const newB = Math.max(0.3, b - frDelta);
-    this.layoutStore.setRowHeights([newT, newB]);
+    this.shellLayout.resizeRow(delta, gridHeight);
   }
 
   protected onHtmlContentChange(content: string): void {
@@ -403,31 +378,6 @@ export class ChallengeShell {
     }
   }
 
-  protected openPreviewInNewTab(): void {
-    const html = this.htmlContent();
-    const js = this.jsContent();
-    const css = this.cssContent();
-    const vtt = this.vttContent();
-
-    const vttScript = vtt
-      ? `<script>(function() {
-    var vttContent = ${JSON.stringify(vtt)};
-    var blob = new Blob([vttContent], { type: 'text/vtt' });
-    var blobUrl = URL.createObjectURL(blob);
-    document.querySelectorAll('track[src]').forEach(function(track) {
-      if (track.getAttribute('src').endsWith('.vtt')) {
-        track.setAttribute('src', blobUrl);
-      }
-    });
-  })();</script>`
-      : '';
-
-    const srcdoc = `<!DOCTYPE html><html><head><style>${css}</style></head><body>${html}${vttScript}<script>${js}</script></body></html>`;
-    const blob = new Blob([srcdoc], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
-  }
-
   protected readonly editorTabs = computed<EditorTab[]>(() => {
     const tabs: EditorTab[] = ['html'];
     if (this.challenge().starter.js) {
@@ -466,44 +416,18 @@ export class ChallengeShell {
     this.layoutStore.setScreenReaderHighlightEnabled(enabled);
   }
 
-  protected onTreeTabKeydown(event: KeyboardEvent, tab: TreeTab): void {
-    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
-      return;
-    }
-    event.preventDefault();
-    const tabs: TreeTab[] = ['tree', 'screen-reader', 'color-contrast'];
-    const currentIndex = tabs.indexOf(tab);
-    const nextIndex =
-      event.key === 'ArrowRight'
-        ? (currentIndex + 1) % tabs.length
-        : (currentIndex - 1 + tabs.length) % tabs.length;
-    const nextTab = tabs[nextIndex];
-    this.switchTreeTab(nextTab);
-    const el = (event.target as HTMLElement)
-      .closest('[role="tablist"]')
-      ?.querySelector(`#tree-tab-${nextTab}`) as HTMLElement | null;
-    el?.focus();
-  }
-
-  protected onEditorTabKeydown(event: KeyboardEvent, tab: EditorTab): void {
-    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
-      event.preventDefault();
-      const tabs = this.editorTabs();
-      const currentIndex = tabs.indexOf(tab);
-      let nextIndex: number;
-      if (event.key === 'ArrowRight') {
-        nextIndex = (currentIndex + 1) % tabs.length;
-      } else {
-        nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-      }
-      const nextTab = tabs[nextIndex];
-      this.switchEditorTab(nextTab);
-      const tabId = `editor-tab-${nextTab}`;
-      const el = (event.target as HTMLElement)
-        .closest('[role="tablist"]')
-        ?.querySelector(`#${tabId}`) as HTMLElement | null;
-      el?.focus();
-    }
+  protected openPreviewInNewTab(): void {
+    const html = this.htmlContent();
+    const js = this.jsContent();
+    const css = this.cssContent();
+    const vtt = this.vttContent();
+    const vttScript = vtt
+      ? `<script>(function() { var vttContent = ${JSON.stringify(vtt)}; var blob = new Blob([vttContent], { type: 'text/vtt' }); var blobUrl = URL.createObjectURL(blob); document.querySelectorAll('track[src]').forEach(function(track) { if (track.getAttribute('src').endsWith('.vtt')) { track.setAttribute('src', blobUrl); } }); })();</script>`
+      : '';
+    const srcdoc = `<!DOCTYPE html><html><head><style>${css}</style></head><body>${html}${vttScript}<script>${js}</script></body></html>`;
+    const blob = new Blob([srcdoc], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
   }
 
   private requestIframeAnalysis(): void {

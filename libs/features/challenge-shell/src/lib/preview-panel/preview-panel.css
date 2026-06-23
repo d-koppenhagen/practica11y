@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.preview-content {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ===================================================================
+   Defer placeholder
+   =================================================================== */
+
+.defer-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: var(--p11y-text-muted, #6b7280);
+}
+
+.shell-spinner {
+  display: inline-block;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+  border: 2px solid var(--p11y-border, #d1d5db);
+  border-top-color: var(--p11y-primary, #2563eb);
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell-spinner {
+    animation: none;
+  }
+}

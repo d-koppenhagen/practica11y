@@ -15,10 +15,10 @@
       <span class="completion-badge" aria-label="Completed">✓</span>
       }
     </h1>
-    <div
-      class="shell-description-content prose"
-      [innerHTML]="renderedDescription()"
-    ></div>
+    <a11y-markdown-content
+      class="shell-description-content"
+      [source]="challenge().description"
+    />
     @if (challenge().links.length > 0) {
     <nav class="shell-description-links" aria-label="Further reading">
       <h2>Further Reading</h2>
@@ -77,71 +77,19 @@
         [style.flex]="colWidths()[1]"
       >
         <h2 id="editor-heading" class="sr-only">Code Editor</h2>
-        <div
+        <a11y-editor-tabs
           panelHeader
-          role="tablist"
-          aria-label="Editor language"
-          class="shell-tabs"
-        >
-          <button
-            id="editor-tab-html"
-            role="tab"
-            [attr.aria-selected]="activeEditorTab() === 'html'"
-            [attr.aria-controls]="'editor-panel-html'"
-            [class]="'shell-tab' + (activeEditorTab() === 'html' ? ' shell-tab--active' : '')"
-            [tabindex]="activeEditorTab() === 'html' ? 0 : -1"
-            (click)="switchEditorTab('html')"
-            (keydown)="onEditorTabKeydown($event, 'html')"
-          >
-            HTML
-          </button>
-          @if (challenge().starter.js) {
-          <button
-            id="editor-tab-js"
-            role="tab"
-            [attr.aria-selected]="activeEditorTab() === 'js'"
-            [attr.aria-controls]="'editor-panel-js'"
-            [class]="'shell-tab' + (activeEditorTab() === 'js' ? ' shell-tab--active' : '')"
-            [tabindex]="activeEditorTab() === 'js' ? 0 : -1"
-            (click)="switchEditorTab('js')"
-            (keydown)="onEditorTabKeydown($event, 'js')"
-          >
-            JS
-          </button>
-          }
-          <button
-            id="editor-tab-css"
-            role="tab"
-            [attr.aria-selected]="activeEditorTab() === 'css'"
-            [attr.aria-controls]="'editor-panel-css'"
-            [class]="'shell-tab' + (activeEditorTab() === 'css' ? ' shell-tab--active' : '')"
-            [tabindex]="activeEditorTab() === 'css' ? 0 : -1"
-            (click)="switchEditorTab('css')"
-            (keydown)="onEditorTabKeydown($event, 'css')"
-          >
-            CSS
-          </button>
-          @if (challenge().starter.vtt) {
-          <button
-            id="editor-tab-vtt"
-            role="tab"
-            [attr.aria-selected]="activeEditorTab() === 'vtt'"
-            [attr.aria-controls]="'editor-panel-vtt'"
-            [class]="'shell-tab' + (activeEditorTab() === 'vtt' ? ' shell-tab--active' : '')"
-            [tabindex]="activeEditorTab() === 'vtt' ? 0 : -1"
-            (click)="switchEditorTab('vtt')"
-            (keydown)="onEditorTabKeydown($event, 'vtt')"
-          >
-            VTT
-          </button>
-          }
-        </div>
+          [tabs]="editorTabs()"
+          [activeTab]="activeEditorTab()"
+          (tabActivated)="switchEditorTab($event)"
+        />
         <div
           id="editor-panel-html"
           role="tabpanel"
           aria-labelledby="editor-tab-html"
           [class]="'shell-editor-panel' + (activeEditorTab() !== 'html' ? ' shell-editor-panel--hidden' : '')"
         >
+          @defer (on viewport) {
           <ng-catbee-monaco-editor
             [language]="'html'"
             [options]="editorOptions()"
@@ -150,6 +98,17 @@
             [(value)]="htmlContent"
             (valueChange)="onHtmlContentChange($event)"
           />
+          } @placeholder {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading editor…</span>
+          </div>
+          } @loading (minimum 200ms) {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading editor…</span>
+          </div>
+          }
         </div>
         @if (challenge().starter.js) {
         <div
@@ -158,6 +117,7 @@
           aria-labelledby="editor-tab-js"
           [class]="'shell-editor-panel' + (activeEditorTab() !== 'js' ? ' shell-editor-panel--hidden' : '')"
         >
+          @defer (on viewport) {
           <ng-catbee-monaco-editor
             [language]="'javascript'"
             [options]="editorOptions()"
@@ -166,6 +126,17 @@
             [(value)]="jsContent"
             (valueChange)="onJsContentChange($event)"
           />
+          } @placeholder {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading editor…</span>
+          </div>
+          } @loading (minimum 200ms) {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading editor…</span>
+          </div>
+          }
         </div>
         }
         <div
@@ -174,6 +145,7 @@
           aria-labelledby="editor-tab-css"
           [class]="'shell-editor-panel' + (activeEditorTab() !== 'css' ? ' shell-editor-panel--hidden' : '')"
         >
+          @defer (on viewport) {
           <ng-catbee-monaco-editor
             [language]="'css'"
             [options]="editorOptions()"
@@ -182,6 +154,17 @@
             [(value)]="cssContent"
             (valueChange)="onCssContentChange($event)"
           />
+          } @placeholder {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading editor…</span>
+          </div>
+          } @loading (minimum 200ms) {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading editor…</span>
+          </div>
+          }
         </div>
         @if (challenge().starter.vtt) {
         <div
@@ -190,6 +173,7 @@
           aria-labelledby="editor-tab-vtt"
           [class]="'shell-editor-panel' + (activeEditorTab() !== 'vtt' ? ' shell-editor-panel--hidden' : '')"
         >
+          @defer (on viewport) {
           <ng-catbee-monaco-editor
             [language]="'plaintext'"
             [options]="editorOptions()"
@@ -198,6 +182,17 @@
             [(value)]="vttContent"
             (valueChange)="onVttContentChange($event)"
           />
+          } @placeholder {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading editor…</span>
+          </div>
+          } @loading (minimum 200ms) {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading editor…</span>
+          </div>
+          }
         </div>
         }
       </a11y-shell-panel>
@@ -249,7 +244,7 @@
             </svg>
           </button>
         </div>
-        <a11y-sandbox-preview
+        <a11y-preview-panel
           [htmlContent]="htmlContent()"
           [jsContent]="jsContent()"
           [cssContent]="cssContent()"
@@ -284,49 +279,11 @@
         [style.flex]="colWidths()[1]"
       >
         <h2 id="a11y-tree-heading" class="sr-only">Accessibility Output</h2>
-        <div
+        <a11y-investigation-tool-tabs
           panelHeader
-          role="tablist"
-          aria-label="Accessibility output view"
-          class="shell-tabs"
-        >
-          <button
-            id="tree-tab-tree"
-            role="tab"
-            [attr.aria-selected]="activeTreeTab() === 'tree'"
-            [attr.aria-controls]="'tree-panel-tree'"
-            [class]="'shell-tab' + (activeTreeTab() === 'tree' ? ' shell-tab--active' : '')"
-            [tabindex]="activeTreeTab() === 'tree' ? 0 : -1"
-            (click)="switchTreeTab('tree')"
-            (keydown)="onTreeTabKeydown($event, 'tree')"
-          >
-            Accessibility Tree
-          </button>
-          <button
-            id="tree-tab-screen-reader"
-            role="tab"
-            [attr.aria-selected]="activeTreeTab() === 'screen-reader'"
-            [attr.aria-controls]="'tree-panel-screen-reader'"
-            [class]="'shell-tab' + (activeTreeTab() === 'screen-reader' ? ' shell-tab--active' : '')"
-            [tabindex]="activeTreeTab() === 'screen-reader' ? 0 : -1"
-            (click)="switchTreeTab('screen-reader')"
-            (keydown)="onTreeTabKeydown($event, 'screen-reader')"
-          >
-            Virtual Screen Reader
-          </button>
-          <button
-            id="tree-tab-color-contrast"
-            role="tab"
-            [attr.aria-selected]="activeTreeTab() === 'color-contrast'"
-            [attr.aria-controls]="'tree-panel-color-contrast'"
-            [class]="'shell-tab' + (activeTreeTab() === 'color-contrast' ? ' shell-tab--active' : '')"
-            [tabindex]="activeTreeTab() === 'color-contrast' ? 0 : -1"
-            (click)="switchTreeTab('color-contrast')"
-            (keydown)="onTreeTabKeydown($event, 'color-contrast')"
-          >
-            Color Contrast
-          </button>
-        </div>
+          [activeTab]="activeTreeTab()"
+          (tabActivated)="switchTreeTab($event)"
+        />
         <div
           id="tree-panel-tree"
           role="tabpanel"
@@ -334,10 +291,22 @@
           class="shell-tree-panel"
           [hidden]="activeTreeTab() !== 'tree'"
         >
+          @defer (on idle) {
           <a11y-accessibility-tree
             [tree]="accessibilityTree()"
             [pageTitle]="sandboxPageTitle()"
           />
+          } @placeholder {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading accessibility tree…</span>
+          </div>
+          } @loading (minimum 200ms) {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading accessibility tree…</span>
+          </div>
+          }
         </div>
         <div
           id="tree-panel-screen-reader"
@@ -346,6 +315,7 @@
           class="shell-tree-panel shell-tree-panel--sr"
           [hidden]="activeTreeTab() !== 'screen-reader'"
         >
+          @defer (on idle) {
           <a11y-virtual-screen-reader
             [sandboxDocument]="sandboxDocument()"
             [revision]="srRevision()"
@@ -357,6 +327,17 @@
             [highlightEnabled]="screenReaderHighlightEnabled()"
             (highlightEnabledChange)="updateScreenReaderHighlightEnabled($event)"
           />
+          } @placeholder {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading screen reader…</span>
+          </div>
+          } @loading (minimum 200ms) {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading screen reader…</span>
+          </div>
+          }
         </div>
         <div
           id="tree-panel-color-contrast"
@@ -365,7 +346,19 @@
           class="shell-tree-panel"
           [hidden]="activeTreeTab() !== 'color-contrast'"
         >
+          @defer (on idle) {
           <a11y-color-contrast-panel [sandboxIframe]="previewIframe()" />
+          } @placeholder {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading color contrast checker…</span>
+          </div>
+          } @loading (minimum 200ms) {
+          <div class="defer-placeholder" role="status" aria-live="polite">
+            <span class="shell-spinner"></span>
+            <span>Loading color contrast checker…</span>
+          </div>
+          }
         </div>
       </a11y-shell-panel>
 
@@ -417,22 +410,11 @@
           </a>
           }
         </div>
-        @switch (feedbackState()) { @case ('button') {
-        <div class="shell-feedback-action">
-          <button class="check-solution-btn" (click)="checkSolution()">
-            Check Solution
-          </button>
-        </div>
-        } @case ('loading') {
-        <div class="shell-feedback-loading" role="status" aria-live="polite">
-          <span class="shell-spinner"></span>
-          Analyzing…
-        </div>
-        } @case ('results') {
-        <div aria-live="polite" aria-atomic="true">
-          <a11y-challenge-feedback [result]="pipeline.analysisResult()" />
-        </div>
-        } }
+        <a11y-feedback-panel
+          [state]="feedbackState()"
+          [analysisResult]="pipeline.analysisResult()"
+          (checkSolution)="checkSolution()"
+        />
       </a11y-shell-panel>
     </div>
   </div>

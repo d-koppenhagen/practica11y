@@ -17,7 +17,10 @@
     "@practica11y/accessibility-tree": "workspace:*",
     "@practica11y/virtual-screen-reader": "workspace:*",
     "@practica11y/challenge-feedback": "workspace:*",
-    "@practica11y/color-contrast-checker": "workspace:*"
+    "@practica11y/color-contrast-checker": "workspace:*",
+    "@practica11y/ui": "workspace:*",
+    "@angular/common": "catalog:",
+    "@angular/aria": "catalog:"
   },
   "sideEffects": false
 }

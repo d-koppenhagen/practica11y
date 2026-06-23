@@ -10,7 +10,7 @@ Provides shared UI components for the entire application. Contains reusable, gen
 | ------------- | --------- | -------------------------------------------------------- |
 | `ThemeToggle` | Component | Toggle button for switching between light and dark theme |
 
-**Selector:** `lib-theme-toggle`
+**Selector:** `a11y-theme-toggle`
 
 ## Dependencies
 
@@ -23,7 +23,7 @@ import { ThemeToggle } from '@practica11y/ui';
 
 @Component({
   imports: [ThemeToggle],
-  template: `<lib-theme-toggle />`,
+  template: `<a11y-theme-toggle />`,
 })
 export class MyComponent {}
 ```

@@ -34,6 +34,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/aria": "catalog:",
     "@angular/cdk": "catalog:",
     "@angular/common": "catalog:",
     "@angular/compiler": "catalog:",
@@ -75,6 +76,7 @@
     "@swc/helpers": "catalog:",
     "@testing-library/angular": "catalog:",
     "@testing-library/dom": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
     "@types/node": "catalog:",
     "@typescript-eslint/utils": "catalog:",
     "@vitest/coverage-v8": "catalog:",

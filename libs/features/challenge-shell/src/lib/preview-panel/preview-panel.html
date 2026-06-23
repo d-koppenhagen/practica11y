@@ -1,0 +1,25 @@
+<div class="preview-content">
+  @defer (on viewport) {
+  <a11y-sandbox-preview
+    [htmlContent]="htmlContent()"
+    [jsContent]="jsContent()"
+    [cssContent]="cssContent()"
+    [vttContent]="vttContent()"
+    [previewTitle]="previewTitle()"
+    (domReady)="onDomReady($event)"
+    (axeResult)="onAxeResult($event)"
+    (axeError)="onAxeError($event)"
+    (interactionChange)="onInteractionChange()"
+  />
+  } @placeholder {
+  <div class="defer-placeholder" role="status" aria-live="polite">
+    <span class="shell-spinner"></span>
+    <span>Loading preview…</span>
+  </div>
+  } @loading (minimum 200ms) {
+  <div class="defer-placeholder" role="status" aria-live="polite">
+    <span class="shell-spinner"></span>
+    <span>Loading preview…</span>
+  </div>
+  }
+</div>

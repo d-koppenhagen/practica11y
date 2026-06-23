@@ -70,4 +70,6 @@ catalog:
   monaco-editor: '0.55.1'
   '@guidepup/virtual-screen-reader': '0.32.1'
   colorjs.io: '^0.6.1'
+  '@testing-library/jest-dom': ^6.9.1
+  '@angular/aria': ^22.0.2
 catalogMode: 'strict'

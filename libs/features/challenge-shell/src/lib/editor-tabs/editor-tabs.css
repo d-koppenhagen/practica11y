@@ -1,0 +1,44 @@
+:host {
+  display: block;
+}
+
+.shell-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--p11y-border, #e5e7eb);
+  background-color: var(--p11y-bg-muted, #f9fafb);
+}
+
+.shell-tab {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--p11y-text-secondary, #4b5563);
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.shell-tab:hover {
+  color: var(--p11y-text, #111827);
+  background-color: var(--p11y-bg-surface, #ffffff);
+}
+
+.shell-tab[aria-selected='true'] {
+  color: var(--p11y-primary, #4f46e5);
+  border-bottom: 2px solid var(--p11y-primary, #4f46e5);
+  background-color: var(--p11y-bg-surface, #ffffff);
+}
+
+.shell-tab:focus-visible {
+  outline: 2px solid var(--p11y-primary, #2563eb);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell-tab {
+    transition: none;
+  }
+}

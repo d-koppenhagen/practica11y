@@ -1,0 +1,15 @@
+<div ngTabs class="shell-tabs-container">
+  <div
+    ngTabList
+    [selectedTab]="activeTab()"
+    (selectedTabChange)="onSelectedTabChange($event)"
+    selectionMode="follow"
+    [wrap]="true"
+    aria-label="Editor language"
+    class="shell-tabs"
+  >
+    @for (tab of tabs(); track tab) {
+    <button ngTab [value]="tab" class="shell-tab">{{ tab | uppercase }}</button>
+    }
+  </div>
+</div>

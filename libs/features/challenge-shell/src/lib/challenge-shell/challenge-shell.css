@@ -84,11 +84,6 @@
     min-height: 300px;
   }
 
-  /* Mobile: feedback action area needs height since button is position:absolute */
-  .shell-feedback-action {
-    min-height: 4rem;
-  }
-
   /* Mobile: feedback panel body needs to grow */
   .shell-feedback ::ng-deep .panel-body {
     flex: none;
@@ -181,69 +176,7 @@ a11y-shell-resizer {
 }
 
 .shell-description-content {
-  max-width: none;
-  color: var(--p11y-text-secondary, #4b5563);
-  font-size: 0.875rem;
-  line-height: 1.7;
   flex: 1;
-}
-
-.shell-description-content ::ng-deep h2,
-.shell-description-content ::ng-deep h3 {
-  color: var(--p11y-text);
-}
-
-.shell-description-content ::ng-deep h2 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 1.5rem 0 0.75rem;
-}
-
-.shell-description-content ::ng-deep h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 1.25rem 0 0.5rem;
-}
-
-.shell-description-content ::ng-deep p {
-  margin: 0.75rem 0;
-}
-
-.shell-description-content ::ng-deep ul,
-.shell-description-content ::ng-deep ol {
-  margin: 0.5rem 0;
-  padding-left: 1.5rem;
-}
-
-.shell-description-content ::ng-deep ul {
-  list-style-type: disc;
-}
-
-.shell-description-content ::ng-deep ol {
-  list-style-type: decimal;
-}
-
-.shell-description-content ::ng-deep li {
-  margin: 0.25rem 0;
-}
-
-.shell-description-content ::ng-deep li::marker {
-  color: var(--p11y-text-muted, #6b7280);
-}
-
-.shell-description-content ::ng-deep code {
-  background-color: var(--p11y-code-bg);
-  padding: 0.125rem 0.375rem;
-  border-radius: 0.25rem;
-  font-size: 0.8125rem;
-}
-
-.shell-description-content ::ng-deep a {
-  color: var(--p11y-link);
-}
-
-.shell-description-content ::ng-deep a:hover {
-  color: var(--p11y-link-hover);
 }
 
 /* Links section pinned at bottom of description */
@@ -309,36 +242,6 @@ a11y-shell-resizer {
 .shell-editor ::ng-deep .panel-body {
   display: flex;
   flex-direction: column;
-}
-
-.shell-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--p11y-border, #e5e7eb);
-  background-color: var(--p11y-bg-muted, #f9fafb);
-}
-
-.shell-tab {
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: var(--p11y-text-secondary, #4b5563);
-  transition:
-    color 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.shell-tab:hover {
-  color: var(--p11y-text, #111827);
-  background-color: var(--p11y-bg-surface, #ffffff);
-}
-
-.shell-tab--active {
-  color: var(--p11y-primary, #4f46e5);
-  border-bottom: 2px solid var(--p11y-primary, #4f46e5);
-  background-color: var(--p11y-bg-surface, #ffffff);
 }
 
 .shell-editor-panel {
@@ -500,7 +403,11 @@ a11y-shell-resizer {
   outline-offset: 2px;
 }
 
-.shell-feedback-loading {
+/* ===================================================================
+   Defer placeholder
+   =================================================================== */
+
+.defer-placeholder {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -523,68 +430,4 @@ a11y-shell-resizer {
   to {
     transform: rotate(360deg);
   }
-}
-
-.shell-feedback-action {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  overflow: hidden;
-}
-
-.shell-feedback-action::before {
-  content: '?';
-  position: absolute;
-  font-size: 24rem;
-  font-weight: 900;
-  color: var(--p11y-primary, #4f46e5);
-  opacity: 0.08;
-  filter: blur(4px);
-  pointer-events: none;
-  user-select: none;
-  line-height: 1;
-}
-
-.check-solution-btn {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--p11y-primary, #4f46e5);
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
-  margin: 0;
-  z-index: 1;
-}
-
-.check-solution-btn:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--p11y-primary, #4f46e5) 10%,
-    transparent
-  );
-  color: var(--p11y-primary, #4f46e5);
-}
-
-.check-solution-btn:focus-visible {
-  outline: 2px solid var(--p11y-primary, #2563eb);
-  outline-offset: -2px;
-}
-
-.check-solution-btn:active {
-  background-color: color-mix(
-    in srgb,
-    var(--p11y-primary, #4f46e5) 18%,
-    transparent
-  );
-  color: var(--p11y-primary, #4f46e5);
 }

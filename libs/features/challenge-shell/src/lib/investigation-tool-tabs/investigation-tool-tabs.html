@@ -1,0 +1,15 @@
+<div ngTabs class="shell-tabs-container">
+  <div
+    ngTabList
+    [selectedTab]="activeTab()"
+    (selectedTabChange)="onSelectedTabChange($event)"
+    [selectionMode]="'follow'"
+    [wrap]="true"
+    aria-label="Accessibility output view"
+    class="shell-tabs"
+  >
+    @for (tab of tabs; track tab.id) {
+    <button ngTab [value]="tab.id" class="shell-tab">{{ tab.label }}</button>
+    }
+  </div>
+</div>

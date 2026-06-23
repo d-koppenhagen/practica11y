@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  DeferBlockBehavior,
+  DeferBlockState,
+  TestBed,
+} from '@angular/core/testing';
 import { Component, input, model, output, signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Challenge } from '@practica11y/models';
@@ -11,9 +16,15 @@ import { SandboxAxeViolation } from '@practica11y/sandbox';
 
 import { ChallengeShell } from './challenge-shell';
 import { AnalysisPipeline } from '../analysis-pipeline';
+import { ShellLayout } from '../shell-layout';
 import { ShellPanel } from '../shell-panel/shell-panel';
 import { ShellResizer } from '../shell-resizer/shell-resizer';
 import { Confetti } from '../confetti/confetti';
+import { EditorTabs } from '../editor-tabs/editor-tabs';
+import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
+import { FeedbackPanel } from '../feedback-panel/feedback-panel';
+import { PreviewPanel } from '../preview-panel/preview-panel';
+import { MarkdownContent } from '@practica11y/ui';
 
 // --- Stub components ---
 
@@ -152,25 +163,62 @@ describe('ChallengeShell', () => {
       })),
     });
 
+    // Mock IntersectionObserver for @defer (on viewport) blocks
+    if (!globalThis.IntersectionObserver) {
+      globalThis.IntersectionObserver = class IntersectionObserver {
+        constructor(private callback: IntersectionObserverCallback) {}
+        observe(target: Element) {
+          // Immediately trigger as intersecting so deferred blocks render
+          this.callback(
+            [{ isIntersecting: true, target } as IntersectionObserverEntry],
+            this as unknown as globalThis.IntersectionObserver,
+          );
+        }
+        unobserve() {
+          /* noop */
+        }
+        disconnect() {
+          /* noop */
+        }
+      } as unknown as typeof globalThis.IntersectionObserver;
+    }
+
     mockPipeline = new MockAnalysisPipeline();
 
     await TestBed.configureTestingModule({
       imports: [ChallengeShell],
+      deferBlockBehavior: DeferBlockBehavior.Playthrough,
     })
       .overrideComponent(ChallengeShell, {
         set: {
           imports: [
             MockCatbeeMonacoEditor,
-            MockSandboxPreview,
             MockAccessibilityTree,
-            MockChallengeFeedback,
             MockVirtualScreenReader,
             MockColorContrastPanel,
             ShellPanel,
             ShellResizer,
             Confetti,
+            EditorTabs,
+            InvestigationToolTabs,
+            FeedbackPanel,
+            PreviewPanel,
+            MarkdownContent,
           ],
-          providers: [{ provide: AnalysisPipeline, useValue: mockPipeline }],
+          providers: [
+            { provide: AnalysisPipeline, useValue: mockPipeline },
+            ShellLayout,
+          ],
+        },
+      })
+      .overrideComponent(FeedbackPanel, {
+        set: {
+          imports: [MockChallengeFeedback],
+        },
+      })
+      .overrideComponent(PreviewPanel, {
+        set: {
+          imports: [MockSandboxPreview],
         },
       })
       .compileComponents();
@@ -178,6 +226,13 @@ describe('ChallengeShell', () => {
     fixture = TestBed.createComponent(ChallengeShell);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('challenge', mockChallenge);
+    fixture.detectChanges();
+
+    // Render all @defer blocks to their complete state for testing
+    const deferBlocks = await fixture.getDeferBlocks();
+    for (const block of deferBlocks) {
+      await block.render(DeferBlockState.Complete);
+    }
     fixture.detectChanges();
     await fixture.whenStable();
   });
@@ -240,7 +295,10 @@ describe('ChallengeShell', () => {
     mockPipeline.isAnalyzing.set(true);
     fixture.detectChanges();
 
-    const loader = fixture.debugElement.query(By.css('[role="status"]'));
+    const feedbackSection = fixture.debugElement.query(
+      By.css('[aria-labelledby="feedback-heading"]'),
+    );
+    const loader = feedbackSection.query(By.css('[role="status"]'));
     expect(loader).toBeTruthy();
     expect(loader.nativeElement.textContent).toContain('Analyzing');
   });
@@ -249,7 +307,10 @@ describe('ChallengeShell', () => {
     mockPipeline.isAnalyzing.set(false);
     fixture.detectChanges();
 
-    const loader = fixture.debugElement.query(By.css('[role="status"]'));
+    const feedbackSection = fixture.debugElement.query(
+      By.css('[aria-labelledby="feedback-heading"]'),
+    );
+    const loader = feedbackSection.query(By.css('[role="status"]'));
     expect(loader).toBeFalsy();
   });
 
@@ -259,12 +320,20 @@ describe('ChallengeShell', () => {
   });
 
   it('should switch active editor tab when clicking CSS tab', () => {
-    const cssTab = fixture.debugElement.query(By.css('#editor-tab-css'));
+    const tablist = fixture.debugElement.query(
+      By.css('[aria-label="Editor language"]'),
+    );
+    const tabs = tablist.queryAll(By.css('[role="tab"]'));
+    const cssTab = tabs.find(
+      (t) => t.nativeElement.textContent.trim() === 'CSS',
+    )!;
     cssTab.nativeElement.click();
     fixture.detectChanges();
 
     expect(cssTab.nativeElement.getAttribute('aria-selected')).toBe('true');
-    const htmlTab = fixture.debugElement.query(By.css('#editor-tab-html'));
+    const htmlTab = tabs.find(
+      (t) => t.nativeElement.textContent.trim() === 'HTML',
+    )!;
     expect(htmlTab.nativeElement.getAttribute('aria-selected')).toBe('false');
   });
 
@@ -409,7 +478,7 @@ describe('ChallengeShell', () => {
       );
     });
 
-    it('should reactively update ChallengeFeedback when analysisResult signal changes', () => {
+    it('should reactively update ChallengeFeedback when analysisResult signal changes', async () => {
       // feedbackVisible must be true and isAnalyzing false for feedbackState === 'results'
       (
         component as unknown as {
@@ -420,6 +489,13 @@ describe('ChallengeShell', () => {
 
       // Update the analysisResult signal with mock data
       mockPipeline.analysisResult.set(mockResult);
+      fixture.detectChanges();
+
+      // Render nested @defer blocks that appear after state change
+      const deferBlocks = await fixture.getDeferBlocks();
+      for (const block of deferBlocks) {
+        await block.render(DeferBlockState.Complete);
+      }
       fixture.detectChanges();
 
       // Find the ChallengeFeedback component and verify its result input
@@ -433,7 +509,7 @@ describe('ChallengeShell', () => {
       expect(feedbackComponent.result()).toEqual(mockResult);
     });
 
-    it('should complete end-to-end flow: code change → domReady → pipeline → reactive re-render', () => {
+    it('should complete end-to-end flow: code change → domReady → pipeline → reactive re-render', async () => {
       mockPipeline.updateCode.mockClear();
       mockPipeline.runTreeAnalysis.mockClear();
       mockPipeline.setSandboxDocument.mockClear();
@@ -476,6 +552,13 @@ describe('ChallengeShell', () => {
         }
       ).feedbackVisible.set(true);
       mockPipeline.isAnalyzing.set(false);
+      fixture.detectChanges();
+
+      // Render nested @defer blocks that appear after state change
+      const deferBlocks = await fixture.getDeferBlocks();
+      for (const block of deferBlocks) {
+        await block.render(DeferBlockState.Complete);
+      }
       fixture.detectChanges();
 
       // Step 6: Verify ChallengeFeedback received the updated result
