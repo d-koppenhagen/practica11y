@@ -43,10 +43,10 @@ export const reducedMotion: Validator = {
         const cssText = style.textContent || '';
         if (/prefers-reduced-motion\s*:\s*reduce/i.test(cssText)) {
           hasReducedMotionQuery = true;
-          // Check that the media query contains a rule block with a selector that disables animations
-          // Pattern: selector { ... animation: none ... } inside the media query
+          // Check for animation-disabling patterns following the media query.
+          // Handles both top-level @media blocks and nested @media inside a selector.
           if (
-            /prefers-reduced-motion\s*:\s*reduce\s*\)\s*\{[^}]*\{[^}]*(animation\s*:\s*none|animation-duration\s*:\s*0|transition-duration\s*:\s*0|animation-play-state\s*:\s*paused)/i.test(
+            /prefers-reduced-motion\s*:\s*reduce\s*\)\s*\{[^}]*(animation\s*:\s*none|animation-duration\s*:\s*0|transition-duration\s*:\s*0|animation-play-state\s*:\s*paused)/i.test(
               cssText,
             )
           ) {
@@ -86,24 +86,57 @@ function checkStyleSheet(sheet: CSSStyleSheet): {
   let hasQuery = false;
   let disablesAnimations = false;
 
-  const rules = Array.from(sheet.cssRules || []);
-  for (const rule of rules) {
+  traverseRules(Array.from(sheet.cssRules || []), (rule) => {
     if (rule instanceof CSSMediaRule) {
       if (/prefers-reduced-motion\s*:\s*reduce/i.test(rule.conditionText)) {
         hasQuery = true;
-        // Check that at least one CSSStyleRule inside the media query disables animations
-        disablesAnimations = hasAnimationDisablingStyleRule(rule);
+        if (hasAnimationDisablingStyleRule(rule)) {
+          disablesAnimations = true;
+        }
       }
     }
-  }
+  });
 
   return { hasQuery, disablesAnimations };
 }
 
 /**
+ * Recursively traverses CSS rules, including those nested inside CSSStyleRule
+ * (CSS Nesting) and CSSGroupingRules (e.g., @supports, @layer).
+ */
+function traverseRules(
+  rules: CSSRule[],
+  callback: (rule: CSSRule) => void,
+): void {
+  for (const rule of rules) {
+    callback(rule);
+
+    // CSSStyleRule can contain nested rules when CSS Nesting is used
+    if (rule instanceof CSSStyleRule && rule.cssRules?.length) {
+      traverseRules(Array.from(rule.cssRules), callback);
+    }
+
+    // CSSGroupingRule covers @supports, @layer, and other grouping rules
+    // (but NOT CSSMediaRule which we handle via callback above)
+    if (
+      rule instanceof CSSGroupingRule &&
+      !(rule instanceof CSSMediaRule) &&
+      rule.cssRules?.length
+    ) {
+      traverseRules(Array.from(rule.cssRules), callback);
+    }
+
+    // Also recurse into CSSMediaRule children to find nested @media inside @media
+    if (rule instanceof CSSMediaRule && rule.cssRules?.length) {
+      traverseRules(Array.from(rule.cssRules), callback);
+    }
+  }
+}
+
+/**
  * Checks whether a CSSMediaRule contains at least one CSSStyleRule (with a selector)
- * that disables animations. A bare `animation: none` without a selector is invalid CSS
- * and should not pass validation.
+ * that disables animations. Also handles CSS Nesting where the rule might use
+ * the implicit `&` selector or be nested deeper.
  */
 function hasAnimationDisablingStyleRule(mediaRule: CSSMediaRule): boolean {
   const animationPattern =
@@ -113,6 +146,17 @@ function hasAnimationDisablingStyleRule(mediaRule: CSSMediaRule): boolean {
     if (innerRule instanceof CSSStyleRule) {
       if (animationPattern.test(innerRule.style.cssText)) {
         return true;
+      }
+      // Check nested rules within this style rule (deeper nesting)
+      if (innerRule.cssRules?.length) {
+        for (const nestedRule of Array.from(innerRule.cssRules)) {
+          if (
+            nestedRule instanceof CSSStyleRule &&
+            animationPattern.test(nestedRule.style.cssText)
+          ) {
+            return true;
+          }
+        }
       }
     }
   }
