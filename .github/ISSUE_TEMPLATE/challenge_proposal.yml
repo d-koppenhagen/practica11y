@@ -54,6 +54,32 @@ body:
     validations:
       required: false
   - type: textarea
+    id: starter_code
+    attributes:
+      label: Starter code (broken)
+      description: >-
+        Provide the initial HTML/CSS/JS that contains the accessibility problem.
+        Use fenced code blocks (```html, ```css, ```js).
+      placeholder: |
+        ```html
+        <!-- The broken code the user starts with -->
+        ```
+    validations:
+      required: false
+  - type: textarea
+    id: solution_code
+    attributes:
+      label: Solution code (fixed)
+      description: >-
+        Provide a reference solution that resolves the accessibility issue.
+        Use fenced code blocks (```html, ```css, ```js).
+      placeholder: |
+        ```html
+        <!-- The corrected, accessible version -->
+        ```
+    validations:
+      required: false
+  - type: textarea
     id: references
     attributes:
       label: References
