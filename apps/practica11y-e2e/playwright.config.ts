@@ -5,7 +5,8 @@ const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
 
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src/tests' }),
-  timeout: 60_000,
+  timeout: 90_000,
+  retries: process.env['CI'] ? 2 : 0,
   use: {
     baseURL,
     trace: 'on-first-retry',

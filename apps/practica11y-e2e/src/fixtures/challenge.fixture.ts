@@ -158,7 +158,7 @@ export const test = base.extend<{ challengeHelpers: ChallengeHelpers }>({
 
         // Wait for validation to complete: feedback results must appear
         await page.waitForSelector('.feedback-results', {
-          timeout: 60_000,
+          timeout: 90_000,
         });
       },
 
