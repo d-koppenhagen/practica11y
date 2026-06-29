@@ -88,6 +88,6 @@ jobs:
 
       - run: pnpm rebuild
 
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm --filter practica11y-e2e exec playwright install --with-deps chromium
 
       - run: pnpm nx e2e practica11y-e2e --no-tui --configuration=ci
