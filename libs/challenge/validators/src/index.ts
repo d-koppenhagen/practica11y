@@ -22,3 +22,4 @@ export { errorFocusManagement } from './lib/error-focus-management';
 export { videoHasCaptions } from './lib/video-has-captions';
 export { liveRegionPattern } from './lib/live-region-pattern';
 export { noDisabledSubmit } from './lib/no-disabled-submit';
+export { focusVisible } from './lib/focus-visible';

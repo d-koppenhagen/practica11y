@@ -11,6 +11,7 @@ allowBuilds:
   nx: true
   unrs-resolver: true
 catalog:
+  '@playwright/test': '1.61.0'
   '@angular/cdk': '22.0.2'
   '@angular/common': '22.0.2'
   '@angular/compiler': '22.0.2'
@@ -31,6 +32,7 @@ catalog:
   '@nx/js': '23.0.0'
   '@nx/vite': '23.0.0'
   '@nx/vitest': '23.0.0'
+  '@nx/playwright': '23.0.0'
   '@nx/web': '23.0.0'
   '@nx/workspace': '23.0.0'
   '@schematics/angular': '22.0.3'

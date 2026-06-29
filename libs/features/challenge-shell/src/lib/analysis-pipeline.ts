@@ -35,6 +35,7 @@ import {
   videoHasCaptions,
   liveRegionPattern,
   noDisabledSubmit,
+  focusVisible,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -88,6 +89,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(videoHasCaptions);
     this.challengeValidator.registerValidator(liveRegionPattern);
     this.challengeValidator.registerValidator(noDisabledSubmit);
+    this.challengeValidator.registerValidator(focusVisible);
   }
 
   /** Debounced code change signal (300ms) */

@@ -67,3 +67,27 @@ jobs:
       - run: pnpm rebuild
 
       - run: pnpm nx build practica11y --configuration=production
+
+  e2e:
+    name: E2E Tests
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+        env:
+          npm_config_ignore_scripts: true
+
+      - run: pnpm rebuild
+
+      - run: pnpm exec playwright install --with-deps chromium
+
+      - run: pnpm nx e2e practica11y-e2e --no-tui --configuration=ci

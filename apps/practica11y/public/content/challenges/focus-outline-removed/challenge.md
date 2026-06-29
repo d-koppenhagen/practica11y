@@ -12,6 +12,7 @@ starter:
 solution:
   css: solution.css
 validators:
+  - focus-visible
   - keyboard-accessible
 links:
   - text: 'WCAG: Focus Visible'

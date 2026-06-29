@@ -29,6 +29,8 @@
     "build": "nx build practica11y --no-tui",
     "preview": "pnpm run build && pnpm dlx http-server dist/apps/practica11y/browser -p 8080 --gzip -c-1",
     "test": "pnpm nx run-many --target=test",
+    "e2e": "pnpm nx e2e practica11y-e2e",
+    "e2e:ci": "pnpm nx e2e practica11y-e2e --configuration=ci",
     "lint": "pnpm nx run-many --target=lint",
     "format": "prettier --write ."
   },
@@ -68,6 +70,7 @@
     "@nx/js": "catalog:",
     "@nx/vite": "catalog:",
     "@nx/vitest": "catalog:",
+    "@nx/playwright": "catalog:",
     "@nx/web": "catalog:",
     "@nx/workspace": "catalog:",
     "@schematics/angular": "catalog:",

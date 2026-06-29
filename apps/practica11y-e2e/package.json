@@ -1,0 +1,9 @@
+{
+  "name": "practica11y-e2e",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@playwright/test": "catalog:",
+    "yaml": "catalog:"
+  }
+}

@@ -28,6 +28,7 @@ The testing strategy follows the classic test pyramid with a focus on fast, dete
 | **@testing-library/angular** | Component rendering and interaction |
 | **jsdom**                    | DOM simulation for unit tests       |
 | **Playwright**               | End-to-end tests                    |
+| **@nx/playwright**           | Nx integration for Playwright e2e   |
 | **@vitest/coverage-v8**      | Code coverage                       |
 | **axe-core**                 | Accessibility audit in E2E          |
 
@@ -61,6 +62,33 @@ Complete user workflows via Playwright:
 - **Keyboard navigation**: Full operability via keyboard
 - **Accessibility audit**: Run axe-core on the platform itself
 - **Responsive design**: Behavior on different viewports
+
+#### Challenge E2E Tests
+
+A dedicated Nx project at `apps/practica11y-e2e/` provides automated end-to-end coverage for every registered challenge. It uses `@nx/playwright` for Nx integration.
+
+**Dynamic test generation**: Tests are generated automatically from `apps/practica11y/public/content/challenges/registry.json` at test-collection time. Adding a new challenge to the registry automatically creates e2e coverage — no manual test file updates are needed.
+
+**Two-phase validation pattern**: Each challenge is tested in two phases:
+
+1. **Starter code fails** — Navigate to the challenge page, click "Check Solution" with default starter code loaded, and assert that validation errors are displayed and the score has not increased. This confirms the challenge is not trivially solvable.
+2. **Solution code passes** — Load the reference solution files into the corresponding Monaco editor tabs, click "Check Solution", and assert that no validation errors are displayed and the score has increased. This confirms solution files and validators are correct.
+
+Challenges without a `solution` field in their frontmatter only run the first phase (starter-fails verification).
+
+**Running locally**:
+
+```bash
+# Launches Playwright UI mode (default configuration)
+pnpm nx e2e practica11y-e2e
+
+# Runs headless, CI-like execution
+pnpm nx e2e practica11y-e2e --configuration=ci
+```
+
+The local configuration (`defaultConfiguration: "local"`) opens Playwright UI mode for interactive debugging. The `ci` configuration runs headless. In both cases, the Playwright `webServer` config starts the application automatically if it is not already running.
+
+**CI execution**: The e2e tests run as a dedicated `e2e` job in `.github/workflows/checks.yml` after the `build` job. The job installs Playwright browsers (`pnpm exec playwright install --with-deps chromium`), then runs the tests using `serve-static` to serve the production build. Failures block the workflow — no `continue-on-error` is set. Playwright traces are captured on the first retry for debugging.
 
 ## Conventions
 
@@ -134,6 +162,12 @@ pnpm nx affected --target=test
 
 # With coverage
 pnpm nx test <project-name> --coverage
+
+# E2E tests (Playwright UI mode)
+pnpm nx e2e practica11y-e2e
+
+# E2E tests (headless, CI-like)
+pnpm nx e2e practica11y-e2e --configuration=ci
 ```
 
 ## Coverage
