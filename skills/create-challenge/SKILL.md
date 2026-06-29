@@ -53,19 +53,20 @@ starter:
   html: starter.html # Required
   css: starter.css # Optional
   js: starter.js # Optional
+solution:
+  html: solution.html # Optional: reference solution file(s)
+  css: solution.css # Optional
+  js: solution.js # Optional
 validators:
-  # At least this generic validators should be always set:
-  - color-contrast
-  - axe-no-violations
-  # One or more additional validator IDs
-  - <validator-id>
+  - color-contrast # ← ALWAYS include (default common validator)
+  - axe-no-violations # ← ALWAYS include (default common validator)
+  - <validator-id> # Challenge-specific validator(s)
 previewTitle: 'Custom Preview Title' # Optional, default: "Challenge: {title} | Preview"
 links:
   - text: 'MDN: Relevant Topic'
     url: 'https://developer.mozilla.org/...'
   - text: 'WCAG: Matching Success Criterion'
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/...'
-discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/<number>'
 ---
 
 Describe the problem here — what is broken and why is it an accessibility issue?
@@ -98,11 +99,28 @@ Explain clearly and concisely what the user needs to fix:
 
 **Optional fields:**
 
-| Field           | Type              | Description                                             |
-| --------------- | ----------------- | ------------------------------------------------------- |
-| `previewTitle`  | `string`          | Custom title for the preview iframe                     |
-| `links`         | `{ text, url }[]` | External reference links (MDN, WCAG, Deque, etc.)       |
-| `discussionUrl` | `string`          | URL to the GitHub Discussions thread for this challenge |
+| Field           | Type              | Description                                                         |
+| --------------- | ----------------- | ------------------------------------------------------------------- |
+| `solution`      | `object`          | Paths to solution files (html, css, js) — shown via "Peek Solution" |
+| `previewTitle`  | `string`          | Custom title for the preview iframe                                 |
+| `links`         | `{ text, url }[]` | External reference links (MDN, WCAG, Deque, etc.)                   |
+| `discussionUrl` | `string`          | URL to a GitHub Discussion for this challenge                       |
+
+**Validator convention — default common validators:**
+
+Every challenge **must** include these two validators as the first entries:
+
+1. `color-contrast` — ensures the starter/solution CSS meets WCAG contrast ratios
+2. `axe-no-violations` — catches general axe-core violations (label-name, aria rules, etc.)
+
+Then add challenge-specific validator(s) after them. Example:
+
+```yaml
+validators:
+  - color-contrast
+  - axe-no-violations
+  - button-link-semantics
+```
 
 #### 2.2 `starter.html` — The Broken HTML Code (Required)
 
@@ -142,6 +160,26 @@ function addToCart(item) {
 }
 ```
 
+#### 2.5 Solution Files (Optional, recommended)
+
+Provide reference solution files so users can "Peek Solution" when stuck. Solution files live in the same challenge folder and are referenced in the `solution:` frontmatter block.
+
+Create one or more of:
+
+- `solution.html` — the fixed HTML
+- `solution.css` — the fixed CSS (when only CSS changes are needed)
+- `solution.js` — the fixed JS
+
+The solution should be the minimal correct fix for the accessibility issue. Only include solution files for the file types that actually need changes.
+
+Example frontmatter:
+
+```yaml
+solution:
+  html: solution.html
+  css: solution.css
+```
+
 ### 3. Update the Registry
 
 Add the challenge to `apps/practica11y/public/content/challenges/registry.json`:
@@ -154,62 +192,41 @@ Add the challenge to `apps/practica11y/public/content/challenges/registry.json`:
 
 The order determines the display order in the challenge list.
 
-### 4. Create a GitHub Discussion Thread
+### 4. Create or Reuse a Validator
 
-Each challenge has a linked discussion thread where learners can ask questions,
-share hints, and discuss approaches.
-
-**Create the discussion using the GitHub CLI:**
-
-```bash
-gh discussion create \
-  --category "Challenges" \
-  --title "Challenge: <Challenge Title>" \
-  --body "Discuss the **<Challenge Title>** challenge.
-
-🔗 [Open challenge on practica11y.dev](https://practica11y.dev/challenges/<challenge-id>)
-
-Share your approach, ask questions, or help others. Please use \`<details>\` tags for code spoilers."
-```
-
-The command outputs the discussion URL (e.g. `https://github.com/d-koppenhagen/practica11y/discussions/42`).
-
-**Add the URL to the challenge frontmatter:**
-
-```yaml
-discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/42'
-```
-
-The discussion link appears in:
-
-- The **Feedback panel header** (speech bubble icon with "Discuss" label)
-- The **Success dialog** shown after solving the challenge
-
-### 5. Create or Reuse a Validator
-
-#### 5.1 Check if an existing validator fits
+#### 4.1 Check if an existing validator fits
 
 Available validators in `libs/challenge/validators/src/index.ts`:
 
-| Validator ID             | Checks                         |
-| ------------------------ | ------------------------------ |
-| `axe-no-violations`      | No axe-core violations         |
-| `has-landmarks`          | At least one landmark present  |
-| `has-all-landmarks`      | All expected landmarks present |
-| `has-skip-link`          | Skip link present              |
-| `button-link-semantics`  | Correct button/link semantics  |
-| `focus-after-navigation` | Focus set after navigation     |
-| `heading-structure`      | Correct heading hierarchy      |
-| `form-labels`            | Form fields have labels        |
-| `color-contrast`         | Sufficient color contrast      |
-| `semantic-button`        | Semantic button instead of div |
-| `keyboard-accessible`    | Keyboard accessibility         |
-| `image-alt-text`         | Images have alt text           |
-| `focus-trap-implemented` | Focus trap implemented         |
-| `valid-html-syntax`      | Valid HTML                     |
-| `page-title`             | Page title present             |
+| Validator ID               | Checks                                          |
+| -------------------------- | ----------------------------------------------- |
+| `axe-no-violations`        | No axe-core violations                          |
+| `has-landmarks`            | At least one landmark present                   |
+| `has-all-landmarks`        | All expected landmarks present                  |
+| `has-skip-link`            | Skip link present                               |
+| `button-link-semantics`    | Correct button/link semantics                   |
+| `focus-after-navigation`   | Focus set after navigation                      |
+| `heading-structure`        | Correct heading hierarchy                       |
+| `form-labels`              | Form fields have labels                         |
+| `color-contrast`           | Sufficient color contrast                       |
+| `semantic-button`          | Semantic button instead of div                  |
+| `keyboard-accessible`      | Keyboard accessibility                          |
+| `image-alt-text`           | Images have alt text                            |
+| `focus-trap-implemented`   | Focus trap implemented                          |
+| `valid-html-syntax`        | Valid HTML                                      |
+| `page-title`               | Page title present                              |
+| `image-alt-text-limit`     | Alt text within character limit                 |
+| `image-aria-describedby`   | Image has aria-describedby for long description |
+| `reduced-motion`           | Respects prefers-reduced-motion                 |
+| `aria-invalid-errors`      | Uses aria-invalid for form errors               |
+| `error-focus-management`   | Focus moves to error on validation              |
+| `video-has-captions`       | Video element has captions track                |
+| `live-region-pattern`      | ARIA live region for dynamic updates            |
+| `no-disabled-submit`       | Submit button not disabled                      |
+| `focus-visible`            | Focus indicator visible                         |
+| `interactive-element-name` | Buttons and links have accessible names         |
 
-#### 5.2 Create a new validator
+#### 4.2 Create a new validator
 
 Create a file at `libs/challenge/validators/src/lib/<validator-id>.ts`:
 
@@ -264,7 +281,7 @@ interface ValidationResult {
 - Provide clear, helpful error messages in `message` and `details`
 - The export name is camelCase (e.g. `imageAltText`, `buttonLinkSemantics`)
 
-#### 5.3 Export the validator
+#### 4.3 Export the validator
 
 Add the export to `libs/challenge/validators/src/index.ts`:
 
@@ -272,7 +289,7 @@ Add the export to `libs/challenge/validators/src/index.ts`:
 export { myValidator } from './lib/my-validator';
 ```
 
-#### 5.4 Register the validator in the AnalysisPipeline
+#### 4.4 Register the validator in the AnalysisPipeline
 
 In `libs/features/challenge-shell/src/lib/analysis-pipeline.ts`:
 
@@ -288,7 +305,7 @@ import { myValidator } from '@practica11y/validators';
 this.challengeValidator.registerValidator(myValidator);
 ```
 
-### 6. Test Locally
+### 5. Test Locally
 
 ```bash
 pnpm start
@@ -303,7 +320,7 @@ pnpm start
    - Validator fails on unmodified code
    - After applying the correct fix: validator reports success
 
-### 7. Write Tests (optional, recommended for new validators)
+### 6. Write Tests (optional, recommended for new validators)
 
 Create `libs/challenge/validators/src/lib/__tests__/<validator-id>.spec.ts`:
 
@@ -344,23 +361,28 @@ pnpm nx test validators
 - [ ] `challenge.md` with complete frontmatter and description
 - [ ] `starter.html` with realistic, broken code
 - [ ] Optional: `starter.css` and/or `starter.js`
+- [ ] Solution file(s) provided (`solution.html`, `solution.css`, `solution.js`)
+- [ ] `solution:` block in frontmatter references the solution file(s)
 - [ ] Entry added to `registry.json`
-- [ ] GitHub Discussion created via `gh discussion create --category "Challenges"` and `discussionUrl` added to frontmatter
-- [ ] Validator available (existing or newly created)
+- [ ] Validators include `color-contrast` + `axe-no-violations` as first two entries
+- [ ] Challenge-specific validator available (existing or newly created)
 - [ ] If new validator: export in `index.ts` + registration in `AnalysisPipeline`
 - [ ] Tested locally — challenge loads, validation works
 - [ ] Optional: unit tests for new validator
 
 ## File Paths Overview
 
-```
+```text
 apps/practica11y/public/content/challenges/
 ├── registry.json                          ← Challenge list
 └── <challenge-id>/
     ├── challenge.md                       ← Frontmatter + description
     ├── starter.html                       ← Broken HTML code
     ├── starter.css                        ← Optional: styling
-    └── starter.js                         ← Optional: JavaScript
+    ├── starter.js                         ← Optional: JavaScript
+    ├── solution.html                      ← Optional: reference solution HTML
+    ├── solution.css                       ← Optional: reference solution CSS
+    └── solution.js                        ← Optional: reference solution JS
 
 libs/challenge/validators/src/
 ├── index.ts                               ← All validator exports
