@@ -15,51 +15,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - run: corepack enable
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-        env:
-          npm_config_ignore_scripts: true
-
-      - run: pnpm rebuild
-
-      - run: pnpm nx run-many --target=lint
-
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - run: corepack enable
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-        env:
-          npm_config_ignore_scripts: true
-
-      - run: pnpm rebuild
-
-      - run: pnpm nx run-many --target=test
+  checks:
+    name: Checks
+    uses: ./.github/workflows/checks.yml
 
   deploy:
-    name: Build & Deploy
-    needs: [lint, test]
+    name: Deploy
+    needs: [checks]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
