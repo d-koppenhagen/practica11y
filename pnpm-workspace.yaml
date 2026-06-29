@@ -29,7 +29,7 @@ catalog:
   '@nx/angular': '23.0.0'
   '@nx/eslint': '23.0.0'
   '@nx/eslint-plugin': '23.0.0'
-  '@nx/js': '23.0.0'
+  '@nx/js': '23.0.1'
   '@nx/vite': '23.0.0'
   '@nx/vitest': '23.0.0'
   '@nx/playwright': '23.0.0'
