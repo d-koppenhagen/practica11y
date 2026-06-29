@@ -11,6 +11,8 @@ starter:
   html: starter.html
   js: starter.js
   css: starter.css
+solution:
+  js: solution.js
 validators:
   - page-title
 links:

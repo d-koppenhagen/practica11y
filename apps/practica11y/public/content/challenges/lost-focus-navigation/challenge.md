@@ -11,6 +11,9 @@ starter:
   html: starter.html
   js: starter.js
   css: starter.css
+solution:
+  html: solution.html
+  js: solution.js
 validators:
   - focus-after-navigation
 links:

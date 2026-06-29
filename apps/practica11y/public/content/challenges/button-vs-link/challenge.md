@@ -10,6 +10,8 @@ starter:
   html: starter.html
   js: starter.js
   css: starter.css
+solution:
+  html: solution.html
 validators:
   - button-link-semantics
 links:

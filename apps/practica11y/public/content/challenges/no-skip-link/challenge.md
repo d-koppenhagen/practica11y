@@ -9,6 +9,9 @@ points: 125
 starter:
   html: starter.html
   css: starter.css
+solution:
+  html: solution.html
+  css: solution.css
 validators:
   - has-skip-link
 links:

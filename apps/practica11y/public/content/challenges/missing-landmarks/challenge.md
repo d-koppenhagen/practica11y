@@ -9,6 +9,8 @@ points: 100
 starter:
   html: starter.html
   css: starter.css
+solution:
+  html: solution.html
 validators:
   - has-all-landmarks
 links:

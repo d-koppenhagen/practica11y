@@ -9,6 +9,8 @@ points: 100
 starter:
   html: starter.html
   css: starter.css
+solution:
+  css: solution.css
 validators:
   - color-contrast
 links:

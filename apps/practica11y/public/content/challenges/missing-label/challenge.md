@@ -8,6 +8,8 @@ points: 75
 starter:
   html: starter.html
   css: starter.css
+solution:
+  html: solution.html
 validators:
   - form-labels
 links:

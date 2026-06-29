@@ -10,6 +10,8 @@ starter:
   html: starter.html
   css: starter.css
   vtt: starter.vtt
+solution:
+  html: solution.html
 validators:
   - video-has-captions
 links:

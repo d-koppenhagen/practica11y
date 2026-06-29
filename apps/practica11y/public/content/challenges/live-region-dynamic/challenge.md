@@ -10,6 +10,10 @@ starter:
   html: starter.html
   js: starter.js
   css: starter.css
+solution:
+  html: solution.html
+  js: solution.js
+  css: solution.css
 validators:
   - keyboard-accessible
   - live-region-pattern

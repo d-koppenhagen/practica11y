@@ -9,6 +9,8 @@ points: 150
 starter:
   html: starter.html
   css: starter.css
+solution:
+  html: solution.html
 validators:
   - image-alt-text-limit
   - image-aria-describedby

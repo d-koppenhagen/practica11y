@@ -9,6 +9,9 @@ points: 150
 starter:
   html: starter.html
   css: starter.css
+solution:
+  html: solution.html
+  js: solution.js
 validators:
   - focus-trap-implemented
   - keyboard-accessible

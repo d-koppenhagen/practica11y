@@ -9,6 +9,8 @@ points: 75
 starter:
   html: starter.html
   css: starter.css
+solution:
+  css: solution.css
 validators:
   - keyboard-accessible
 links:
