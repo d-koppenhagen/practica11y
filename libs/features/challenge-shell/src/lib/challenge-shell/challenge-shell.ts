@@ -39,6 +39,7 @@ import { ShellLayout } from '../shell-layout';
 import { ShellPanel } from '../shell-panel/shell-panel';
 import { ShellResizer } from '../shell-resizer/shell-resizer';
 import { EditorTabs } from '../editor-tabs/editor-tabs';
+import { EditorActions } from '../editor-actions/editor-actions';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
@@ -61,6 +62,7 @@ type EditorTab = 'html' | 'js' | 'css' | 'vtt';
     ShellPanel,
     ShellResizer,
     EditorTabs,
+    EditorActions,
     InvestigationToolTabs,
     FeedbackPanel,
     PreviewPanel,
@@ -115,6 +117,17 @@ export class ChallengeShell {
     () => this.layoutStore.layout().screenReaderHighlightEnabled,
   );
   protected readonly challengeCompleted = signal(false);
+  protected readonly solutionRevealed = signal(false);
+  protected readonly isPeeked = signal(false);
+  protected readonly hasSolution = computed(
+    () => this.challenge().solution !== undefined,
+  );
+  protected readonly solutionAnnouncement = signal('');
+  protected readonly revealError = signal('');
+
+  /** Snapshot of the user's code before reveal, so they can switch back */
+  private userSnapshot: { html: string; js: string; css: string; vtt: string } | null = null;
+  protected readonly hasUserSnapshot = signal(false);
 
   protected readonly editorOptions = computed<MonacoEditorOptions>(() => ({
     theme: this.themeService.theme() === 'dark' ? 'hc-black' : 'hc-light',
@@ -212,6 +225,10 @@ export class ChallengeShell {
       this.cssContent.set(challenge.starter.css);
       this.vttContent.set(challenge.starter.vtt);
       this.feedbackVisible.set(false);
+      this.solutionRevealed.set(false);
+      this.isPeeked.set(false);
+      this.solutionAnnouncement.set('');
+      this.revealError.set('');
       this.pipeline.setChallenge(challenge);
       this.pipeline.updateCode(
         challenge.starter.html,
@@ -219,10 +236,13 @@ export class ChallengeShell {
         challenge.starter.css,
       );
 
-      // Load completed status for this challenge
+      // Load completed and peeked status for this challenge
       this.progressStore.loadProgress().then((progress) => {
         this.challengeCompleted.set(
           progress.completedChallenges.includes(challenge.id),
+        );
+        this.isPeeked.set(
+          (progress.peekedChallenges ?? []).includes(challenge.id),
         );
       });
     });
@@ -286,6 +306,105 @@ export class ChallengeShell {
         }));
       }
     });
+  }
+
+  protected revealSolution(): void {
+    try {
+      const challenge = this.challenge();
+      if (!challenge.solution) {
+        this.revealError.set(
+          'Solution could not be loaded. The solution file may be missing or unavailable.',
+        );
+        return;
+      }
+
+      const solution = challenge.solution;
+      if (
+        solution.html == null &&
+        solution.js == null &&
+        solution.css == null &&
+        solution.vtt == null
+      ) {
+        this.revealError.set(
+          'Solution data appears to be empty or corrupt. Please try again.',
+        );
+        return;
+      }
+
+      this.revealError.set('');
+
+      // Save the user's current code before overwriting with solution
+      this.userSnapshot = {
+        html: this.htmlContent(),
+        js: this.jsContent(),
+        css: this.cssContent(),
+        vtt: this.vttContent(),
+      };
+      this.hasUserSnapshot.set(true);
+
+      // Only overwrite editor tabs where the solution provides content.
+      // If a solution doesn't specify e.g. CSS, keep the current (starter) CSS.
+      const newHtml = solution.html || this.htmlContent();
+      const newJs = solution.js || this.jsContent();
+      const newCss = solution.css || this.cssContent();
+      const newVtt = solution.vtt || this.vttContent();
+
+      this.htmlContent.set(newHtml);
+      this.jsContent.set(newJs);
+      this.cssContent.set(newCss);
+      this.vttContent.set(newVtt);
+      this.solutionRevealed.set(true);
+      this.feedbackVisible.set(false);
+      this.pipeline.updateCode(newHtml, newJs, newCss);
+      this.solutionAnnouncement.set('Solution revealed');
+      this.syncEditorValues();
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.revealError.set(`Failed to load solution: ${message}`);
+    }
+  }
+
+  protected retryReveal(): void {
+    this.revealError.set('');
+    this.revealSolution();
+  }
+
+  protected resetToStarter(): void {
+    const challenge = this.challenge();
+    this.htmlContent.set(challenge.starter.html);
+    this.jsContent.set(challenge.starter.js);
+    this.cssContent.set(challenge.starter.css);
+    this.vttContent.set(challenge.starter.vtt);
+    this.solutionRevealed.set(false);
+    this.feedbackVisible.set(false);
+    this.revealError.set('');
+    this.userSnapshot = null;
+    this.hasUserSnapshot.set(false);
+    this.pipeline.updateCode(
+      challenge.starter.html,
+      challenge.starter.js,
+      challenge.starter.css,
+    );
+    this.solutionAnnouncement.set('');
+    this.syncEditorValues();
+  }
+
+  protected restoreUserCode(): void {
+    if (!this.userSnapshot) return;
+    this.htmlContent.set(this.userSnapshot.html);
+    this.jsContent.set(this.userSnapshot.js);
+    this.cssContent.set(this.userSnapshot.css);
+    this.vttContent.set(this.userSnapshot.vtt);
+    this.solutionRevealed.set(false);
+    this.feedbackVisible.set(false);
+    this.pipeline.updateCode(
+      this.userSnapshot.html,
+      this.userSnapshot.js,
+      this.userSnapshot.css,
+    );
+    this.solutionAnnouncement.set('');
+    this.syncEditorValues();
   }
 
   protected onResizeCol1(delta: number): void {
@@ -428,6 +547,34 @@ export class ChallengeShell {
     const blob = new Blob([srcdoc], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');
+  }
+
+  /**
+   * Force-syncs the Monaco editor instances with the current signal values.
+   * Required because ng-catbee/monaco-editor does not automatically call
+   * editor.setValue() when the model signal is updated externally.
+   * Uses the global Monaco API since editors inside @defer blocks
+   * are not reliably accessible via viewChildren.
+   */
+  private syncEditorValues(): void {
+    const editors = (
+      globalThis as unknown as { monaco?: { editor?: { getEditors?: () => { getValue: () => string; setValue: (v: string) => void }[] } } }
+    ).monaco?.editor?.getEditors?.();
+    if (!editors) return;
+
+    const tabOrder = this.editorTabs();
+
+    for (let i = 0; i < editors.length && i < tabOrder.length; i++) {
+      const tab = tabOrder[i];
+      const newValue = tab === 'html' ? this.htmlContent()
+        : tab === 'js' ? this.jsContent()
+        : tab === 'css' ? this.cssContent()
+        : this.vttContent();
+
+      if (editors[i].getValue() !== newValue) {
+        editors[i].setValue(newValue);
+      }
+    }
   }
 
   private requestIframeAnalysis(): void {

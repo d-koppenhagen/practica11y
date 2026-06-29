@@ -1,0 +1,29 @@
+@if (hasSolution()) {
+<div class="editor-actions">
+  @if (isPeeked()) {
+  <span class="peeked-indicator" aria-label="Solution was previously revealed">
+    👀
+  </span>
+  }
+
+  @if (!solutionRevealed()) {
+  <button class="editor-action-btn reveal-btn" (click)="onRevealSolution()">
+    Reveal Solution
+  </button>
+  }
+
+  @if (solutionRevealed()) {
+  <button class="editor-action-btn restore-btn" (click)="onRestoreUserCode()">
+    Back to My Code
+  </button>
+  <button class="editor-action-btn reset-btn" (click)="onResetToStarter()">
+    Reset to Starter
+  </button>
+  }
+</div>
+}
+
+<a11y-cheat-animation
+  [trigger]="animationTrigger()"
+  (animationComplete)="onAnimationComplete()"
+/>

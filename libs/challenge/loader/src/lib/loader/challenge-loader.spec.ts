@@ -23,6 +23,48 @@ validators:
 
 Fix the clickable div to be accessible.`;
 
+const CHALLENGE_WITH_SOLUTION_MD = `---
+id: alt-text-basics
+title: Alt Text Basics
+difficulty: beginner
+tags:
+  - images
+  - alt-text
+points: 100
+starter:
+  html: starter/index.html
+  css: starter/styles.css
+solution:
+  html: solution/index.html
+  css: solution/styles.css
+  js: solution/script.js
+validators:
+  - alt-text-present
+---
+
+# Alt Text Basics
+
+Add alt text to images.`;
+
+const CHALLENGE_WITH_PARTIAL_SOLUTION_MD = `---
+id: partial-solution
+title: Partial Solution
+difficulty: beginner
+tags:
+  - forms
+points: 50
+starter:
+  html: starter.html
+solution:
+  html: solution/index.html
+validators:
+  - label-present
+---
+
+# Partial Solution
+
+Only HTML solution provided.`;
+
 const VALID_REGISTRY = {
   challenges: [{ id: 'clickable-div' }, { id: 'form-labels' }],
 };
@@ -226,6 +268,176 @@ Add proper labels to form inputs.`;
       await expect(loader.loadAllChallenges()).rejects.toThrow(
         /Invalid challenge registry/,
       );
+    });
+  });
+
+  describe('solution loading', () => {
+    it('should load solution files correctly when challenge defines a solution field', async () => {
+      mockFetch.mockImplementation(async (url: string) => {
+        if (url.includes('alt-text-basics/challenge.md')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => CHALLENGE_WITH_SOLUTION_MD,
+          };
+        }
+        if (url.includes('alt-text-basics/starter/index.html')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => '<img src="photo.jpg">',
+          };
+        }
+        if (url.includes('alt-text-basics/starter/styles.css')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => 'img { max-width: 100%; }',
+          };
+        }
+        if (url.includes('alt-text-basics/solution/index.html')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => '<img src="photo.jpg" alt="A sunset over the ocean">',
+          };
+        }
+        if (url.includes('alt-text-basics/solution/styles.css')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => 'img { max-width: 100%; display: block; }',
+          };
+        }
+        if (url.includes('alt-text-basics/solution/script.js')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => 'console.log("solution");',
+          };
+        }
+        return { ok: false, status: 404, statusText: 'Not Found' };
+      });
+
+      const challenge = await loader.loadChallenge('alt-text-basics');
+
+      expect(challenge.solution).toBeDefined();
+      expect(challenge.solution!.html).toBe(
+        '<img src="photo.jpg" alt="A sunset over the ocean">',
+      );
+      expect(challenge.solution!.css).toBe(
+        'img { max-width: 100%; display: block; }',
+      );
+      expect(challenge.solution!.js).toBe('console.log("solution");');
+      expect(challenge.solution!.vtt).toBe('');
+    });
+
+    it('should set solution to undefined when challenge has no solution field', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        text: async () => VALID_CHALLENGE_MD,
+      });
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        text: async () => '<div>starter</div>',
+      });
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        text: async () => '.style {}',
+      });
+
+      const challenge = await loader.loadChallenge('clickable-div');
+
+      expect(challenge.solution).toBeUndefined();
+    });
+
+    it('should throw an error with file path and challenge ID when solution file returns 404', async () => {
+      mockFetch.mockImplementation(async (url: string) => {
+        if (url.includes('alt-text-basics/challenge.md')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => CHALLENGE_WITH_SOLUTION_MD,
+          };
+        }
+        if (url.includes('alt-text-basics/starter/index.html')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => '<img src="photo.jpg">',
+          };
+        }
+        if (url.includes('alt-text-basics/starter/styles.css')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => 'img { max-width: 100%; }',
+          };
+        }
+        if (url.includes('alt-text-basics/solution/index.html')) {
+          return { ok: false, status: 404, statusText: 'Not Found' };
+        }
+        return { ok: false, status: 404, statusText: 'Not Found' };
+      });
+
+      await expect(
+        loader.loadChallenge('alt-text-basics'),
+      ).rejects.toThrow(/Failed to load solution HTML for challenge "alt-text-basics"/);
+    });
+
+    it('should return empty strings for unspecified file types in a partial solution', async () => {
+      mockFetch.mockImplementation(async (url: string) => {
+        if (url.includes('partial-solution/challenge.md')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => CHALLENGE_WITH_PARTIAL_SOLUTION_MD,
+          };
+        }
+        if (url.includes('partial-solution/starter.html')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => '<form><input></form>',
+          };
+        }
+        if (url.includes('partial-solution/solution/index.html')) {
+          return {
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            text: async () => '<form><label for="name">Name</label><input id="name"></form>',
+          };
+        }
+        return { ok: false, status: 404, statusText: 'Not Found' };
+      });
+
+      const challenge = await loader.loadChallenge('partial-solution');
+
+      expect(challenge.solution).toBeDefined();
+      expect(challenge.solution!.html).toBe(
+        '<form><label for="name">Name</label><input id="name"></form>',
+      );
+      expect(challenge.solution!.css).toBe('');
+      expect(challenge.solution!.js).toBe('');
+      expect(challenge.solution!.vtt).toBe('');
     });
   });
 });

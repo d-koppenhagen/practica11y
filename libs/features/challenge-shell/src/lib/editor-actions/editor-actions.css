@@ -1,0 +1,101 @@
+:host {
+  display: contents;
+}
+
+.editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding-right: 4px;
+}
+
+.editor-action-btn {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--p11y-radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* Reveal Solution — uses warning semantic colors (dark text on warning bg for contrast) */
+.reveal-btn {
+  background-color: var(--p11y-warning-bg);
+  color: var(--p11y-warning-text);
+  border: 1px solid var(--p11y-warning-border);
+}
+
+.reveal-btn:hover {
+  background-color: var(--p11y-warning-border);
+}
+
+.reveal-btn:focus-visible {
+  outline: 2px solid var(--p11y-warning-border);
+  outline-offset: 2px;
+}
+
+.reveal-btn:active {
+  background-color: var(--p11y-warning-border);
+}
+
+/* Back to My Code — uses primary button style */
+.restore-btn {
+  background-color: var(--p11y-primary);
+  color: var(--p11y-primary-text);
+}
+
+.restore-btn:hover {
+  background-color: var(--p11y-primary-hover);
+}
+
+.restore-btn:focus-visible {
+  outline: 2px solid var(--p11y-primary);
+  outline-offset: 2px;
+}
+
+.restore-btn:active {
+  background-color: var(--p11y-primary-hover);
+}
+
+/* Reset to Starter — uses error semantic colors (dark text on error bg for contrast) */
+.reset-btn {
+  background-color: var(--p11y-error-bg);
+  color: var(--p11y-error-text);
+  border: 1px solid var(--p11y-error-border);
+}
+
+.reset-btn:hover {
+  background-color: var(--p11y-error-border);
+}
+
+.reset-btn:focus-visible {
+  outline: 2px solid var(--p11y-error-border);
+  outline-offset: 2px;
+}
+
+.reset-btn:active {
+  background-color: var(--p11y-error-border);
+}
+
+.peeked-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  min-height: 16px;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editor-action-btn {
+    transition: none;
+  }
+}

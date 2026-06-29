@@ -17,6 +17,7 @@ import { ShellPanel } from '../shell-panel/shell-panel';
 import { ShellResizer } from '../shell-resizer/shell-resizer';
 import { Confetti } from '../confetti/confetti';
 import { EditorTabs } from '../editor-tabs/editor-tabs';
+import { EditorActions } from '../editor-actions/editor-actions';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
@@ -72,6 +73,32 @@ class MockAccessibilityTree {
 })
 class MockChallengeFeedback {
   readonly result = input<AnalysisPipelineResult | null>(null);
+}
+
+@Component({
+  selector: 'a11y-cheat-animation',
+  standalone: true,
+  template: '<div class="mock-cheat-animation"></div>',
+})
+class MockCheatAnimation {
+  readonly trigger = input(false);
+  readonly animationComplete = output<void>();
+}
+
+@Component({
+  selector: 'a11y-editor-actions',
+  standalone: true,
+  template: '<div class="mock-editor-actions"></div>',
+})
+class MockEditorActions {
+  readonly hasSolution = input(false);
+  readonly solutionRevealed = input(false);
+  readonly hasUserSnapshot = input(false);
+  readonly isPeeked = input(false);
+  readonly challengeTitle = input('');
+  readonly revealSolution = output<void>();
+  readonly resetToStarter = output<void>();
+  readonly restoreUserCode = output<void>();
 }
 
 @Component({
@@ -216,6 +243,7 @@ describe('ChallengeShell tab integration', () => {
             ShellResizer,
             Confetti,
             EditorTabs,
+            MockEditorActions,
             InvestigationToolTabs,
             FeedbackPanel,
             PreviewPanel,

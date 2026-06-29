@@ -14,12 +14,30 @@ import {
 import { ChallengeLoader } from '@practica11y/loader';
 import { ChallengeShell } from '../challenge-shell/challenge-shell';
 import { EditorTabs } from '../editor-tabs/editor-tabs';
+import { EditorActions } from '../editor-actions/editor-actions';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
 import { ShellPanel } from '../shell-panel/shell-panel';
 import { ShellResizer } from '../shell-resizer/shell-resizer';
 import { MarkdownContent } from '@practica11y/ui';
+
+// Mock window.matchMedia for CheatAnimation (used by FeedbackPanel)
+beforeEach(() => {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: vi.fn().mockImplementation((query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+});
 
 // --- Mock heavy components used inside @defer blocks ---
 
@@ -92,6 +110,21 @@ class MockSandboxPreview {
 })
 class MockChallengeFeedback {
   readonly result = input<unknown>();
+}
+
+@Component({
+  selector: 'a11y-editor-actions',
+  template: '<div class="mock-editor-actions"></div>',
+})
+class MockEditorActions {
+  readonly hasSolution = input(false);
+  readonly solutionRevealed = input(false);
+  readonly hasUserSnapshot = input(false);
+  readonly isPeeked = input(false);
+  readonly challengeTitle = input('');
+  readonly revealSolution = output<void>();
+  readonly resetToStarter = output<void>();
+  readonly restoreUserCode = output<void>();
 }
 
 // --- Test data ---
@@ -207,6 +240,7 @@ async function setup(challenge: Challenge = mockChallenge) {
       ShellPanel,
       ShellResizer,
       EditorTabs,
+      MockEditorActions,
       InvestigationToolTabs,
       FeedbackPanel,
       PreviewPanel,

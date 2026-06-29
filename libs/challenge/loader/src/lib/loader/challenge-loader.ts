@@ -89,6 +89,10 @@ export class ChallengeLoader {
     const description = parseMarkdownBody(raw);
     const starter = await this.loadStarterCode(id, meta.starter);
 
+    const solution = meta.solution
+      ? await this.loadSolutionCode(id, meta.solution)
+      : undefined;
+
     return {
       id: meta.id,
       title: meta.title,
@@ -101,6 +105,7 @@ export class ChallengeLoader {
       previewTitle: meta.previewTitle ?? `Challenge: ${meta.title} | Preview`,
       links: meta.links ?? [],
       discussionUrl: meta.discussionUrl,
+      solution,
     };
   }
 
@@ -212,6 +217,76 @@ export class ChallengeLoader {
         { cause: error },
       );
     }
+  }
+
+  /**
+   * Loads solution code files for a challenge.
+   * Follows the same pattern as loadStarterCode but all file types are optional.
+   *
+   * @param challengeId - The unique challenge identifier
+   * @param solution - The solution file path mapping from frontmatter
+   * @returns A StarterCode object with loaded content (empty strings for unspecified types)
+   * @throws Error if any referenced solution file fails to load
+   */
+  async loadSolutionCode(
+    challengeId: string,
+    solution: ChallengeMeta['solution'],
+  ): Promise<StarterCode> {
+    const basePath = `${CHALLENGES_BASE_PATH}/${challengeId}`;
+
+    let html = '';
+    if (solution?.html) {
+      const htmlPath = `${basePath}/${solution.html}`;
+      try {
+        html = await this.fetchText(htmlPath);
+      } catch (error) {
+        throw new Error(
+          `Failed to load solution HTML for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+          { cause: error },
+        );
+      }
+    }
+
+    let js = '';
+    if (solution?.js) {
+      const jsPath = `${basePath}/${solution.js}`;
+      try {
+        js = await this.fetchText(jsPath);
+      } catch (error) {
+        throw new Error(
+          `Failed to load solution JS for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+          { cause: error },
+        );
+      }
+    }
+
+    let css = '';
+    if (solution?.css) {
+      const cssPath = `${basePath}/${solution.css}`;
+      try {
+        css = await this.fetchText(cssPath);
+      } catch (error) {
+        throw new Error(
+          `Failed to load solution CSS for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+          { cause: error },
+        );
+      }
+    }
+
+    let vtt = '';
+    if (solution?.vtt) {
+      const vttPath = `${basePath}/${solution.vtt}`;
+      try {
+        vtt = await this.fetchText(vttPath);
+      } catch (error) {
+        throw new Error(
+          `Failed to load solution VTT for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+          { cause: error },
+        );
+      }
+    }
+
+    return { html, js, css, vtt };
   }
 
   /**

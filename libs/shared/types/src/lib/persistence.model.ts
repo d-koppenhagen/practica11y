@@ -3,6 +3,7 @@ import { Achievement, Level } from './gamification.model';
 export interface UserProgress {
   xp: number;
   completedChallenges: string[]; // Challenge-IDs
+  peekedChallenges: string[]; // Challenge-IDs where solution was revealed
   achievements: Achievement[];
   currentLevel: Level;
   lastActivity: Date;

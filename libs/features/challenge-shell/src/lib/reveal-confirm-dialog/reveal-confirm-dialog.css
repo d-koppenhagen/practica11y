@@ -1,0 +1,98 @@
+.reveal-confirm-dialog {
+  width: min(24rem, calc(100vw - 2rem));
+  padding: 1.75rem;
+  background: var(--p11y-bg-surface);
+  color: var(--p11y-text);
+  border: 1px solid var(--p11y-border);
+  border-radius: var(--p11y-radius-lg);
+  box-shadow: var(--p11y-shadow-lg);
+}
+
+.reveal-confirm-dialog-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.reveal-confirm-dialog-icon {
+  display: block;
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.reveal-confirm-dialog-title {
+  margin: 0;
+  font-size: var(--font-size-lg, 1.125rem);
+  font-weight: 700;
+  color: var(--p11y-text);
+}
+
+.reveal-confirm-dialog-body {
+  margin: 0 0 1.5rem;
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--p11y-text-secondary);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.reveal-confirm-dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.reveal-confirm-dialog-confirm {
+  padding: 0.625rem 1.5rem;
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 600;
+  color: var(--p11y-primary-text);
+  background: var(--p11y-primary);
+  border: none;
+  border-radius: var(--p11y-radius);
+  cursor: pointer;
+  transition: background-color var(--transition-fast, 150ms ease);
+}
+
+.reveal-confirm-dialog-confirm:hover {
+  background: var(--p11y-primary-hover);
+}
+
+.reveal-confirm-dialog-cancel {
+  padding: 0.625rem 1.5rem;
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 600;
+  color: var(--p11y-text);
+  background: var(--p11y-bg-muted);
+  border: 1px solid var(--p11y-border);
+  border-radius: var(--p11y-radius);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast, 150ms ease),
+    border-color var(--transition-fast, 150ms ease);
+}
+
+.reveal-confirm-dialog-cancel:hover {
+  background: var(--p11y-bg-surface);
+  border-color: var(--p11y-text-secondary);
+}
+
+/* Visible focus indicators for keyboard users */
+.reveal-confirm-dialog-confirm:focus-visible,
+.reveal-confirm-dialog-cancel:focus-visible {
+  outline: 2px solid var(--p11y-primary);
+  outline-offset: 2px;
+}
+
+/* Minimum touch target size (24x24 CSS pixels) */
+.reveal-confirm-dialog-confirm,
+.reveal-confirm-dialog-cancel {
+  min-height: 2.25rem;
+  min-width: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-confirm-dialog-confirm,
+  .reveal-confirm-dialog-cancel {
+    transition: none;
+  }
+}

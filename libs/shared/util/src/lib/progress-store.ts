@@ -18,6 +18,7 @@ function getDefaultProgress(): UserProgress {
   return {
     xp: 0,
     completedChallenges: [],
+    peekedChallenges: [],
     achievements: [],
     currentLevel: 'hatchling',
     lastActivity: new Date(),
@@ -101,6 +102,7 @@ export class ProgressStore {
         );
         if (stored) {
           stored.lastActivity = new Date(stored.lastActivity);
+          stored.peekedChallenges = stored.peekedChallenges ?? [];
           this.inMemoryProgress = stored;
           return stored;
         }
@@ -109,6 +111,7 @@ export class ProgressStore {
         if (raw) {
           const parsed = JSON.parse(raw) as UserProgress;
           parsed.lastActivity = new Date(parsed.lastActivity);
+          parsed.peekedChallenges = parsed.peekedChallenges ?? [];
           this.inMemoryProgress = parsed;
           return parsed;
         }
@@ -125,6 +128,16 @@ export class ProgressStore {
 
     if (!progress.completedChallenges.includes(challengeId)) {
       progress.completedChallenges.push(challengeId);
+      progress.lastActivity = new Date();
+      await this.saveProgress(progress);
+    }
+  }
+
+  async markChallengePeeked(challengeId: string): Promise<void> {
+    const progress = await this.loadProgress();
+
+    if (!progress.peekedChallenges.includes(challengeId)) {
+      progress.peekedChallenges.push(challengeId);
       progress.lastActivity = new Date();
       await this.saveProgress(progress);
     }

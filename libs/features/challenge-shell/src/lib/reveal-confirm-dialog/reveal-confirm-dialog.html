@@ -1,0 +1,30 @@
+<div class="reveal-confirm-dialog">
+  <div class="reveal-confirm-dialog-header">
+    <span class="reveal-confirm-dialog-icon" aria-hidden="true">🕵️</span>
+    <h2 id="reveal-confirm-title" class="reveal-confirm-dialog-title">
+      Are you sure? No judgment — peeking is learning too!
+    </h2>
+  </div>
+
+  <p class="reveal-confirm-dialog-body">
+    This will replace your current editor content with the reference solution
+    for <strong>{{ data.challengeTitle }}</strong>.
+  </p>
+
+  <div class="reveal-confirm-dialog-actions">
+    <button
+      type="button"
+      class="reveal-confirm-dialog-confirm"
+      (click)="confirm()"
+    >
+      Yes, show me
+    </button>
+    <button
+      type="button"
+      class="reveal-confirm-dialog-cancel"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+  </div>
+</div>

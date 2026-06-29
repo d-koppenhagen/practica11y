@@ -366,8 +366,13 @@ export class AnalysisPipeline {
       return;
     }
 
-    // Award XP
-    this.gamification.addXP(challenge.points);
+    // Skip XP award if the challenge was peeked (solution revealed)
+    const isPeeked = progress.peekedChallenges.includes(challenge.id);
+
+    if (!isPeeked) {
+      // Award XP only for non-peeked challenges
+      this.gamification.addXP(challenge.points);
+    }
 
     // Mark challenge as completed and persist updated XP
     await this.progressStore.markChallengeCompleted(challenge.id);

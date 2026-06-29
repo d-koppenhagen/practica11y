@@ -14,6 +14,8 @@ import {
 } from '@practica11y/types';
 import { SandboxAxeViolation } from '@practica11y/sandbox';
 
+import { ProgressStore } from '@practica11y/util';
+
 import { ChallengeShell } from './challenge-shell';
 import { AnalysisPipeline } from '../analysis-pipeline';
 import { ShellLayout } from '../shell-layout';
@@ -21,6 +23,7 @@ import { ShellPanel } from '../shell-panel/shell-panel';
 import { ShellResizer } from '../shell-resizer/shell-resizer';
 import { Confetti } from '../confetti/confetti';
 import { EditorTabs } from '../editor-tabs/editor-tabs';
+import { EditorActions } from '../editor-actions/editor-actions';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
@@ -76,6 +79,32 @@ class MockAccessibilityTree {
 })
 class MockChallengeFeedback {
   readonly result = input<AnalysisPipelineResult | null>(null);
+}
+
+@Component({
+  selector: 'a11y-cheat-animation',
+  standalone: true,
+  template: '<div class="mock-cheat-animation"></div>',
+})
+class MockCheatAnimation {
+  readonly trigger = input(false);
+  readonly animationComplete = output<void>();
+}
+
+@Component({
+  selector: 'a11y-editor-actions',
+  standalone: true,
+  template: '<div class="mock-editor-actions"></div>',
+})
+class MockEditorActions {
+  readonly hasSolution = input(false);
+  readonly solutionRevealed = input(false);
+  readonly hasUserSnapshot = input(false);
+  readonly isPeeked = input(false);
+  readonly challengeTitle = input('');
+  readonly revealSolution = output<void>();
+  readonly resetToStarter = output<void>();
+  readonly restoreUserCode = output<void>();
 }
 
 @Component({
@@ -200,6 +229,7 @@ describe('ChallengeShell', () => {
             ShellResizer,
             Confetti,
             EditorTabs,
+            MockEditorActions,
             InvestigationToolTabs,
             FeedbackPanel,
             PreviewPanel,
@@ -644,6 +674,304 @@ describe('ChallengeShell', () => {
           component as unknown as { feedbackVisible: () => boolean }
         ).feedbackVisible();
         expect(visible).toBe(false);
+      });
+    });
+  });
+
+  describe('Reveal / Reset solution', () => {
+    const mockChallengeWithSolution: Challenge = {
+      ...mockChallenge,
+      solution: {
+        html: '<button>Accessible button</button>',
+        js: 'console.log("solution")',
+        css: 'button { color: green; }',
+        vtt: '',
+      },
+    };
+
+    describe('revealSolution()', () => {
+      it('should set editor content to solution code and mark solutionRevealed', async () => {
+        fixture.componentRef.setInput('challenge', mockChallengeWithSolution);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const shell = component as unknown as {
+          revealSolution: () => void;
+          solutionRevealed: () => boolean;
+          htmlContent: () => string;
+          jsContent: () => string;
+          cssContent: () => string;
+          vttContent: () => string;
+        };
+
+        shell.revealSolution();
+
+        expect(shell.solutionRevealed()).toBe(true);
+        expect(shell.htmlContent()).toBe('<button>Accessible button</button>');
+        expect(shell.jsContent()).toBe('console.log("solution")');
+        expect(shell.cssContent()).toBe('button { color: green; }');
+        expect(shell.vttContent()).toBe('');
+      });
+
+      it('should call pipeline.updateCode with solution content', async () => {
+        fixture.componentRef.setInput('challenge', mockChallengeWithSolution);
+        fixture.detectChanges();
+        await fixture.whenStable();
+        mockPipeline.updateCode.mockClear();
+
+        (
+          component as unknown as { revealSolution: () => void }
+        ).revealSolution();
+
+        expect(mockPipeline.updateCode).toHaveBeenCalledWith(
+          '<button>Accessible button</button>',
+          'console.log("solution")',
+          'button { color: green; }',
+        );
+      });
+
+      it('should hide feedback panel on reveal', async () => {
+        fixture.componentRef.setInput('challenge', mockChallengeWithSolution);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        // First set feedbackVisible to true
+        (
+          component as unknown as {
+            feedbackVisible: { set: (v: boolean) => void };
+          }
+        ).feedbackVisible.set(true);
+
+        (
+          component as unknown as { revealSolution: () => void }
+        ).revealSolution();
+
+        const visible = (
+          component as unknown as { feedbackVisible: () => boolean }
+        ).feedbackVisible();
+        expect(visible).toBe(false);
+      });
+    });
+
+    describe('resetToStarter()', () => {
+      it('should restore editor to starter code and clear solutionRevealed', async () => {
+        fixture.componentRef.setInput('challenge', mockChallengeWithSolution);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const shell = component as unknown as {
+          revealSolution: () => void;
+          resetToStarter: () => void;
+          solutionRevealed: () => boolean;
+          htmlContent: () => string;
+          jsContent: () => string;
+          cssContent: () => string;
+          vttContent: () => string;
+        };
+
+        // Reveal first, then reset
+        shell.revealSolution();
+        expect(shell.solutionRevealed()).toBe(true);
+
+        shell.resetToStarter();
+
+        expect(shell.solutionRevealed()).toBe(false);
+        expect(shell.htmlContent()).toBe(
+          mockChallengeWithSolution.starter.html,
+        );
+        expect(shell.jsContent()).toBe(mockChallengeWithSolution.starter.js);
+        expect(shell.cssContent()).toBe(mockChallengeWithSolution.starter.css);
+        expect(shell.vttContent()).toBe(mockChallengeWithSolution.starter.vtt);
+      });
+
+      it('should call pipeline.updateCode with starter content', async () => {
+        fixture.componentRef.setInput('challenge', mockChallengeWithSolution);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        (
+          component as unknown as { revealSolution: () => void }
+        ).revealSolution();
+        mockPipeline.updateCode.mockClear();
+
+        (
+          component as unknown as { resetToStarter: () => void }
+        ).resetToStarter();
+
+        expect(mockPipeline.updateCode).toHaveBeenCalledWith(
+          mockChallengeWithSolution.starter.html,
+          mockChallengeWithSolution.starter.js,
+          mockChallengeWithSolution.starter.css,
+        );
+      });
+
+      it('should hide feedback panel on reset', async () => {
+        fixture.componentRef.setInput('challenge', mockChallengeWithSolution);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        (
+          component as unknown as { revealSolution: () => void }
+        ).revealSolution();
+        (
+          component as unknown as {
+            feedbackVisible: { set: (v: boolean) => void };
+          }
+        ).feedbackVisible.set(true);
+
+        (
+          component as unknown as { resetToStarter: () => void }
+        ).resetToStarter();
+
+        const visible = (
+          component as unknown as { feedbackVisible: () => boolean }
+        ).feedbackVisible();
+        expect(visible).toBe(false);
+      });
+    });
+
+    describe('hasSolution computed', () => {
+      it('should be true when challenge has solution', async () => {
+        fixture.componentRef.setInput('challenge', mockChallengeWithSolution);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const hasSolution = (
+          component as unknown as { hasSolution: () => boolean }
+        ).hasSolution();
+        expect(hasSolution).toBe(true);
+      });
+
+      it('should be false when challenge has no solution', () => {
+        // mockChallenge has no solution field
+        const hasSolution = (
+          component as unknown as { hasSolution: () => boolean }
+        ).hasSolution();
+        expect(hasSolution).toBe(false);
+      });
+    });
+
+    describe('isPeeked signal', () => {
+      it('should reflect progress store peeked state', async () => {
+        // The ProgressStore uses in-memory fallback in test environment.
+        // We use the real store and pre-populate it with peeked data.
+        const progressStore = TestBed.inject(ProgressStore);
+        await progressStore.markChallengePeeked('test-challenge');
+
+        // Re-set challenge input to trigger the effect that loads peeked state
+        fixture.componentRef.setInput('challenge', { ...mockChallenge });
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const isPeeked = (
+          component as unknown as { isPeeked: () => boolean }
+        ).isPeeked();
+        expect(isPeeked).toBe(true);
+      });
+
+      it('should be false for challenges not in peekedChallenges', () => {
+        const isPeeked = (
+          component as unknown as { isPeeked: () => boolean }
+        ).isPeeked();
+        expect(isPeeked).toBe(false);
+      });
+    });
+
+    describe('Error handling', () => {
+      it('should set revealError when challenge has no solution and revealSolution is called', () => {
+        // mockChallenge has no solution
+        (
+          component as unknown as { revealSolution: () => void }
+        ).revealSolution();
+        const error = (
+          component as unknown as { revealError: () => string }
+        ).revealError();
+        expect(error).toContain('Solution could not be loaded');
+      });
+
+      it('should preserve editor content when revealSolution fails due to missing solution', () => {
+        // mockChallenge has no solution - editor should keep starter content
+        (
+          component as unknown as { revealSolution: () => void }
+        ).revealSolution();
+        const html = (
+          component as unknown as { htmlContent: () => string }
+        ).htmlContent();
+        expect(html).toBe(mockChallenge.starter.html);
+      });
+
+      it('should set revealError signal when revealSolution is called without solution', () => {
+        // Trigger error by calling revealSolution without solution
+        (
+          component as unknown as { revealSolution: () => void }
+        ).revealSolution();
+
+        const error = (
+          component as unknown as { revealError: () => string }
+        ).revealError();
+        expect(error).toContain('Solution could not be loaded');
+      });
+
+      it('should clear error and re-attempt on retryReveal()', async () => {
+        fixture.componentRef.setInput('challenge', mockChallengeWithSolution);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        // First, manually set an error to simulate a previous failure
+        (
+          component as unknown as { revealError: { set: (v: string) => void } }
+        ).revealError.set('Previous error');
+        fixture.detectChanges();
+
+        // Now retry - should succeed since challenge has solution
+        (
+          component as unknown as { retryReveal: () => void }
+        ).retryReveal();
+
+        const error = (
+          component as unknown as { revealError: () => string }
+        ).revealError();
+        expect(error).toBe('');
+
+        const html = (
+          component as unknown as { htmlContent: () => string }
+        ).htmlContent();
+        expect(html).toBe(mockChallengeWithSolution.solution!.html);
+      });
+    });
+
+    describe('live region announcement', () => {
+      it('should announce "Solution revealed" on revealSolution()', async () => {
+        fixture.componentRef.setInput('challenge', mockChallengeWithSolution);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        (
+          component as unknown as { revealSolution: () => void }
+        ).revealSolution();
+
+        const announcement = (
+          component as unknown as { solutionAnnouncement: () => string }
+        ).solutionAnnouncement();
+        expect(announcement).toBe('Solution revealed');
+      });
+
+      it('should clear announcement on resetToStarter()', async () => {
+        fixture.componentRef.setInput('challenge', mockChallengeWithSolution);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        (
+          component as unknown as { revealSolution: () => void }
+        ).revealSolution();
+        (
+          component as unknown as { resetToStarter: () => void }
+        ).resetToStarter();
+
+        const announcement = (
+          component as unknown as { solutionAnnouncement: () => string }
+        ).solutionAnnouncement();
+        expect(announcement).toBe('');
       });
     });
   });

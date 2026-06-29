@@ -191,6 +191,60 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
     throw new Error('Invalid field "validators": All items must be strings.');
   }
 
+  // Solution (optional)
+  if (
+    'solution' in data &&
+    data['solution'] !== undefined &&
+    data['solution'] !== null
+  ) {
+    if (typeof data['solution'] !== 'object' || Array.isArray(data['solution'])) {
+      throw new Error(
+        'Invalid field "solution": Must be an object mapping file types to paths.',
+      );
+    }
+    const solution = data['solution'] as Record<string, unknown>;
+    if (
+      'html' in solution &&
+      solution['html'] !== undefined &&
+      solution['html'] !== null &&
+      typeof solution['html'] !== 'string'
+    ) {
+      throw new Error(
+        'Invalid field "solution.html": Must be a string (file path) if provided.',
+      );
+    }
+    if (
+      'css' in solution &&
+      solution['css'] !== undefined &&
+      solution['css'] !== null &&
+      typeof solution['css'] !== 'string'
+    ) {
+      throw new Error(
+        'Invalid field "solution.css": Must be a string (file path) if provided.',
+      );
+    }
+    if (
+      'js' in solution &&
+      solution['js'] !== undefined &&
+      solution['js'] !== null &&
+      typeof solution['js'] !== 'string'
+    ) {
+      throw new Error(
+        'Invalid field "solution.js": Must be a string (file path) if provided.',
+      );
+    }
+    if (
+      'vtt' in solution &&
+      solution['vtt'] !== undefined &&
+      solution['vtt'] !== null &&
+      typeof solution['vtt'] !== 'string'
+    ) {
+      throw new Error(
+        'Invalid field "solution.vtt": Must be a string (file path) if provided.',
+      );
+    }
+  }
+
   // discussionUrl (optional)
   if (
     'discussionUrl' in data &&
@@ -208,6 +262,22 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
         'Invalid field "discussionUrl": Must be a well-formed URL.',
       );
     }
+  }
+
+  // Build solution object if present
+  let solutionResult: ChallengeMeta['solution'] | undefined;
+  if (
+    'solution' in data &&
+    data['solution'] !== undefined &&
+    data['solution'] !== null
+  ) {
+    const solution = data['solution'] as Record<string, unknown>;
+    solutionResult = {
+      ...(typeof solution['html'] === 'string' ? { html: solution['html'] } : {}),
+      ...(typeof solution['css'] === 'string' ? { css: solution['css'] } : {}),
+      ...(typeof solution['js'] === 'string' ? { js: solution['js'] } : {}),
+      ...(typeof solution['vtt'] === 'string' ? { vtt: solution['vtt'] } : {}),
+    };
   }
 
   return {
@@ -234,6 +304,7 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
     data['discussionUrl'].trim() !== ''
       ? { discussionUrl: data['discussionUrl'] as string }
       : {}),
+    ...(solutionResult ? { solution: solutionResult } : {}),
   };
 }
 

@@ -83,6 +83,17 @@
           [activeTab]="activeEditorTab()"
           (tabActivated)="switchEditorTab($event)"
         />
+        <a11y-editor-actions
+          panelHeader
+          [hasSolution]="hasSolution()"
+          [solutionRevealed]="solutionRevealed()"
+          [hasUserSnapshot]="hasUserSnapshot()"
+          [isPeeked]="isPeeked()"
+          [challengeTitle]="challenge().title"
+          (revealSolution)="revealSolution()"
+          (resetToStarter)="resetToStarter()"
+          (restoreUserCode)="restoreUserCode()"
+        />
         <div
           id="editor-panel-html"
           role="tabpanel"
@@ -415,6 +426,9 @@
           [analysisResult]="pipeline.analysisResult()"
           (checkSolution)="checkSolution()"
         />
+        <div aria-live="polite" class="solution-announcement sr-only">
+          {{ solutionAnnouncement() }}
+        </div>
       </a11y-shell-panel>
     </div>
   </div>

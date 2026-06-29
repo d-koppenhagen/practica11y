@@ -95,6 +95,7 @@ describe('AnalysisPipeline', () => {
         .mockResolvedValueOnce({
           xp: 0,
           completedChallenges: [],
+          peekedChallenges: [],
           achievements: [],
           currentLevel: 'hatchling',
           lastActivity: new Date(),
@@ -102,6 +103,7 @@ describe('AnalysisPipeline', () => {
         .mockResolvedValue({
           xp: 50,
           completedChallenges: ['test-challenge'],
+          peekedChallenges: [],
           achievements: [],
           currentLevel: 'hatchling',
           lastActivity: new Date(),
@@ -298,6 +300,61 @@ describe('AnalysisPipeline', () => {
 
       expect(mockGamification.addXP).not.toHaveBeenCalled();
       expect(mockProgressStore.markChallengeCompleted).not.toHaveBeenCalled();
+    });
+
+    it('should not award XP when challenge is peeked', async () => {
+      mockProgressStore.loadProgress
+        .mockReset()
+        .mockResolvedValueOnce({
+          xp: 0,
+          completedChallenges: [],
+          peekedChallenges: ['test-challenge'],
+          achievements: [],
+          currentLevel: 'hatchling',
+          lastActivity: new Date(),
+        })
+        .mockResolvedValue({
+          xp: 0,
+          completedChallenges: ['test-challenge'],
+          peekedChallenges: ['test-challenge'],
+          achievements: [],
+          currentLevel: 'hatchling',
+          lastActivity: new Date(),
+        });
+
+      pipeline.setChallenge(mockChallenge);
+      await pipeline.runPipeline(document);
+
+      expect(mockGamification.addXP).not.toHaveBeenCalled();
+      expect(mockProgressStore.markChallengeCompleted).toHaveBeenCalledWith(
+        'test-challenge',
+      );
+    });
+
+    it('should still award XP when challenge is not peeked', async () => {
+      mockProgressStore.loadProgress
+        .mockReset()
+        .mockResolvedValueOnce({
+          xp: 0,
+          completedChallenges: [],
+          peekedChallenges: ['other-challenge'],
+          achievements: [],
+          currentLevel: 'hatchling',
+          lastActivity: new Date(),
+        })
+        .mockResolvedValue({
+          xp: 50,
+          completedChallenges: ['test-challenge'],
+          peekedChallenges: ['other-challenge'],
+          achievements: [],
+          currentLevel: 'hatchling',
+          lastActivity: new Date(),
+        });
+
+      pipeline.setChallenge(mockChallenge);
+      await pipeline.runPipeline(document);
+
+      expect(mockGamification.addXP).toHaveBeenCalledWith(50);
     });
   });
 

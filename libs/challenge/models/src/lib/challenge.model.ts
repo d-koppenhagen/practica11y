@@ -36,6 +36,8 @@ export interface Challenge {
   disabled?: boolean;
   /** Optional URL to the GitHub Discussions thread for this challenge */
   discussionUrl?: string;
+  /** Reference solution code, undefined if challenge has no solution */
+  solution?: StarterCode;
 }
 
 /**
@@ -60,4 +62,11 @@ export interface ChallengeMeta {
   links?: { text: string; url: string }[];
   /** Optional URL to the GitHub Discussions thread for this challenge */
   discussionUrl?: string;
+  /** Optional solution file paths, same structure as starter */
+  solution?: {
+    html?: string;
+    css?: string;
+    js?: string;
+    vtt?: string;
+  };
 }

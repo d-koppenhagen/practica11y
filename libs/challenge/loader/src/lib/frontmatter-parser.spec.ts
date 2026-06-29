@@ -212,6 +212,213 @@ starter:
     );
   });
 
+  describe('solution field handling', () => {
+    it('should not include solution in result when solution field is absent', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+validators:
+  - test-validator
+---
+
+Body`;
+
+      const result = parseFrontmatter(raw);
+      expect(result.solution).toBeUndefined();
+    });
+
+    it('should include solution in result when solution field has valid paths', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+solution:
+  html: solution/index.html
+  css: solution/styles.css
+validators:
+  - test-validator
+---
+
+Body`;
+
+      const result = parseFrontmatter(raw);
+      expect(result.solution).toEqual({
+        html: 'solution/index.html',
+        css: 'solution/styles.css',
+      });
+    });
+
+    it('should include only specified solution paths (partial solution)', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+solution:
+  html: solution/index.html
+validators:
+  - test-validator
+---
+
+Body`;
+
+      const result = parseFrontmatter(raw);
+      expect(result.solution).toEqual({ html: 'solution/index.html' });
+    });
+
+    it('should throw when solution field is not an object (string)', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+solution: "not-an-object"
+validators:
+  - test-validator
+---
+
+Body`;
+
+      expect(() => parseFrontmatter(raw)).toThrow(
+        'Invalid field "solution": Must be an object mapping file types to paths.',
+      );
+    });
+
+    it('should throw when solution field is not an object (array)', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+solution:
+  - html: solution/index.html
+validators:
+  - test-validator
+---
+
+Body`;
+
+      expect(() => parseFrontmatter(raw)).toThrow(
+        'Invalid field "solution": Must be an object mapping file types to paths.',
+      );
+    });
+
+    it('should throw when solution.html is not a string', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+solution:
+  html: 123
+validators:
+  - test-validator
+---
+
+Body`;
+
+      expect(() => parseFrontmatter(raw)).toThrow(
+        'Invalid field "solution.html": Must be a string (file path) if provided.',
+      );
+    });
+
+    it('should throw when solution.css is not a string', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+solution:
+  css: true
+validators:
+  - test-validator
+---
+
+Body`;
+
+      expect(() => parseFrontmatter(raw)).toThrow(
+        'Invalid field "solution.css": Must be a string (file path) if provided.',
+      );
+    });
+
+    it('should throw when solution.js is not a string', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+solution:
+  js: 42
+validators:
+  - test-validator
+---
+
+Body`;
+
+      expect(() => parseFrontmatter(raw)).toThrow(
+        'Invalid field "solution.js": Must be a string (file path) if provided.',
+      );
+    });
+
+    it('should throw when solution.vtt is not a string', () => {
+      const raw = `---
+id: test
+title: Test
+difficulty: beginner
+tags:
+  - semantics
+points: 50
+starter:
+  html: starter.html
+solution:
+  vtt: false
+validators:
+  - test-validator
+---
+
+Body`;
+
+      expect(() => parseFrontmatter(raw)).toThrow(
+        'Invalid field "solution.vtt": Must be a string (file path) if provided.',
+      );
+    });
+  });
+
   describe('discussionUrl handling', () => {
     it('should accept frontmatter with a valid discussionUrl and return it correctly', () => {
       const raw = `---
