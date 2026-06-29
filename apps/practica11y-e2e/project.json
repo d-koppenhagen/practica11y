@@ -7,20 +7,13 @@
   "implicitDependencies": ["practica11y"],
   "targets": {
     "e2e": {
-      "executor": "@nx/playwright:playwright",
       "outputs": ["{workspaceRoot}/dist/.playwright/apps/practica11y-e2e"],
       "defaultConfiguration": "local",
-      "options": {
-        "config": "apps/practica11y-e2e/playwright.config.ts"
-      },
       "configurations": {
         "local": {
           "ui": true
         },
-        "ci": {
-          "ui": false,
-          "skipInstall": true
-        }
+        "ci": {}
       }
     }
   }
