@@ -4,15 +4,11 @@
   <span class="peeked-indicator" aria-label="Solution was previously revealed">
     👀
   </span>
-  }
-
-  @if (!solutionRevealed()) {
+  } @if (!solutionRevealed()) {
   <button class="editor-action-btn reveal-btn" (click)="onRevealSolution()">
     Reveal Solution
   </button>
-  }
-
-  @if (solutionRevealed()) {
+  } @if (solutionRevealed()) {
   <button class="editor-action-btn restore-btn" (click)="onRestoreUserCode()">
     Back to My Code
   </button>

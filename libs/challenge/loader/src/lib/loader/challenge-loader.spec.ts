@@ -303,7 +303,8 @@ Add proper labels to form inputs.`;
             ok: true,
             status: 200,
             statusText: 'OK',
-            text: async () => '<img src="photo.jpg" alt="A sunset over the ocean">',
+            text: async () =>
+              '<img src="photo.jpg" alt="A sunset over the ocean">',
           };
         }
         if (url.includes('alt-text-basics/solution/styles.css')) {
@@ -395,9 +396,9 @@ Add proper labels to form inputs.`;
         return { ok: false, status: 404, statusText: 'Not Found' };
       });
 
-      await expect(
-        loader.loadChallenge('alt-text-basics'),
-      ).rejects.toThrow(/Failed to load solution HTML for challenge "alt-text-basics"/);
+      await expect(loader.loadChallenge('alt-text-basics')).rejects.toThrow(
+        /Failed to load solution HTML for challenge "alt-text-basics"/,
+      );
     });
 
     it('should return empty strings for unspecified file types in a partial solution', async () => {
@@ -423,7 +424,8 @@ Add proper labels to form inputs.`;
             ok: true,
             status: 200,
             statusText: 'OK',
-            text: async () => '<form><label for="name">Name</label><input id="name"></form>',
+            text: async () =>
+              '<form><label for="name">Name</label><input id="name"></form>',
           };
         }
         return { ok: false, status: 404, statusText: 'Not Found' };

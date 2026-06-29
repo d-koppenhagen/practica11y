@@ -197,7 +197,10 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
     data['solution'] !== undefined &&
     data['solution'] !== null
   ) {
-    if (typeof data['solution'] !== 'object' || Array.isArray(data['solution'])) {
+    if (
+      typeof data['solution'] !== 'object' ||
+      Array.isArray(data['solution'])
+    ) {
       throw new Error(
         'Invalid field "solution": Must be an object mapping file types to paths.',
       );
@@ -273,7 +276,9 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
   ) {
     const solution = data['solution'] as Record<string, unknown>;
     solutionResult = {
-      ...(typeof solution['html'] === 'string' ? { html: solution['html'] } : {}),
+      ...(typeof solution['html'] === 'string'
+        ? { html: solution['html'] }
+        : {}),
       ...(typeof solution['css'] === 'string' ? { css: solution['css'] } : {}),
       ...(typeof solution['js'] === 'string' ? { js: solution['js'] } : {}),
       ...(typeof solution['vtt'] === 'string' ? { vtt: solution['vtt'] } : {}),

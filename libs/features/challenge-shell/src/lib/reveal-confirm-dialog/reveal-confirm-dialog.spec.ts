@@ -30,9 +30,7 @@ describe('RevealConfirmDialog', () => {
     expect(
       screen.getByText(/no judgment — peeking is learning too/i),
     ).toBeTruthy();
-    expect(
-      screen.getByRole('button', { name: /yes, show me/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole('button', { name: /yes, show me/i })).toBeTruthy();
     expect(screen.getByRole('button', { name: /cancel/i })).toBeTruthy();
   });
 

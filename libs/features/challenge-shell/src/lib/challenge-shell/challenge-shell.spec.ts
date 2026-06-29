@@ -924,9 +924,7 @@ describe('ChallengeShell', () => {
         fixture.detectChanges();
 
         // Now retry - should succeed since challenge has solution
-        (
-          component as unknown as { retryReveal: () => void }
-        ).retryReveal();
+        (component as unknown as { retryReveal: () => void }).retryReveal();
 
         const error = (
           component as unknown as { revealError: () => string }

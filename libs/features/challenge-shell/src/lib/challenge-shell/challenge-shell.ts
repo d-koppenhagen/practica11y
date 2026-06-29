@@ -126,7 +126,12 @@ export class ChallengeShell {
   protected readonly revealError = signal('');
 
   /** Snapshot of the user's code before reveal, so they can switch back */
-  private userSnapshot: { html: string; js: string; css: string; vtt: string } | null = null;
+  private userSnapshot: {
+    html: string;
+    js: string;
+    css: string;
+    vtt: string;
+  } | null = null;
   protected readonly hasUserSnapshot = signal(false);
 
   protected readonly editorOptions = computed<MonacoEditorOptions>(() => ({
@@ -558,7 +563,16 @@ export class ChallengeShell {
    */
   private syncEditorValues(): void {
     const editors = (
-      globalThis as unknown as { monaco?: { editor?: { getEditors?: () => { getValue: () => string; setValue: (v: string) => void }[] } } }
+      globalThis as unknown as {
+        monaco?: {
+          editor?: {
+            getEditors?: () => {
+              getValue: () => string;
+              setValue: (v: string) => void;
+            }[];
+          };
+        };
+      }
     ).monaco?.editor?.getEditors?.();
     if (!editors) return;
 
@@ -566,10 +580,14 @@ export class ChallengeShell {
 
     for (let i = 0; i < editors.length && i < tabOrder.length; i++) {
       const tab = tabOrder[i];
-      const newValue = tab === 'html' ? this.htmlContent()
-        : tab === 'js' ? this.jsContent()
-        : tab === 'css' ? this.cssContent()
-        : this.vttContent();
+      const newValue =
+        tab === 'html'
+          ? this.htmlContent()
+          : tab === 'js'
+            ? this.jsContent()
+            : tab === 'css'
+              ? this.cssContent()
+              : this.vttContent();
 
       if (editors[i].getValue() !== newValue) {
         editors[i].setValue(newValue);
