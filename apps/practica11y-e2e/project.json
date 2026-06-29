@@ -18,7 +18,8 @@
           "ui": true
         },
         "ci": {
-          "ui": false
+          "ui": false,
+          "skipInstall": true
         }
       }
     }
