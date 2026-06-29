@@ -17,9 +17,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: process.env['CI']
-      ? 'pnpm nx serve-static practica11y --no-tui'
-      : 'pnpm nx serve practica11y --no-tui',
+    command: 'pnpm nx serve practica11y --no-tui',
     url: baseURL,
     reuseExistingServer: !process.env['CI'],
     timeout: 120_000,
