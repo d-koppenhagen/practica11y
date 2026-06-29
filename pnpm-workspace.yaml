@@ -17,7 +17,7 @@ catalog:
   '@angular/core': '22.0.2'
   '@angular/forms': '22.0.2'
   '@angular/platform-browser': '22.0.2'
-  '@angular/router': '22.0.2'
+  '@angular/router': '22.0.4'
   '@angular-devkit/core': '22.0.3'
   '@angular-devkit/schematics': '22.0.3'
   '@angular/build': '22.0.3'
