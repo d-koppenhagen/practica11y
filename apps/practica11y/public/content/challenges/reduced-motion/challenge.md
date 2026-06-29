@@ -12,6 +12,8 @@ starter:
 solution:
   css: solution.css
 validators:
+  - color-contrast
+  - axe-no-violations
   - reduced-motion
 links:
   - text: 'MDN: prefers-reduced-motion'

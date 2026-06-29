@@ -13,6 +13,8 @@ starter:
 solution:
   html: solution.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - video-has-captions
 links:
   - text: 'MDN: The Video element'

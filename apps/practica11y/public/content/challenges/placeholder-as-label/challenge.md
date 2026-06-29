@@ -12,6 +12,8 @@ solution:
   html: solution.html
   css: solution.css
 validators:
+  - color-contrast
+  - axe-no-violations
   - form-labels
 links:
   - text: 'MDN: The Label element'

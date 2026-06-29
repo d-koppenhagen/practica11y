@@ -12,6 +12,8 @@ starter:
 solution:
   html: solution.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - image-alt-text-limit
   - image-aria-describedby
 links:

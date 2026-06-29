@@ -13,6 +13,8 @@ solution:
   html: solution.html
   css: solution.css
 validators:
+  - color-contrast
+  - axe-no-violations
   - has-skip-link
 links:
   - text: 'WCAG: Bypass Blocks'

@@ -12,6 +12,8 @@ starter:
 solution:
   html: solution.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - semantic-button
   - keyboard-accessible
 links:

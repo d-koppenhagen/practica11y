@@ -54,7 +54,11 @@ starter:
   css: starter.css # Optional
   js: starter.js # Optional
 validators:
-  - <validator-id> # One or more validator IDs
+  # At least this generic validators should be always set:
+  - color-contrast
+  - axe-no-violations
+  # One or more additional validator IDs
+  - <validator-id>
 previewTitle: 'Custom Preview Title' # Optional, default: "Challenge: {title} | Preview"
 links:
   - text: 'MDN: Relevant Topic'

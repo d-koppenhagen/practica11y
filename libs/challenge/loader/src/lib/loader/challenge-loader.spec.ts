@@ -15,6 +15,8 @@ starter:
   html: starter.html
   css: starter.css
 validators:
+  - color-contrast
+  - axe-no-violations
   - semantic-button
   - keyboard-accessible
 ---
@@ -39,6 +41,8 @@ solution:
   css: solution/styles.css
   js: solution/script.js
 validators:
+  - color-contrast
+  - axe-no-violations
   - alt-text-present
 ---
 
@@ -58,6 +62,8 @@ starter:
 solution:
   html: solution/index.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - label-present
 ---
 
@@ -178,6 +184,8 @@ points: 75
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - label-association
 ---
 

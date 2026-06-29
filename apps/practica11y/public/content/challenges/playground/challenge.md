@@ -10,6 +10,7 @@ starter:
   css: starter.css
   js: starter.js
 validators:
+  - color-contrast
   - axe-no-violations
 previewTitle: 'Playground | Practica11y'
 links:

@@ -12,6 +12,8 @@ starter:
 solution:
   html: solution.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - has-all-landmarks
 links:
   - text: 'MDN: Document and website structure'

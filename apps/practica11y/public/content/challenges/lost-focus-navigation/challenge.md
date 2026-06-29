@@ -15,6 +15,8 @@ solution:
   html: solution.html
   js: solution.js
 validators:
+  - color-contrast
+  - axe-no-violations
   - focus-after-navigation
 links:
   - text: 'MDN: Managing focus in accessibility'

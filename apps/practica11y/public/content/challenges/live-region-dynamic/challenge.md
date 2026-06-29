@@ -15,6 +15,8 @@ solution:
   js: solution.js
   css: solution.css
 validators:
+  - color-contrast
+  - axe-no-violations
   - keyboard-accessible
   - live-region-pattern
 links:

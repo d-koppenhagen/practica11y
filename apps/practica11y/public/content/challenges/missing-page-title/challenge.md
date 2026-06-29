@@ -14,6 +14,8 @@ starter:
 solution:
   js: solution.js
 validators:
+  - color-contrast
+  - axe-no-violations
   - page-title
 links:
   - text: 'WCAG: Page Titled'

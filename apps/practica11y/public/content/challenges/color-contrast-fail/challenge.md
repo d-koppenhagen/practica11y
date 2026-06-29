@@ -13,6 +13,8 @@ solution:
   css: solution.css
 validators:
   - color-contrast
+  - axe-no-violations
+  - color-contrast
 links:
   - text: 'WCAG: Contrast (Minimum)'
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html'

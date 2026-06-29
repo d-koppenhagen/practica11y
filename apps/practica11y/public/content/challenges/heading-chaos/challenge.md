@@ -11,6 +11,8 @@ starter:
 solution:
   html: solution.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - heading-structure
 links:
   - text: 'MDN: Heading elements'

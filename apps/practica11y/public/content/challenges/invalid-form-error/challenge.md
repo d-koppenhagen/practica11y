@@ -14,6 +14,8 @@ solution:
   html: solution.html
   js: solution.js
 validators:
+  - color-contrast
+  - axe-no-violations
   - no-disabled-submit
   - form-labels
   - aria-invalid-errors

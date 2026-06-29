@@ -13,6 +13,8 @@ starter:
 solution:
   html: solution.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - button-link-semantics
 links:
   - text: 'MDN: The Anchor element'

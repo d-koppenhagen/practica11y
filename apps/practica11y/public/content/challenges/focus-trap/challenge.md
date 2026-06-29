@@ -13,6 +13,8 @@ solution:
   html: solution.html
   js: solution.js
 validators:
+  - color-contrast
+  - axe-no-violations
   - focus-trap-implemented
   - keyboard-accessible
 links:

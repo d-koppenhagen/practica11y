@@ -11,6 +11,8 @@ starter:
 solution:
   html: solution.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - form-labels
 links:
   - text: 'MDN: The Label element'

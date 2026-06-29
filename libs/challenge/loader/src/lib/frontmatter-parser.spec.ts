@@ -14,6 +14,8 @@ starter:
   html: starter.html
   css: starter.css
 validators:
+  - color-contrast
+  - axe-no-violations
   - semantic-button
   - keyboard-accessible
 ---
@@ -52,6 +54,8 @@ points: 50
 starter:
   html: index.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - form-labels
 ---
 
@@ -99,6 +103,8 @@ points: 10
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test
 ---`;
     expect(() => parseFrontmatter(raw)).toThrow('Missing required field: id');
@@ -113,6 +119,8 @@ points: 10
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test
 ---`;
     expect(() => parseFrontmatter(raw)).toThrow(
@@ -130,6 +138,8 @@ points: 10
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test
 ---`;
     expect(() => parseFrontmatter(raw)).toThrow(
@@ -147,6 +157,8 @@ points: 10
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test
 ---`;
     expect(() => parseFrontmatter(raw)).toThrow('Must be an array of strings');
@@ -162,6 +174,8 @@ points: "fifty"
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test
 ---`;
     expect(() => parseFrontmatter(raw)).toThrow('Must be a number');
@@ -175,6 +189,8 @@ difficulty: beginner
 tags: []
 points: 10
 validators:
+  - color-contrast
+  - axe-no-violations
   - test
 ---`;
     expect(() => parseFrontmatter(raw)).toThrow(
@@ -192,6 +208,8 @@ points: 10
 starter:
   css: style.css
 validators:
+  - color-contrast
+  - axe-no-violations
   - test
 ---`;
     expect(() => parseFrontmatter(raw)).toThrow('starter.html');
@@ -224,6 +242,8 @@ points: 50
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 ---
 
@@ -247,6 +267,8 @@ solution:
   html: solution/index.html
   css: solution/styles.css
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 ---
 
@@ -272,6 +294,8 @@ starter:
 solution:
   html: solution/index.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 ---
 
@@ -293,6 +317,8 @@ starter:
   html: starter.html
 solution: "not-an-object"
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 ---
 
@@ -316,6 +342,8 @@ starter:
 solution:
   - html: solution/index.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 ---
 
@@ -339,6 +367,8 @@ starter:
 solution:
   html: 123
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 ---
 
@@ -362,6 +392,8 @@ starter:
 solution:
   css: true
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 ---
 
@@ -385,6 +417,8 @@ starter:
 solution:
   js: 42
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 ---
 
@@ -408,6 +442,8 @@ starter:
 solution:
   vtt: false
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 ---
 
@@ -431,6 +467,8 @@ points: 50
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/42'
 ---
@@ -454,6 +492,8 @@ points: 50
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 ---
 
@@ -474,6 +514,8 @@ points: 50
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 discussionUrl: ''
 ---
@@ -495,6 +537,8 @@ points: 50
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 discussionUrl: 12345
 ---
@@ -517,6 +561,8 @@ points: 50
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 discussionUrl: true
 ---
@@ -539,6 +585,8 @@ points: 50
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test-validator
 discussionUrl: 'not-a-valid-url'
 ---
@@ -577,6 +625,8 @@ points: 10
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test
 ---
 
@@ -602,6 +652,8 @@ points: 10
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test
 ---
 
@@ -624,6 +676,8 @@ points: 10
 starter:
   html: starter.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - test
 ---
 

@@ -11,6 +11,8 @@ starter:
 solution:
   html: solution.html
 validators:
+  - color-contrast
+  - axe-no-violations
   - image-alt-text
 links:
   - text: 'MDN: Images in HTML'
