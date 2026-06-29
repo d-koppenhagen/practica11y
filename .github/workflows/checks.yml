@@ -66,7 +66,13 @@ jobs:
 
       - run: pnpm rebuild
 
-      - run: pnpm nx build practica11y --configuration=production
+      - run: pnpm nx build practica11y --no-tui --configuration=production
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: dist/apps/practica11y/
+          retention-days: 1
 
   e2e:
     name: E2E Tests
@@ -89,6 +95,11 @@ jobs:
       - run: pnpm rebuild
 
       - run: pnpm --filter practica11y-e2e exec playwright install --with-deps chromium
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist/apps/practica11y/
 
       - run: pnpm nx e2e practica11y-e2e --no-tui --configuration=ci
 
