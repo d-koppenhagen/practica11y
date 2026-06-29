@@ -34,7 +34,12 @@ const VALID_META: ChallengeMeta = {
     html: 'starter.html',
     css: 'starter.css',
   },
-  validators: ['semantic-button', 'keyboard-accessible'],
+  validators: [
+    'color-contrast',
+    'axe-no-violations',
+    'semantic-button',
+    'keyboard-accessible',
+  ],
 };
 
 describe('parseFrontmatter', () => {

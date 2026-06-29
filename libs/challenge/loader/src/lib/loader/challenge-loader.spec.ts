@@ -134,6 +134,8 @@ describe('ChallengeLoader', () => {
       );
       expect(challenge.starter.css).toBe('.clickable { cursor: pointer; }');
       expect(challenge.validatorIds).toEqual([
+        'color-contrast',
+        'axe-no-violations',
         'semantic-button',
         'keyboard-accessible',
       ]);
