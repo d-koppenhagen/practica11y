@@ -34,7 +34,7 @@ catalog:
   '@nx/vitest': '23.0.0'
   '@nx/playwright': '23.0.0'
   '@nx/web': '23.0.0'
-  '@nx/workspace': '23.0.0'
+  '@nx/workspace': '23.0.1'
   '@schematics/angular': '22.0.3'
   '@swc-node/register': '1.11.1'
   '@swc/core': '1.15.41'
