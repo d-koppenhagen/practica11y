@@ -1,0 +1,26 @@
+nav a {
+  display: inline-flex;
+  padding: 8px;
+}
+nav svg,
+nav img {
+  width: 24px;
+  height: 24px;
+}
+.toolbar {
+  display: flex;
+  gap: 0.5rem;
+}
+.toolbar button {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+}
+.toolbar svg {
+  width: 20px;
+  height: 20px;
+}

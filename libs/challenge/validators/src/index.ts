@@ -23,3 +23,4 @@ export { videoHasCaptions } from './lib/video-has-captions';
 export { liveRegionPattern } from './lib/live-region-pattern';
 export { noDisabledSubmit } from './lib/no-disabled-submit';
 export { focusVisible } from './lib/focus-visible';
+export { interactiveElementName } from './lib/interactive-element-name';

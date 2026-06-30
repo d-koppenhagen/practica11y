@@ -36,6 +36,7 @@ import {
   liveRegionPattern,
   noDisabledSubmit,
   focusVisible,
+  interactiveElementName,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -90,6 +91,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(liveRegionPattern);
     this.challengeValidator.registerValidator(noDisabledSubmit);
     this.challengeValidator.registerValidator(focusVisible);
+    this.challengeValidator.registerValidator(interactiveElementName);
   }
 
   /** Debounced code change signal (300ms) */
