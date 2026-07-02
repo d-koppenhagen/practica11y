@@ -33,7 +33,7 @@ graph TD
     M -->|Challenge completed| N
 ```
 
-No backend required — all data is persisted locally in the browser (localStorage / IndexedDB).
+No backend required — all data is persisted locally in the browser (localStorage / IndexedDB). Optionally, users can sign in via GitHub (OAuth Device Flow) to sync progress across devices — stored in a private GitHub Gist (`practica11y-sync.json`).
 
 ## Nx Library Architecture
 

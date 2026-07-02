@@ -191,6 +191,22 @@ export class ProgressStore {
     return this.inMemorySettings;
   }
 
+  /**
+   * Replaces local progress with remote data.
+   * Writes directly to IndexedDB/localStorage and updates in-memory state.
+   */
+  async overwriteProgress(progress: UserProgress): Promise<void> {
+    await this.saveProgress(progress);
+  }
+
+  /**
+   * Replaces local settings with remote data.
+   * Writes directly to IndexedDB/localStorage and updates in-memory state.
+   */
+  async overwriteSettings(settings: UserSettings): Promise<void> {
+    await this.saveSettings(settings);
+  }
+
   isStorageAvailable(): boolean {
     return this.storageAvailable;
   }

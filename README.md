@@ -11,7 +11,7 @@ Practica11y is a gamified, browser-based learning platform for web accessibility
 
 The mission is to raise awareness for web accessibility, sharpen understanding of WCAG guidelines, and turn inclusive development into a natural habit. Whether you're just starting out or deepening your expertise — hands-on practice makes the difference.
 
-The platform is entirely client-side — no backend required. All progress is stored locally in the browser.
+The platform is entirely client-side — no backend required. Progress is stored locally in the browser and can optionally be synced across devices via GitHub sign-in (OAuth Device Flow). Synced progress is stored in a private GitHub Gist owned by the authenticated user.
 
 ## Prerequisites
 

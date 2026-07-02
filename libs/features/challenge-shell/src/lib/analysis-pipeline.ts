@@ -9,7 +9,7 @@ import {
   AnalysisPipelineResult,
   AxeViolation,
 } from '@practica11y/types';
-import { Gamification, ProgressStore } from '@practica11y/util';
+import { Gamification, ProgressStore, SyncStore } from '@practica11y/util';
 import {
   ChallengeValidator,
   axeNoViolations,
@@ -51,6 +51,7 @@ export class AnalysisPipeline {
   private readonly challengeValidator = inject(ChallengeValidator);
   private readonly gamification = inject(Gamification);
   private readonly progressStore = inject(ProgressStore);
+  private readonly syncStore = inject(SyncStore);
 
   private readonly codeChange = signal<CodeChange>({
     htmlContent: '',
@@ -391,5 +392,8 @@ export class AnalysisPipeline {
       type: 'challenge_completed',
       payload: { completedCount: updatedProgress.completedChallenges.length },
     });
+
+    // Sync progress to remote after challenge completion (Req 4.3)
+    this.syncStore.sync();
   }
 }

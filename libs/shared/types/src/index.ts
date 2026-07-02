@@ -1,5 +1,6 @@
 export * from './lib/accessibility.model';
 export * from './lib/analysis-pipeline.model';
+export * from './lib/auth.model';
 export * from './lib/color-contrast.model';
 export * from './lib/gamification.model';
 export * from './lib/persistence.model';

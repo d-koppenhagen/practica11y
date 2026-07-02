@@ -9,20 +9,28 @@ import {
   effect,
   untracked,
 } from '@angular/core';
+import { Dialog, DialogRef } from '@angular/cdk/dialog';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 import {
+  AuthStore,
   ErrorService,
   Gamification,
   ProgressStore,
+  SyncStore,
   ThemeService,
 } from '@practica11y/util';
 import { ChallengeLoader } from '@practica11y/loader';
-import { ThemeToggle } from '@practica11y/ui';
+import {
+  DeviceFlowDialog,
+  DeviceFlowDialogData,
+  ThemeToggle,
+  UserMenu,
+} from '@practica11y/ui';
 import { LEVEL_THRESHOLDS } from '@practica11y/types';
 
 @Component({
-  imports: [RouterModule, ThemeToggle],
+  imports: [RouterModule, ThemeToggle, UserMenu],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -38,6 +46,11 @@ export class App {
   private readonly router = inject(Router);
   protected readonly errorService = inject(ErrorService);
   private readonly challengeLoader = inject(ChallengeLoader);
+  protected readonly authStore = inject(AuthStore);
+  private readonly syncStore = inject(SyncStore);
+  private readonly dialog = inject(Dialog);
+
+  private deviceFlowDialogRef: DialogRef<'cancel' | undefined> | null = null;
 
   protected readonly mainContent =
     viewChild<ElementRef<HTMLElement>>('mainContent');
@@ -91,9 +104,11 @@ export class App {
 
   constructor() {
     this.initializeProgress();
+    this.initializeAuth();
     this.setupFocusManagement();
     this.loadChallengeList();
     this.setupXPAnimation();
+    this.setupDeviceFlowDialog();
   }
 
   private setupXPAnimation(): void {
@@ -189,6 +204,58 @@ export class App {
   private loadChallengeList(): void {
     this.challengeLoader.loadAllChallenges().catch(() => {
       // Silently ignore — navigation will just show disabled prev/next
+    });
+  }
+
+  private initializeAuth(): void {
+    this.authStore.initialize();
+
+    // Sync whenever auth state transitions to 'authenticated'.
+    // Covers both: fresh Device Flow auth (Req 4.1) and
+    // app load with a valid stored token (Req 4.2).
+    effect(() => {
+      if (this.authStore.state() === 'authenticated') {
+        untracked(() => this.syncStore.sync());
+      }
+    });
+  }
+
+  private setupDeviceFlowDialog(): void {
+    effect(() => {
+      const code = this.authStore.deviceCode();
+
+      if (code && !this.deviceFlowDialogRef) {
+        // Open the dialog
+        const data: DeviceFlowDialogData = {
+          userCode: code.userCode,
+          verificationUri: code.verificationUri,
+          isPolling: true,
+          errorMessage: null,
+        };
+
+        this.deviceFlowDialogRef = this.dialog.open<
+          'cancel' | undefined,
+          DeviceFlowDialogData
+        >(DeviceFlowDialog, {
+          data,
+          ariaModal: true,
+          ariaLabelledBy: 'device-flow-dialog-title',
+          autoFocus: 'dialog',
+          restoreFocus: true,
+          panelClass: 'device-flow-dialog-panel',
+        });
+
+        this.deviceFlowDialogRef.closed.subscribe((result) => {
+          this.deviceFlowDialogRef = null;
+          if (result === 'cancel') {
+            untracked(() => this.authStore.cancelDeviceFlow());
+          }
+        });
+      } else if (!code && this.deviceFlowDialogRef) {
+        // Close the dialog (auth completed or cancelled elsewhere)
+        this.deviceFlowDialogRef.close();
+        this.deviceFlowDialogRef = null;
+      }
     });
   }
 }

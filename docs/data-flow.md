@@ -192,3 +192,96 @@ sequenceDiagram
 The selected output tab (Accessibility Tree vs. Virtual Screen Reader) and the playback rate are persisted via the `LayoutStore` (IndexedDB), so they are restored across sessions.
 
 > The simulation runs entirely client-side and is purely read-only — it never mutates the preview document.
+
+## GitHub Sync Flow (Cross-Device Progress)
+
+Users can optionally sign in with GitHub to sync their progress across devices. Authentication uses the OAuth Device Flow (RFC 8628), and progress is stored in a private Gist.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant App as Angular App
+    participant Auth as AuthStore
+    participant Sync as SyncStore
+    participant GitHub as GitHub API
+    participant Gist as GitHub Gist
+
+    User->>App: Click "Sign in"
+    App->>Auth: startDeviceFlow()
+    Auth->>GitHub: POST /login/device/code
+    GitHub-->>Auth: { user_code, verification_uri, device_code }
+    Auth->>App: Show DeviceFlowDialog (user_code + link)
+    User->>GitHub: Enter code at github.com/login/device
+
+    loop Poll for token
+        Auth->>GitHub: POST /login/oauth/access_token
+        GitHub-->>Auth: { authorization_pending }
+    end
+
+    GitHub-->>Auth: { access_token }
+    Auth->>GitHub: GET /user (validate token)
+    GitHub-->>Auth: { login, avatar_url }
+    Auth->>Auth: Store token + profile in localStorage
+    Auth->>App: state → 'authenticated'
+
+    App->>Sync: sync() (triggered by auth state change)
+    Sync->>Gist: GET /gists (find practica11y-sync.json)
+    Sync->>Gist: GET /gists/{id} (read remote progress)
+    Sync->>Sync: Merge local + remote progress
+    Sync->>Gist: PATCH /gists/{id} (write merged data)
+    Sync->>App: Update ProgressStore + Gamification signals
+```
+
+### Sync Strategy: Merge
+
+Instead of last-write-wins, the sync uses a **merge strategy** that preserves progress from both sides:
+
+| Field                 | Merge Rule                                                |
+| --------------------- | --------------------------------------------------------- |
+| `completedChallenges` | Union of local and remote (no duplicates)                 |
+| `peekedChallenges`    | Union of local and remote                                 |
+| `achievements`        | Union by ID (earliest `unlockedAt` wins)                  |
+| `xp`                  | `Math.max(local, remote)`                                 |
+| `currentLevel`        | Level corresponding to the higher XP                      |
+| `lastActivity`        | Most recent timestamp                                     |
+| `settings`            | Last-write-wins (from the side with newer `lastActivity`) |
+
+After merging:
+
+- If merged differs from local → update local (IndexedDB + Gamification signals)
+- If merged differs from remote → update Gist
+
+### Gist Storage
+
+Progress is stored in a **private Gist** containing a single file:
+
+- **Filename**: `practica11y-sync.json`
+- **Format**: `{ version: 1, progress: SerializedUserProgress, settings: UserSettings }`
+- **Scope**: The OAuth app requests the `gist` scope only
+
+The Gist is identified by searching the authenticated user's gists for one containing `practica11y-sync.json`.
+
+### Sync Triggers
+
+| Trigger                 | Description                                        |
+| ----------------------- | -------------------------------------------------- |
+| After sign-in           | Immediate sync when auth state → `authenticated`   |
+| App load (stored token) | Sync after token validation on initialization      |
+| Challenge completion    | Sync after `markChallengeCompleted()` + XP awarded |
+| Manual sync button      | User clicks "Sync now" in the User Menu dropdown   |
+
+### CORS Proxy (Development)
+
+GitHub's OAuth endpoints (`github.com/login/*`) do not support CORS from browser origins. In development, the Angular dev server proxies these requests:
+
+- `/github-auth/*` → `https://github.com/*` (configured in `apps/practica11y/proxy.conf.json`)
+
+In production, a CORS proxy (e.g., Cloudflare Worker) is needed.
+
+### Token Lifecycle
+
+1. App boots → `AuthStore.initialize()` checks localStorage for `practica11y-auth`
+2. If found: set `user` signal immediately (instant UI), validate via `GET /user`
+3. Valid → `authenticated`, trigger sync
+4. Invalid (401/403) → clear token, `unauthenticated`
+5. On logout → clear localStorage, reset signals
