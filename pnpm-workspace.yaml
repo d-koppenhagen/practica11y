@@ -1,6 +1,7 @@
 packages:
   - 'apps/*'
   - 'libs/**/*'
+minimumReleaseAge: 2880
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true

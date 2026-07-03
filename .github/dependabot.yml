@@ -4,18 +4,31 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+    cooldown:
+      default-days: 2
     groups:
       angular:
         patterns:
           - '@angular/*'
           - '@angular-devkit/*'
+          - '@schematics/angular'
+          - 'angular-eslint'
+          - 'rxjs'
       nx:
         patterns:
           - '@nx/*'
           - 'nx'
-      github-actions:
+      other:
         patterns:
           - '*'
+        exclude-patterns:
+          - '@angular/*'
+          - '@angular-devkit/*'
+          - '@schematics/angular'
+          - 'angular-eslint'
+          - 'rxjs'
+          - '@nx/*'
+          - 'nx'
     open-pull-requests-limit: 10
 
   - package-ecosystem: 'github-actions'
