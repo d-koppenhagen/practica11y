@@ -52,13 +52,7 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all",
-          "fileReplacements": [
-            {
-              "replace": "apps/practica11y/src/environments/environment.ts",
-              "with": "apps/practica11y/src/environments/environment.prod.ts"
-            }
-          ]
+          "outputHashing": "all"
         },
         "development": {
           "optimization": false,
@@ -102,8 +96,7 @@
           "buildTarget": "practica11y:build:production"
         },
         "development": {
-          "buildTarget": "practica11y:build:development",
-          "proxyConfig": "apps/practica11y/proxy.conf.json"
+          "buildTarget": "practica11y:build:development"
         }
       }
     },

@@ -270,13 +270,16 @@ The Gist is identified by searching the authenticated user's gists for one conta
 | Challenge completion    | Sync after `markChallengeCompleted()` + XP awarded |
 | Manual sync button      | User clicks "Sync now" in the User Menu dropdown   |
 
-### CORS Proxy (Development)
+### CORS Proxy (Cloudflare Worker)
 
-GitHub's OAuth endpoints (`github.com/login/*`) do not support CORS from browser origins. In development, the Angular dev server proxies these requests:
+GitHub's OAuth endpoints (`github.com/login/*`) do not support CORS from browser origins. A Cloudflare Worker (`workers/github-auth-proxy/`) acts as a CORS proxy for both local development and production:
 
-- `/github-auth/*` → `https://github.com/*` (configured in `apps/practica11y/proxy.conf.json`)
+- `POST /login/device/code` → `https://github.com/login/device/code`
+- `POST /login/oauth/access_token` → `https://github.com/login/oauth/access_token`
 
-In production, a CORS proxy (e.g., Cloudflare Worker) is needed.
+The worker is deployed at `https://github-auth-proxy.practica11y.workers.dev` and is used by both environment configurations (dev and prod), eliminating the need for a separate Angular dev server proxy. This ensures consistent behavior across environments — if auth works locally, it works in production.
+
+See `docs/github-auth-proxy.md` for setup and deployment details.
 
 ### Token Lifecycle
 

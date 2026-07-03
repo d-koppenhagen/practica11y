@@ -1,0 +1,6 @@
+name = "github-auth-proxy"
+main = "src/index.ts"
+compatibility_date = "2025-06-01"
+
+# Optional: map to a custom subdomain
+# routes = [{ pattern = "auth-proxy.practica11y.dev", custom_domain = true }]

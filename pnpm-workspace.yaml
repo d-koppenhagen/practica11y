@@ -1,7 +1,12 @@
 packages:
   - 'apps/*'
   - 'libs/**/*'
+  - 'workers/*'
+verifyDepsBeforeRun: warn
 minimumReleaseAge: 2880
+minimumReleaseAgeIgnoreMissingTime: true
+minimumReleaseAgeExclude:
+  - '@angular/*'
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
@@ -10,7 +15,9 @@ allowBuilds:
   lmdb: true
   msgpackr-extract: true
   nx: true
+  sharp: true
   unrs-resolver: true
+  workerd: true
 catalog:
   '@playwright/test': '1.61.0'
   '@angular/cdk': '22.0.2'

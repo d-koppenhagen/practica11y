@@ -78,7 +78,7 @@ Users can sign in with GitHub (OAuth Device Flow) to sync progress across device
 - **SyncStore** (`libs/shared/util/src/lib/sync-store.ts`): Handles Gist CRUD, merge-based conflict resolution, sync orchestration
 - **Gist filename**: `practica11y-sync.json` (private Gist, `gist` scope)
 - **Sync strategy**: Merge (union of challenges/achievements, max XP) — NOT last-write-wins
-- **CORS proxy**: Dev server proxies `/github-auth/*` → `https://github.com/*` (see `apps/practica11y/proxy.conf.json`)
+- **CORS proxy**: Cloudflare Worker at `workers/github-auth-proxy/` (see `docs/github-auth-proxy.md`)
 - **Client ID**: Public OAuth App ID, safe to commit (no secret needed for Device Flow)
 - **UI**: `UserMenu` component (avatar dropdown) + `DeviceFlowDialog` (native `<dialog>`)
 

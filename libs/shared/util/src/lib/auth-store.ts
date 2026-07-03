@@ -12,8 +12,10 @@ const AUTH_STORAGE_KEY = 'practica11y-auth';
 const GITHUB_CONFIG = {
   // Public OAuth Client ID (no secret needed for Device Flow — safe to commit)
   clientId: 'Ov23liN6ftkh3by5wS0Z',
-  deviceCodeUrl: '/github-auth/login/device/code',
-  tokenUrl: '/github-auth/login/oauth/access_token',
+  deviceCodeUrl:
+    'https://github-auth-proxy.practica11y.workers.dev/login/device/code',
+  tokenUrl:
+    'https://github-auth-proxy.practica11y.workers.dev/login/oauth/access_token',
   apiBase: 'https://api.github.com',
 } as const;
 
