@@ -150,6 +150,33 @@ export const test = base.extend<{ challengeHelpers: ChallengeHelpers }>({
       },
 
       async clickCheckSolution(): Promise<void> {
+        // Ensure the preview iframe is loaded (it uses @defer on viewport).
+        // Scroll the preview into view and wait for the iframe to appear.
+        const previewPanel = page.locator('a11y-preview-panel');
+        await previewPanel.scrollIntoViewIfNeeded();
+        const iframe = page.locator(
+          'a11y-preview-panel iframe[title="Live Preview"]',
+        );
+        await iframe.waitFor({ state: 'attached', timeout: 30_000 });
+
+        // Wait for the sandbox script inside the iframe to be ready.
+        // The sandbox posts 'dom-ready' on load — we verify by checking
+        // that the iframe's contentDocument has the user-content element.
+        await page.waitForFunction(
+          () => {
+            const iframeEl = document.querySelector(
+              'a11y-preview-panel iframe[title="Live Preview"]',
+            ) as HTMLIFrameElement | null;
+            if (!iframeEl) return false;
+            try {
+              return !!iframeEl.contentDocument?.getElementById('user-content');
+            } catch {
+              return false;
+            }
+          },
+          { timeout: 30_000 },
+        );
+
         // Click the "Check Solution" button
         const checkButton = page.getByRole('button', {
           name: 'Check Solution',
