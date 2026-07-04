@@ -422,9 +422,14 @@
 
 /* Main content */
 .app-main {
-  margin-inline: auto;
   max-width: 80rem;
   padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .app-main {
+    margin-inline: auto;
+  }
 }
 
 .app-main:focus {
