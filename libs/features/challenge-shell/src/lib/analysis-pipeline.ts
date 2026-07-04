@@ -37,6 +37,7 @@ import {
   noDisabledSubmit,
   focusVisible,
   interactiveElementName,
+  documentLanguage,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -93,6 +94,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(noDisabledSubmit);
     this.challengeValidator.registerValidator(focusVisible);
     this.challengeValidator.registerValidator(interactiveElementName);
+    this.challengeValidator.registerValidator(documentLanguage);
   }
 
   /** Debounced code change signal (300ms) */

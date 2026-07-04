@@ -18,6 +18,7 @@
     { "id": "invalid-form-error" },
     { "id": "missing-video-captions" },
     { "id": "placeholder-as-label" },
-    { "id": "empty-interactive-elements" }
+    { "id": "empty-interactive-elements" },
+    { "id": "missing-document-language" }
   ]
 }

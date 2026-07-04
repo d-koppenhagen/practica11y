@@ -24,3 +24,4 @@ export { liveRegionPattern } from './lib/live-region-pattern';
 export { noDisabledSubmit } from './lib/no-disabled-submit';
 export { focusVisible } from './lib/focus-visible';
 export { interactiveElementName } from './lib/interactive-element-name';
+export { documentLanguage } from './lib/document-language';
