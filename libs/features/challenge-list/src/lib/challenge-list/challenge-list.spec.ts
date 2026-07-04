@@ -358,4 +358,142 @@ describe('ChallengeList', () => {
       ]);
     });
   });
+
+  describe('group by', () => {
+    beforeEach(() => {
+      fixture.componentRef.setInput('challenges', mockChallenges);
+      fixture.componentRef.setInput('completedChallengeIds', []);
+      fixture.detectChanges();
+    });
+
+    function setGroupBy(value: string): void {
+      const select: HTMLSelectElement =
+        fixture.nativeElement.querySelector('#group-by');
+      select.value = value;
+      select.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+    }
+
+    function getGroupHeadings(): string[] {
+      const headings: NodeListOf<HTMLElement> =
+        fixture.nativeElement.querySelectorAll('.group-heading');
+      return Array.from(headings).map((el) => el.textContent!.trim());
+    }
+
+    describe('grouped by difficulty (default)', () => {
+      it('should render group headings in order: Beginner, Intermediate, Advanced', () => {
+        const headings = getGroupHeadings();
+        expect(headings).toEqual(['Beginner', 'Intermediate', 'Advanced']);
+      });
+
+      it('should render one challenge per difficulty group', () => {
+        const groups =
+          fixture.nativeElement.querySelectorAll('.challenge-group');
+        expect(groups.length).toBe(3);
+
+        const beginnerButtons = groups[0].querySelectorAll('.challenge-button');
+        expect(beginnerButtons.length).toBe(1);
+        expect(
+          beginnerButtons[0].querySelector('.challenge-title').textContent,
+        ).toContain('Clickable Div');
+
+        const intermediateButtons =
+          groups[1].querySelectorAll('.challenge-button');
+        expect(intermediateButtons.length).toBe(1);
+        expect(
+          intermediateButtons[0].querySelector('.challenge-title').textContent,
+        ).toContain('Focus Trap');
+
+        const advancedButtons = groups[2].querySelectorAll('.challenge-button');
+        expect(advancedButtons.length).toBe(1);
+        expect(
+          advancedButtons[0].querySelector('.challenge-title').textContent,
+        ).toContain('Color Contrast');
+      });
+
+      it('should omit empty difficulty groups when filtered', () => {
+        const difficultySelect: HTMLSelectElement =
+          fixture.nativeElement.querySelector('#difficulty-filter');
+        difficultySelect.value = 'beginner';
+        difficultySelect.dispatchEvent(new Event('change'));
+        fixture.detectChanges();
+
+        const headings = getGroupHeadings();
+        expect(headings).toEqual(['Beginner']);
+      });
+    });
+
+    describe('grouped by tag', () => {
+      beforeEach(() => {
+        setGroupBy('tag');
+      });
+
+      it('should render group headings sorted alphabetically by tag', () => {
+        const headings = getGroupHeadings();
+        expect(headings).toEqual([
+          'contrast',
+          'focus',
+          'keyboard',
+          'semantics',
+        ]);
+      });
+
+      it('should place challenges in all matching tag groups', () => {
+        const groups =
+          fixture.nativeElement.querySelectorAll('.challenge-group');
+
+        // "keyboard" group should contain challenge-1 and challenge-2
+        const keyboardGroup = Array.from<Element>(groups).find(
+          (g) =>
+            g.querySelector('.group-heading')!.textContent!.trim() ===
+            'keyboard',
+        ) as HTMLElement;
+        expect(keyboardGroup).toBeTruthy();
+        const keyboardButtons =
+          keyboardGroup.querySelectorAll('.challenge-button');
+        expect(keyboardButtons.length).toBe(2);
+
+        const titles = Array.from(keyboardButtons).map((btn) =>
+          btn.querySelector('.challenge-title')!.textContent!.trim(),
+        );
+        expect(titles).toContain('Clickable Div');
+        expect(titles).toContain('Focus Trap');
+      });
+
+      it('should show only relevant tag groups when difficulty filter is applied', () => {
+        const difficultySelect: HTMLSelectElement =
+          fixture.nativeElement.querySelector('#difficulty-filter');
+        difficultySelect.value = 'advanced';
+        difficultySelect.dispatchEvent(new Event('change'));
+        fixture.detectChanges();
+
+        const headings = getGroupHeadings();
+        expect(headings).toEqual(['contrast']);
+      });
+    });
+
+    describe('switching group mode', () => {
+      it('should switch from difficulty to tag grouping', () => {
+        let headings = getGroupHeadings();
+        expect(headings).toEqual(['Beginner', 'Intermediate', 'Advanced']);
+
+        setGroupBy('tag');
+        headings = getGroupHeadings();
+        expect(headings).toEqual([
+          'contrast',
+          'focus',
+          'keyboard',
+          'semantics',
+        ]);
+      });
+
+      it('should switch back from tag to difficulty grouping', () => {
+        setGroupBy('tag');
+        setGroupBy('difficulty');
+
+        const headings = getGroupHeadings();
+        expect(headings).toEqual(['Beginner', 'Intermediate', 'Advanced']);
+      });
+    });
+  });
 });

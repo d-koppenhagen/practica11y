@@ -8,6 +8,14 @@ import {
 } from '@angular/core';
 import { Challenge } from '@practica11y/models';
 
+export type GroupBy = 'difficulty' | 'tag';
+
+export interface ChallengeGroup {
+  key: string;
+  label: string;
+  challenges: Challenge[];
+}
+
 @Component({
   selector: 'a11y-challenge-list',
   imports: [],
@@ -24,6 +32,7 @@ export class ChallengeList {
     'all' | 'beginner' | 'intermediate' | 'advanced'
   >('all');
   protected readonly tagFilter = signal<string>('all');
+  protected readonly groupBy = signal<GroupBy>('difficulty');
 
   protected readonly availableTags = computed<string[]>(() => {
     const tags = new Set<string>();
@@ -51,6 +60,16 @@ export class ChallengeList {
     return result;
   });
 
+  protected readonly groupedChallenges = computed<ChallengeGroup[]>(() => {
+    const filtered = this.filteredChallenges();
+    const mode = this.groupBy();
+
+    if (mode === 'difficulty') {
+      return this.groupByDifficulty(filtered);
+    }
+    return this.groupByTag(filtered);
+  });
+
   protected isCompleted(challengeId: string): boolean {
     return this.completedChallengeIds().includes(challengeId);
   }
@@ -68,5 +87,45 @@ export class ChallengeList {
 
   protected setTagFilter(value: string): void {
     this.tagFilter.set(value);
+  }
+
+  protected setGroupBy(value: GroupBy): void {
+    this.groupBy.set(value);
+  }
+
+  private groupByDifficulty(challenges: Challenge[]): ChallengeGroup[] {
+    const order: { key: Challenge['difficulty']; label: string }[] = [
+      { key: 'beginner', label: 'Beginner' },
+      { key: 'intermediate', label: 'Intermediate' },
+      { key: 'advanced', label: 'Advanced' },
+    ];
+
+    return order
+      .map((entry) => ({
+        key: entry.key,
+        label: entry.label,
+        challenges: challenges.filter((c) => c.difficulty === entry.key),
+      }))
+      .filter((group) => group.challenges.length > 0);
+  }
+
+  private groupByTag(challenges: Challenge[]): ChallengeGroup[] {
+    const tagMap = new Map<string, Challenge[]>();
+
+    for (const challenge of challenges) {
+      for (const tag of challenge.tags) {
+        const list = tagMap.get(tag) ?? [];
+        list.push(challenge);
+        tagMap.set(tag, list);
+      }
+    }
+
+    return Array.from(tagMap.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([tag, items]) => ({
+        key: tag,
+        label: tag,
+        challenges: items,
+      }));
   }
 }
