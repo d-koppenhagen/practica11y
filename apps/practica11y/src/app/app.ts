@@ -10,6 +10,7 @@ import {
   untracked,
 } from '@angular/core';
 import { Dialog, DialogRef } from '@angular/cdk/dialog';
+import { A11yModule } from '@angular/cdk/a11y';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 import {
@@ -30,7 +31,7 @@ import {
 import { LEVEL_THRESHOLDS } from '@practica11y/types';
 
 @Component({
-  imports: [RouterModule, ThemeToggle, UserMenu],
+  imports: [RouterModule, ThemeToggle, UserMenu, A11yModule],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -54,9 +55,12 @@ export class App {
 
   protected readonly mainContent =
     viewChild<ElementRef<HTMLElement>>('mainContent');
+  protected readonly menuToggleBtn =
+    viewChild<ElementRef<HTMLButtonElement>>('menuToggleBtn');
   protected readonly isFullWidth = signal(false);
   protected readonly currentChallengeId = signal<string | null>(null);
   protected readonly isPlayground = signal(false);
+  protected readonly menuOpen = signal(false);
 
   protected readonly currentLevel = this.gamification.currentLevel;
   protected readonly currentXP = this.gamification.currentXP;
@@ -160,6 +164,7 @@ export class App {
         const url = (event as NavigationEnd).urlAfterRedirects;
         this.isFullWidth.set(url.startsWith('/challenges/'));
         this.isPlayground.set(url === '/challenges/playground');
+        this.menuOpen.set(false);
 
         // Extract challenge ID from URL
         const match = url.match(/^\/challenges\/([^/?#]+)/);
@@ -174,6 +179,26 @@ export class App {
 
   protected dismissError(id: string): void {
     this.errorService.clearError(id);
+  }
+
+  protected toggleMenu(): void {
+    const willOpen = !this.menuOpen();
+    this.menuOpen.set(willOpen);
+    if (!willOpen) {
+      this.menuToggleBtn()?.nativeElement.focus();
+    }
+  }
+
+  protected closeMenu(): void {
+    this.menuOpen.set(false);
+    this.menuToggleBtn()?.nativeElement.focus();
+  }
+
+  protected onMenuKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape' && this.menuOpen()) {
+      event.preventDefault();
+      this.closeMenu();
+    }
   }
 
   private async initializeProgress(): Promise<void> {
