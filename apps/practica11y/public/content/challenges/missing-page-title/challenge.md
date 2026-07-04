@@ -3,7 +3,7 @@ id: missing-page-title
 title: 'The Nameless Page'
 difficulty: beginner
 tags:
-  - spa
+  - SPA
   - semantics
 points: 75
 previewTitle: 'MyPage'

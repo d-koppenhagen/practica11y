@@ -5,7 +5,7 @@ difficulty: intermediate
 tags:
   - focus
   - keyboard
-  - spa
+  - SPA
 points: 150
 starter:
   html: starter.html
