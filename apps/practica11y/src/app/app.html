@@ -1,12 +1,8 @@
 <a class="skip-link" href="#main-content">Skip to content</a>
 
 <header class="app-header" [class.app-header--full-width]="isFullWidth()">
-  <nav
-    class="app-nav"
-    [class.app-nav--full-width]="isFullWidth()"
-    aria-label="Main navigation"
-  >
-    <a routerLink="/challenges" class="app-logo">
+  <div class="app-nav" [class.app-nav--full-width]="isFullWidth()">
+    <a routerLink="/" class="app-logo">
       <img
         [src]="'assets/' + themeService.theme() + '.png'"
         alt=""
@@ -139,31 +135,75 @@
       >
         {{ animatedXP() }} XP
       </span>
-      <a
-        routerLink="/about"
-        class="app-about-link"
-        aria-label="About Practica11y"
-      >
-        <svg
-          aria-hidden="true"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="16" x2="12" y2="12" />
-          <line x1="12" y1="8" x2="12.01" y2="8" />
-        </svg>
-      </a>
-      <a11y-user-menu />
-      <a11y-theme-toggle />
     </div>
-  </nav>
+
+    <button
+      #menuToggleBtn
+      type="button"
+      class="app-menu-toggle"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="app-menu"
+      aria-label="Menu"
+      (click)="toggleMenu()"
+    >
+      <svg
+        aria-hidden="true"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        @if (menuOpen()) {
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+        } @else {
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+        }
+      </svg>
+    </button>
+
+    <!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -->
+    <nav
+      id="app-menu"
+      class="app-menu"
+      [class.app-menu--open]="menuOpen()"
+      aria-label="Main navigation"
+      [cdkTrapFocus]="menuOpen()"
+      [cdkTrapFocusAutoCapture]="true"
+      (keydown)="onMenuKeydown($event)"
+    >
+      <ul class="app-menu-links" role="list">
+        <li>
+          <a
+            routerLink="/challenges"
+            routerLinkActive="app-menu-link--active"
+            class="app-menu-link"
+            (click)="closeMenu()"
+            >Challenges</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="/about"
+            routerLinkActive="app-menu-link--active"
+            class="app-menu-link"
+            (click)="closeMenu()"
+            >About</a
+          >
+        </li>
+      </ul>
+      <div class="app-menu-actions">
+        <a11y-user-menu />
+        <a11y-theme-toggle />
+      </div>
+    </nav>
+  </div>
 </header>
 
 <div aria-live="polite" aria-atomic="false" class="app-errors">

@@ -5,7 +5,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { ChallengeLoader } from '@practica11y/loader';
 import { ChallengeList } from '@practica11y/challenge-list';
 import { ErrorService, ProgressStore, Seo } from '@practica11y/util';
@@ -13,7 +13,7 @@ import { Challenge } from '@practica11y/models';
 
 @Component({
   selector: 'app-challenges-page',
-  imports: [ChallengeList, RouterLink],
+  imports: [ChallengeList],
   templateUrl: './challenges-page.html',
   styleUrl: './challenges-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

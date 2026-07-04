@@ -1,48 +1,4 @@
-<section class="challenges-hero">
-  <div class="challenges-hero-inner">
-    <h1 class="challenges-hero-title">
-      Learn web accessibility
-      <span class="challenges-hero-accent">by doing.</span>
-    </h1>
-    <p class="challenges-hero-tagline">
-      Gamified, browser-based challenges that turn WCAG guidelines into hands-on
-      practice for developers.
-    </p>
-    <p class="challenges-hero-badge">WCAG 2.2 AA</p>
-  </div>
-</section>
-
-<section class="playground-section" aria-labelledby="playground-heading">
-  <h2 id="playground-heading" class="challenges-heading">Playground</h2>
-  <div class="playground-card">
-    <div class="playground-card-content">
-      <h3 class="playground-card-title">Free-form Sandbox</h3>
-      <p class="playground-card-description">
-        Experiment with HTML, CSS, and JavaScript freely. Explore the
-        accessibility tree and virtual screen reader — no tasks, no validators,
-        just hands-on learning.
-      </p>
-      <a routerLink="/challenges/playground" class="playground-card-link">
-        Open Playground
-        <svg
-          aria-hidden="true"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<h2 class="challenges-heading">Challenges</h2>
+<h1 class="challenges-heading">Accessibility Challenges</h1>
 @if (loadError()) {
 <p class="text-red-600 p-4 mb-4 border border-red-200 rounded" role="alert">
   {{ loadError() }}
