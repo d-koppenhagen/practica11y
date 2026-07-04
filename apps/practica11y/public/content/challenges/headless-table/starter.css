@@ -1,0 +1,17 @@
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 600px;
+  font-family: system-ui, sans-serif;
+}
+
+td {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+tr:first-child td {
+  background: #f3f4f6;
+  font-weight: bold;
+}

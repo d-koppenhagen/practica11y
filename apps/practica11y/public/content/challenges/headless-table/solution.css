@@ -1,0 +1,24 @@
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 600px;
+  font-family: system-ui, sans-serif;
+}
+
+th,
+td {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+thead th {
+  background: #f3f4f6;
+}
+
+caption {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  font-size: 1.1rem;
+}

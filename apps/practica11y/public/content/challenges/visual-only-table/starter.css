@@ -1,0 +1,46 @@
+.pricing {
+  max-width: 700px;
+  font-family: system-ui, sans-serif;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.table-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.header-row,
+.data-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+}
+
+.header-row {
+  background-color: #1f2937;
+  color: #ffffff;
+}
+
+.cell {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header {
+  font-weight: 600;
+}
+
+.row-label {
+  font-weight: 500;
+  background-color: #f9fafb;
+}
+
+.data-row:last-child .cell {
+  border-bottom: none;
+}

@@ -38,6 +38,8 @@ import {
   focusVisible,
   interactiveElementName,
   documentLanguage,
+  noLayoutTable,
+  semanticTableStructure,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -95,6 +97,8 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(focusVisible);
     this.challengeValidator.registerValidator(interactiveElementName);
     this.challengeValidator.registerValidator(documentLanguage);
+    this.challengeValidator.registerValidator(noLayoutTable);
+    this.challengeValidator.registerValidator(semanticTableStructure);
   }
 
   /** Debounced code change signal (300ms) */

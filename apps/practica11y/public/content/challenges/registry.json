@@ -19,6 +19,9 @@
     { "id": "missing-video-captions" },
     { "id": "placeholder-as-label" },
     { "id": "empty-interactive-elements" },
-    { "id": "missing-document-language" }
+    { "id": "missing-document-language" },
+    { "id": "layout-table" },
+    { "id": "headless-table" },
+    { "id": "visual-only-table" }
   ]
 }
