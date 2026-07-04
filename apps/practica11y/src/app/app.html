@@ -183,6 +183,7 @@
           <a
             routerLink="/challenges"
             routerLinkActive="app-menu-link--active"
+            ariaCurrentWhenActive="page"
             class="app-menu-link"
             (click)="closeMenu()"
             >Challenges</a
@@ -192,6 +193,7 @@
           <a
             routerLink="/about"
             routerLinkActive="app-menu-link--active"
+            ariaCurrentWhenActive="page"
             class="app-menu-link"
             (click)="closeMenu()"
             >About</a
@@ -240,7 +242,12 @@
     ></span
   >
   <nav class="app-footer-links" aria-label="Footer navigation">
-    <a routerLink="/about">About</a>
+    <a
+      routerLink="/about"
+      routerLinkActive="app-footer-link--active"
+      ariaCurrentWhenActive="page"
+      >About</a
+    >
     <a
       href="https://github.com/d-koppenhagen/practica11y"
       target="_blank"
