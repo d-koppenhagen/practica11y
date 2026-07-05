@@ -179,6 +179,51 @@ Rules:
 - Custom domain: `practica11y.dev` (CNAME in repo)
 - Branch strategy: feature branches → PR → merge to main
 
+## GitHub CLI (`gh`)
+
+When interacting with GitHub (issues, PRs, workflows, releases), prefer the **GitHub CLI** (`gh`) over `web_fetch` or direct API calls.
+
+### Prerequisites
+
+Before using `gh`, verify authentication is active:
+
+```bash
+gh auth status
+```
+
+If not authenticated, prompt the user to run `gh auth login`.
+
+### Rules
+
+- **Prefer `gh` over `web_fetch`** — when a GitHub URL is pasted (issue, PR, workflow run, etc.), extract the relevant info using `gh` commands instead of fetching the HTML page.
+- **Read issue/PR comments** — when investigating issues, always include comments for full context (`gh issue view <number> --comments`).
+- **No raw API calls** — avoid `curl` against `api.github.com`; use `gh api` if the CLI doesn't have a dedicated subcommand.
+
+### Typical Use Cases
+
+| Task                     | Command                                             |
+| ------------------------ | --------------------------------------------------- |
+| View issue with comments | `gh issue view <number> --comments`                 |
+| List issues              | `gh issue list`                                     |
+| View PR with comments    | `gh pr view <number> --comments`                    |
+| List PRs                 | `gh pr list`                                        |
+| Check workflow runs      | `gh run list`                                       |
+| View a specific run      | `gh run view <run-id>`                              |
+| View run logs            | `gh run view <run-id> --log-failed`                 |
+| Create a PR              | `gh pr create --fill`                               |
+| View repo info           | `gh repo view`                                      |
+| Query API (advanced)     | `gh api repos/{owner}/{repo}/actions/runs --jq ...` |
+
+### Handling Pasted GitHub Links
+
+When the user pastes a GitHub URL, parse the type and identifier:
+
+- `https://github.com/<owner>/<repo>/issues/<number>` → `gh issue view <number> --comments`
+- `https://github.com/<owner>/<repo>/pull/<number>` → `gh pr view <number> --comments`
+- `https://github.com/<owner>/<repo>/actions/runs/<run-id>` → `gh run view <run-id>`
+
+Always use `gh` as the primary tool. Fall back to `web_fetch` only if `gh` cannot provide the needed information (e.g., rendered markdown previews or non-GitHub pages).
+
 # Angular Style Guide (angular.dev/style-guide)
 
 ## Naming — No Suffixes
