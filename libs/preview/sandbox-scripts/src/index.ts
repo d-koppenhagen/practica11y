@@ -1,5 +1,9 @@
 import { runAxeAnalysis } from './lib/axe-runner';
 import { enableColorPicker, disableColorPicker } from './lib/color-picker';
+import { interceptLinkNavigation } from './lib/link-interceptor';
+
+// Prevent link navigation inside the sandbox preview
+interceptLinkNavigation();
 
 // Signal DOM is ready
 window.parent.postMessage({ type: 'dom-ready' }, '*');
