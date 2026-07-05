@@ -1,0 +1,513 @@
+/* ===================================================================
+   Random Challenge Dice — Full-screen 3D dice roll animation
+   =================================================================== */
+
+.dice-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: oklch(0.15 0.02 240 / 0.92);
+  backdrop-filter: blur(8px);
+  animation: overlay-appear 0.3s ease-out forwards;
+}
+
+@keyframes overlay-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===================================================================
+   3D Dice
+   =================================================================== */
+
+.dice-scene {
+  perspective: 800px;
+  perspective-origin: 50% 45%;
+  width: 160px;
+  height: 160px;
+}
+
+.dice-cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: translateZ(-80px) rotateX(-15deg) rotateY(20deg);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+/* Rolling state — tumbling multi-axis spin */
+.dice-rolling .dice-cube {
+  animation: dice-roll 0.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Landed state — settle on the "bottom" face (showing challenge title) */
+.dice-landed .dice-cube {
+  animation: dice-settle 0.8s cubic-bezier(0.2, 0.8, 0.2, 1.1) forwards;
+}
+
+.dice-face {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  border: 2px solid oklch(0.9 0.03 180 / 0.5);
+  background: #ffffff;
+  box-shadow:
+    inset 0 2px 6px oklch(1 0 0 / 0.3),
+    inset 0 -2px 6px oklch(0.4 0.05 180 / 0.15);
+  backface-visibility: hidden;
+  transform-style: flat;
+  overflow: hidden;
+}
+
+.dice-face--front {
+  transform: rotateY(0deg) translateZ(80px);
+  background: #ffffff;
+}
+.dice-face--back {
+  transform: rotateY(180deg) translateZ(80px);
+  background: #f0f0f0;
+}
+.dice-face--right {
+  transform: rotateY(90deg) translateZ(80px);
+  background: #e8e8e8;
+}
+.dice-face--left {
+  transform: rotateY(-90deg) translateZ(80px);
+  background: #f5f5f5;
+}
+.dice-face--top {
+  transform: rotateX(90deg) translateZ(80px);
+  background: #fafafa;
+}
+.dice-face--bottom {
+  transform: rotateX(-90deg) translateZ(80px);
+  background: #f0f0f0;
+}
+
+/* ===================================================================
+   Dice Dots — real pip layouts
+   =================================================================== */
+
+.dots {
+  display: grid;
+  width: 120px;
+  height: 120px;
+  padding: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.dot {
+  width: 22px;
+  height: 22px;
+  background: oklch(0.25 0.02 240);
+  border-radius: 50%;
+}
+
+/* 1: center */
+.dots--1 {
+  place-items: center;
+}
+.dots--1 .dot {
+  grid-area: 2 / 2;
+}
+
+/* 3: diagonal */
+.dots--3 .dot:nth-child(1) {
+  grid-area: 1 / 3;
+  align-self: start;
+  justify-self: end;
+}
+.dots--3 .dot:nth-child(2) {
+  grid-area: 2 / 2;
+  place-self: center;
+}
+.dots--3 .dot:nth-child(3) {
+  grid-area: 3 / 1;
+  align-self: end;
+  justify-self: start;
+}
+
+/* 4: corners */
+.dots--4 .dot:nth-child(1) {
+  grid-area: 1 / 1;
+}
+.dots--4 .dot:nth-child(2) {
+  grid-area: 1 / 3;
+  justify-self: end;
+}
+.dots--4 .dot:nth-child(3) {
+  grid-area: 3 / 1;
+  align-self: end;
+}
+.dots--4 .dot:nth-child(4) {
+  grid-area: 3 / 3;
+  align-self: end;
+  justify-self: end;
+}
+
+/* 5: corners + center */
+.dots--5 .dot:nth-child(1) {
+  grid-area: 1 / 1;
+}
+.dots--5 .dot:nth-child(2) {
+  grid-area: 1 / 3;
+  justify-self: end;
+}
+.dots--5 .dot:nth-child(3) {
+  grid-area: 2 / 2;
+  place-self: center;
+}
+.dots--5 .dot:nth-child(4) {
+  grid-area: 3 / 1;
+  align-self: end;
+}
+.dots--5 .dot:nth-child(5) {
+  grid-area: 3 / 3;
+  align-self: end;
+  justify-self: end;
+}
+
+/* 6: two columns */
+.dots--6 .dot:nth-child(1) {
+  grid-area: 1 / 1;
+}
+.dots--6 .dot:nth-child(2) {
+  grid-area: 1 / 3;
+  justify-self: end;
+}
+.dots--6 .dot:nth-child(3) {
+  grid-area: 2 / 1;
+  align-self: center;
+}
+.dots--6 .dot:nth-child(4) {
+  grid-area: 2 / 3;
+  align-self: center;
+  justify-self: end;
+}
+.dots--6 .dot:nth-child(5) {
+  grid-area: 3 / 1;
+  align-self: end;
+}
+.dots--6 .dot:nth-child(6) {
+  grid-area: 3 / 3;
+  align-self: end;
+  justify-self: end;
+}
+
+.dice-challenge-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--p11y-primary);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+/* ===================================================================
+   Dice Keyframes
+   =================================================================== */
+
+.dice-shadow {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 20px;
+  background: oklch(0 0 0 / 0.4);
+  border-radius: 50%;
+  filter: blur(10px);
+}
+
+.dice-landed .dice-shadow {
+  animation: shadow-settle 0.8s ease-out forwards;
+}
+
+@keyframes shadow-settle {
+  0% {
+    width: 60px;
+    opacity: 0.2;
+  }
+  100% {
+    width: 120px;
+    opacity: 1;
+  }
+}
+
+@keyframes dice-roll {
+  0% {
+    transform: translateZ(-80px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  20% {
+    transform: translateZ(-80px) rotateX(72deg) rotateY(144deg) rotateZ(36deg);
+  }
+  40% {
+    transform: translateZ(-80px) rotateX(144deg) rotateY(288deg) rotateZ(72deg);
+  }
+  60% {
+    transform: translateZ(-80px) rotateX(216deg) rotateY(432deg) rotateZ(108deg);
+  }
+  80% {
+    transform: translateZ(-80px) rotateX(288deg) rotateY(576deg) rotateZ(144deg);
+  }
+  100% {
+    transform: translateZ(-80px) rotateX(360deg) rotateY(720deg) rotateZ(180deg);
+  }
+}
+
+@keyframes dice-settle {
+  0% {
+    transform: translateZ(-80px) rotateX(360deg) rotateY(720deg) rotateZ(180deg);
+  }
+  50% {
+    transform: translateZ(-80px) rotateX(68deg) rotateY(-25deg) rotateZ(2deg);
+  }
+  70% {
+    transform: translateZ(-80px) rotateX(72deg) rotateY(-22deg) rotateZ(3deg);
+  }
+  85% {
+    transform: translateZ(-80px) rotateX(70deg) rotateY(-24deg) rotateZ(2deg);
+  }
+  100% {
+    transform: translateZ(-80px) rotateX(70deg) rotateY(-24deg) rotateZ(2deg);
+  }
+}
+
+/* ===================================================================
+   Landed Content (title + action buttons)
+   =================================================================== */
+
+.landed-content {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  animation: title-appear 0.5s ease-out 0.3s both;
+}
+
+.landed-label {
+  font-size: 1rem;
+  color: oklch(0.8 0 0);
+  margin: 0;
+}
+
+.landed-title-text {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 12px oklch(0.5 0.15 180 / 0.5);
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin: 0;
+}
+
+.landed-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.action-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--p11y-radius);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.15s ease;
+}
+
+.action-btn:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+.action-btn:active {
+  transform: translateY(1px);
+}
+
+.action-btn--primary {
+  background: var(--p11y-primary);
+  color: var(--p11y-primary-text);
+  box-shadow: 0 2px 12px oklch(0.5 0.15 180 / 0.4);
+}
+
+.action-btn--primary:hover {
+  background: var(--p11y-primary-hover);
+  box-shadow: 0 4px 20px oklch(0.5 0.15 180 / 0.6);
+  transform: translateY(-1px);
+}
+
+.action-btn--secondary {
+  background: oklch(0.3 0.01 240);
+  color: oklch(0.85 0 0);
+  border: 1px solid oklch(0.5 0 0 / 0.3);
+}
+
+.action-btn--secondary:hover {
+  background: oklch(0.35 0.01 240);
+  transform: translateY(-1px);
+}
+
+@keyframes title-appear {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===================================================================
+   Shine Burst Effect (rays radiating from center)
+   =================================================================== */
+
+.shine-burst {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.shine-ray {
+  position: absolute;
+  width: 3px;
+  height: var(--ray-length);
+  background: linear-gradient(
+    to top,
+    transparent,
+    var(--ray-color),
+    transparent
+  );
+  transform-origin: bottom center;
+  transform: rotate(var(--ray-angle));
+  opacity: 0;
+  animation: ray-burst 1.5s ease-out var(--ray-delay) forwards;
+}
+
+@keyframes ray-burst {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--ray-angle)) scaleY(0);
+  }
+  30% {
+    opacity: 0.9;
+    transform: rotate(var(--ray-angle)) scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--ray-angle)) scaleY(1.2) translateY(-30px);
+  }
+}
+
+/* Sparkle particles */
+.sparkle {
+  position: absolute;
+  width: var(--sparkle-size);
+  height: var(--sparkle-size);
+  left: var(--sparkle-x);
+  top: var(--sparkle-y);
+  background: var(--sparkle-color);
+  border-radius: 50%;
+  opacity: 0;
+  animation: sparkle-pop 1.2s ease-out var(--sparkle-delay) forwards;
+  box-shadow: 0 0 6px 2px var(--sparkle-color);
+}
+
+@keyframes sparkle-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+/* ===================================================================
+   Screen reader only
+   =================================================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===================================================================
+   Reduced Motion — skip all animations, show result immediately
+   =================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .dice-overlay {
+    animation: none;
+    opacity: 1;
+  }
+
+  .dice-rolling .dice-cube {
+    animation: none;
+    transform: translateZ(-80px) rotateX(70deg) rotateY(-24deg) rotateZ(2deg);
+  }
+
+  .dice-landed .dice-cube {
+    animation: none;
+    transform: translateZ(-80px) rotateX(70deg) rotateY(-24deg) rotateZ(2deg);
+  }
+
+  .landed-content {
+    animation: none;
+    opacity: 1;
+  }
+
+  .shine-ray {
+    animation: none;
+    opacity: 0;
+  }
+
+  .sparkle {
+    animation: none;
+    opacity: 0;
+  }
+}

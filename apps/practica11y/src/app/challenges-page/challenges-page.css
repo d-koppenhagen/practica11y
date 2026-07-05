@@ -1,8 +1,63 @@
+.challenges-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
 .challenges-heading {
-  margin: 0 0 1.5rem;
+  margin: 0;
   color: var(--p11y-text);
   font-size: clamp(1.75rem, 4vw, 2.25rem);
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.01em;
+}
+
+/* Random Challenge Button */
+.random-challenge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--p11y-primary-text);
+  background: var(--p11y-primary);
+  border: none;
+  border-radius: var(--p11y-radius);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.15s ease;
+  box-shadow: var(--p11y-shadow);
+}
+
+.random-challenge-btn:hover:not(:disabled) {
+  background: var(--p11y-primary-hover);
+  box-shadow: var(--p11y-shadow-lg);
+  transform: translateY(-1px);
+}
+
+.random-challenge-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.random-challenge-btn:focus-visible {
+  outline: 3px solid var(--p11y-primary);
+  outline-offset: 2px;
+}
+
+.random-challenge-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dice-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
 }

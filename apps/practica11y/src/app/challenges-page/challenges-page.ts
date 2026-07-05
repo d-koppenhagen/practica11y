@@ -4,16 +4,18 @@ import {
   inject,
   OnInit,
   signal,
+  computed,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChallengeLoader } from '@practica11y/loader';
 import { ChallengeList } from '@practica11y/challenge-list';
 import { ErrorService, ProgressStore, Seo } from '@practica11y/util';
 import { Challenge } from '@practica11y/models';
+import { RandomChallengeDice } from './random-challenge-dice/random-challenge-dice';
 
 @Component({
   selector: 'app-challenges-page',
-  imports: [ChallengeList],
+  imports: [ChallengeList, RandomChallengeDice],
   templateUrl: './challenges-page.html',
   styleUrl: './challenges-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,6 +30,14 @@ export class ChallengesPage implements OnInit {
   protected readonly challenges = signal<Challenge[]>([]);
   protected readonly completedChallengeIds = signal<string[]>([]);
   protected readonly loadError = signal<string | null>(null);
+
+  protected readonly diceRolling = signal(false);
+  protected readonly randomChallenge = signal<Challenge | null>(null);
+
+  /** Only enabled (non-disabled) challenges can be randomly selected */
+  protected readonly availableChallenges = computed(() =>
+    this.challenges().filter((c) => !c.disabled),
+  );
 
   async ngOnInit(): Promise<void> {
     this.seo.update({
@@ -60,5 +70,25 @@ export class ChallengesPage implements OnInit {
 
   protected onChallengeSelected(challengeId: string): void {
     this.router.navigate(['/challenges', challengeId]);
+  }
+
+  protected rollRandomChallenge(): void {
+    const available = this.availableChallenges();
+    if (available.length === 0) return;
+
+    const randomIndex = Math.floor(Math.random() * available.length);
+    this.randomChallenge.set(available[randomIndex]);
+    this.diceRolling.set(true);
+  }
+
+  protected onDiceNavigate(challengeId: string): void {
+    this.diceRolling.set(false);
+    this.randomChallenge.set(null);
+    this.router.navigate(['/challenges', challengeId]);
+  }
+
+  protected onDiceDismissed(): void {
+    this.diceRolling.set(false);
+    this.randomChallenge.set(null);
   }
 }
