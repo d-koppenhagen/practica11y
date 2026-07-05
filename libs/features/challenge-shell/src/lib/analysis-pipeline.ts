@@ -40,6 +40,7 @@ import {
   documentLanguage,
   noLayoutTable,
   semanticTableStructure,
+  autocompleteAttributes,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -99,6 +100,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(documentLanguage);
     this.challengeValidator.registerValidator(noLayoutTable);
     this.challengeValidator.registerValidator(semanticTableStructure);
+    this.challengeValidator.registerValidator(autocompleteAttributes);
   }
 
   /** Debounced code change signal (300ms) */

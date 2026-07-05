@@ -22,6 +22,7 @@
     { "id": "missing-document-language" },
     { "id": "layout-table" },
     { "id": "headless-table" },
-    { "id": "visual-only-table" }
+    { "id": "visual-only-table" },
+    { "id": "missing-autocomplete" }
   ]
 }
