@@ -41,6 +41,7 @@ import {
   noLayoutTable,
   semanticTableStructure,
   autocompleteAttributes,
+  targetSizeMinimum,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -101,6 +102,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(noLayoutTable);
     this.challengeValidator.registerValidator(semanticTableStructure);
     this.challengeValidator.registerValidator(autocompleteAttributes);
+    this.challengeValidator.registerValidator(targetSizeMinimum);
   }
 
   /** Debounced code change signal (300ms) */

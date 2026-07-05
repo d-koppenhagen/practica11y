@@ -1,0 +1,85 @@
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #e0e7ff;
+  color: #312e81;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-family: system-ui, sans-serif;
+  font-weight: 500;
+}
+
+.tag .remove {
+  background: none;
+  border: none;
+  font-size: 10px;
+  padding: 2px;
+  cursor: pointer;
+  line-height: 1;
+  color: #4338ca;
+  border-radius: 50%;
+}
+
+.tag .remove:hover {
+  background: #c7d2fe;
+}
+
+.pagination {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  font-family: system-ui, sans-serif;
+}
+
+.pagination a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-size: 12px;
+  text-decoration: none;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.pagination a:hover {
+  background: #f1f5f9;
+}
+
+.social {
+  display: flex;
+  gap: 8px;
+}
+
+.social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  color: #475569;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.social a:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+.social svg {
+  width: 16px;
+  height: 16px;
+}
