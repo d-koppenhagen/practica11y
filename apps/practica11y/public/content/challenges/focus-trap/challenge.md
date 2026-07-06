@@ -9,6 +9,7 @@ points: 150
 starter:
   html: starter.html
   css: starter.css
+  js: starter.js
 solution:
   html: solution.html
   js: solution.js
