@@ -335,6 +335,19 @@ a11y-shell-resizer {
   inset: 0;
 }
 
+/* Override Monaco diff editor: use background colors instead of dashed borders */
+.shell-editor-panel ::ng-deep .monaco-diff-editor .char-insert,
+.shell-editor-panel ::ng-deep .monaco-diff-editor .line-insert {
+  border: none !important;
+  background-color: rgba(72, 187, 120, 0.25) !important;
+}
+
+.shell-editor-panel ::ng-deep .monaco-diff-editor .char-delete,
+.shell-editor-panel ::ng-deep .monaco-diff-editor .line-delete {
+  border: none !important;
+  background-color: rgba(245, 101, 101, 0.25) !important;
+}
+
 .shell-editor-panel--hidden {
   display: none;
 }
