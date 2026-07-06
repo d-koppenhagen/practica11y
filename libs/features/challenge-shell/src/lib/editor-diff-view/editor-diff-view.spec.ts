@@ -62,7 +62,7 @@ describe('EditorDiffView', () => {
     return render(EditorDiffView, {
       inputs: { entries },
       on: {
-        modifiedChange: onModifiedChange ?? (() => {}),
+        modifiedChange: onModifiedChange ?? (vi.fn()),
       },
       componentImports: [MockCatbeeMonacoDiffEditor],
     });
