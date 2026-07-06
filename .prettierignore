@@ -3,6 +3,7 @@
 /coverage
 /.nx/cache
 /.nx/workspace-data
+/.vscode/settings.json
 .angular
 pnpm-lock.yaml
 apps/practica11y/public/content/challenges

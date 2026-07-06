@@ -118,8 +118,10 @@
 
 <!-- Screen reader live region (outside overlay so always readable) -->
 <div class="sr-only" role="status" aria-live="polite" aria-atomic="true">
-  @if (phase() === 'rolling') { Rolling dice to pick a random challenge… } @else
-  if (phase() === 'landed') { Random challenge selected: {{ challenge().title
-  }}. }
+  @if (phase() === 'rolling') {
+  <!-- Random -->
+  Rolling dice to pick a random challenge… } @else if (phase() === 'landed') {
+  <!-- Selection -->
+  Random challenge selected: {{ challenge().title }}. }
 </div>
 }
