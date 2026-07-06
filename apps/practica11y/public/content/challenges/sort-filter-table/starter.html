@@ -1,0 +1,29 @@
+<main>
+  <h1>Team Directory</h1>
+
+  <div class="table-container">
+    <div class="filter">
+      <label for="filter-input">Filter table</label>
+      <input type="text" id="filter-input" />
+    </div>
+
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th data-sort="name">Name ↕</th>
+          <th data-sort="role">Role ↕</th>
+          <th data-sort="level">Level ↕</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Alice</td><td>Developer</td><td>Senior</td></tr>
+        <tr><td>Bob</td><td>Designer</td><td>Mid</td></tr>
+        <tr><td>Carol</td><td>Manager</td><td>Lead</td></tr>
+        <tr><td>Dave</td><td>Developer</td><td>Junior</td></tr>
+        <tr><td>Eve</td><td>QA Engineer</td><td>Senior</td></tr>
+      </tbody>
+    </table>
+
+    <div class="status" id="table-status">Showing 5 of 5 entries</div>
+  </div>
+</main>

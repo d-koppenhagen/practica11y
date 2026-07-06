@@ -2,13 +2,15 @@ import { test as base, expect } from '@playwright/test';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as yaml from 'yaml';
+import type { EditorFileType } from '@practica11y/editor-types';
+import { MONACO_LANGUAGE_MAP } from '@practica11y/editor-types';
 
 export interface ChallengeInfo {
   id: string;
   solution: Record<string, string>; // tab → filename mapping from frontmatter
 }
 
-export type EditorTab = 'html' | 'css' | 'js' | 'vtt';
+export type EditorTab = EditorFileType;
 
 export interface ChallengeHelpers {
   navigateToChallenge(id: string): Promise<void>;
@@ -66,14 +68,7 @@ export const test = base.extend<{ challengeHelpers: ChallengeHelpers }>({
       },
 
       async setEditorContent(tab: EditorTab, content: string): Promise<void> {
-        // Map tab names to Monaco language IDs
-        const languageMap: Record<EditorTab, string> = {
-          html: 'html',
-          css: 'css',
-          js: 'javascript',
-          vtt: 'plaintext',
-        };
-        const language = languageMap[tab];
+        const language = MONACO_LANGUAGE_MAP[tab];
 
         // Check if the tab exists in the editor
         const tabExists = await page

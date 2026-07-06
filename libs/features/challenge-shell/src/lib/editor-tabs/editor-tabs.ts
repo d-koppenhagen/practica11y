@@ -6,8 +6,7 @@ import {
 } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { Tabs, TabList, Tab } from '@angular/aria/tabs';
-
-export type EditorTab = 'html' | 'js' | 'css' | 'vtt';
+import { EditorFileType } from '@practica11y/editor-types';
 
 @Component({
   selector: 'a11y-editor-tabs',
@@ -18,17 +17,17 @@ export type EditorTab = 'html' | 'js' | 'css' | 'vtt';
 })
 export class EditorTabs {
   /** Available tabs determined by starter content (e.g., no JS → no JS tab) */
-  readonly tabs = input.required<EditorTab[]>();
+  readonly tabs = input.required<EditorFileType[]>();
 
   /** Currently active tab */
-  readonly activeTab = input.required<EditorTab>();
+  readonly activeTab = input.required<EditorFileType>();
 
   /** Emits when a tab is activated by click or keyboard */
-  readonly tabActivated = output<EditorTab>();
+  readonly tabActivated = output<EditorFileType>();
 
-  protected onSelectedTabChange(tab: string | undefined): void {
+  protected onSelectedTabChange(tab?: string): void {
     if (tab) {
-      this.tabActivated.emit(tab as EditorTab);
+      this.tabActivated.emit(tab as EditorFileType);
     }
   }
 }

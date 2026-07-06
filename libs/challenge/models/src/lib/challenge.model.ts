@@ -1,3 +1,5 @@
+import type { EditorFileType } from '@practica11y/editor-types';
+
 /**
  * Represents an external reference link for a challenge.
  */
@@ -8,13 +10,9 @@ export interface ChallengeLink {
 
 /**
  * Represents the starter code provided with a challenge.
+ * Keys correspond to EditorFileType identifiers.
  */
-export interface StarterCode {
-  html: string;
-  js: string;
-  css: string;
-  vtt: string;
-}
+export type StarterCode = Record<EditorFileType, string>;
 
 /**
  * Represents a fully loaded and parsed challenge.
@@ -49,12 +47,7 @@ export interface ChallengeMeta {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   tags: string[];
   points: number;
-  starter: {
-    html: string; // Dateipfad
-    js?: string; // Dateipfad
-    css?: string; // Dateipfad
-    vtt?: string; // Dateipfad
-  };
+  starter: { html: string } & Partial<Record<EditorFileType, string>>;
   validators: string[];
   /** Optional custom title for the preview iframe. Defaults to "Challenge: {title} | Preview" */
   previewTitle?: string;
@@ -63,10 +56,5 @@ export interface ChallengeMeta {
   /** Optional URL to the GitHub Discussions thread for this challenge */
   discussionUrl?: string;
   /** Optional solution file paths, same structure as starter */
-  solution?: {
-    html?: string;
-    css?: string;
-    js?: string;
-    vtt?: string;
-  };
+  solution?: Partial<Record<EditorFileType, string>>;
 }

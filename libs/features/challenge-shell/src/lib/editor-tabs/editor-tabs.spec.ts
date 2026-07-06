@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/angular';
-import { EditorTabs, EditorTab } from './editor-tabs';
+import { EditorTabs } from './editor-tabs';
+import { EditorFileType } from '@practica11y/editor-types';
 
 describe('EditorTabs — roving tabindex navigation', () => {
-  async function setup(tabs: EditorTab[], activeTab: EditorTab) {
+  async function setup(tabs: EditorFileType[], activeTab: EditorFileType) {
     return render(EditorTabs, {
       inputs: { tabs, activeTab },
     });
@@ -126,7 +127,7 @@ describe('EditorTabs — roving tabindex navigation', () => {
 });
 
 describe('EditorTabs — conditional tab set', () => {
-  async function setup(tabs: EditorTab[], activeTab: EditorTab) {
+  async function setup(tabs: EditorFileType[], activeTab: EditorFileType) {
     return render(EditorTabs, {
       inputs: { tabs, activeTab },
     });
@@ -163,9 +164,9 @@ describe('EditorTabs — conditional tab set', () => {
 
 describe('EditorTabs — tab activation output', () => {
   async function setup(
-    tabs: EditorTab[],
-    activeTab: EditorTab,
-    onTabActivated?: (tab: EditorTab) => void,
+    tabs: EditorFileType[],
+    activeTab: EditorFileType,
+    onTabActivated?: (tab: EditorFileType) => void,
   ) {
     return render(EditorTabs, {
       inputs: { tabs, activeTab },

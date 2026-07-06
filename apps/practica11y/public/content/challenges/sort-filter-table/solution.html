@@ -1,0 +1,40 @@
+<main>
+  <h1>Team Directory</h1>
+
+  <div class="table-container">
+    <div class="filter">
+      <label for="filter-input">Filter table</label>
+      <input type="text" id="filter-input" />
+    </div>
+
+    <table id="data-table">
+      <caption>Team members with sortable columns</caption>
+      <thead>
+        <tr>
+          <th aria-sort="none" data-sort="name">
+            <button type="button">Name</button>
+          </th>
+          <th aria-sort="none" data-sort="role">
+            <button type="button">Role</button>
+          </th>
+          <th aria-sort="none" data-sort="level">
+            <button type="button">Level</button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Alice</td><td>Developer</td><td>Senior</td></tr>
+        <tr><td>Bob</td><td>Designer</td><td>Mid</td></tr>
+        <tr><td>Carol</td><td>Manager</td><td>Lead</td></tr>
+        <tr><td>Dave</td><td>Developer</td><td>Junior</td></tr>
+        <tr><td>Eve</td><td>QA Engineer</td><td>Senior</td></tr>
+      </tbody>
+    </table>
+
+    <div aria-live="polite" aria-atomic="true" class="sr-only" id="sort-announcer"></div>
+
+    <div aria-live="polite" aria-atomic="true" class="status" id="table-status">
+      Showing 5 of 5 entries
+    </div>
+  </div>
+</main>

@@ -42,6 +42,7 @@ import {
   semanticTableStructure,
   autocompleteAttributes,
   targetSizeMinimum,
+  sortableTableAria,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -103,6 +104,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(semanticTableStructure);
     this.challengeValidator.registerValidator(autocompleteAttributes);
     this.challengeValidator.registerValidator(targetSizeMinimum);
+    this.challengeValidator.registerValidator(sortableTableAria);
   }
 
   /** Debounced code change signal (300ms) */

@@ -24,6 +24,7 @@
     { "id": "headless-table" },
     { "id": "visual-only-table" },
     { "id": "missing-autocomplete" },
-    { "id": "target-size-too-small" }
+    { "id": "target-size-too-small" },
+    { "id": "sort-filter-table" }
   ]
 }

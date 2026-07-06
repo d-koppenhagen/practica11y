@@ -5,6 +5,10 @@ import type {
   ChallengeMeta,
   StarterCode,
 } from '@practica11y/models';
+import {
+  EDITOR_FILE_TYPES,
+  emptyCodeRecord,
+} from '@practica11y/editor-types';
 import { parseFrontmatter, parseMarkdownBody } from '../frontmatter-parser';
 
 /**
@@ -126,7 +130,7 @@ export class ChallengeLoader {
       tags: meta.tags,
       points: meta.points,
       description: '',
-      starter: { html: '', js: '', css: '', vtt: '' },
+      starter: emptyCodeRecord(),
       validatorIds: [],
       previewTitle: meta.previewTitle ?? `Challenge: ${meta.title} | Preview`,
       links: meta.links ?? [],
@@ -233,122 +237,52 @@ export class ChallengeLoader {
     solution: ChallengeMeta['solution'],
   ): Promise<StarterCode> {
     const basePath = `${CHALLENGES_BASE_PATH}/${challengeId}`;
+    const result = emptyCodeRecord();
 
-    let html = '';
-    if (solution?.html) {
-      const htmlPath = `${basePath}/${solution.html}`;
-      try {
-        html = await this.fetchText(htmlPath);
-      } catch (error) {
-        throw new Error(
-          `Failed to load solution HTML for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
-          { cause: error },
-        );
+    for (const fileType of EDITOR_FILE_TYPES) {
+      const filePath = solution?.[fileType.id];
+      if (filePath) {
+        const fullPath = `${basePath}/${filePath}`;
+        try {
+          result[fileType.id] = await this.fetchText(fullPath);
+        } catch (error) {
+          throw new Error(
+            `Failed to load solution ${fileType.label} for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+            { cause: error },
+          );
+        }
       }
     }
 
-    let js = '';
-    if (solution?.js) {
-      const jsPath = `${basePath}/${solution.js}`;
-      try {
-        js = await this.fetchText(jsPath);
-      } catch (error) {
-        throw new Error(
-          `Failed to load solution JS for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
-          { cause: error },
-        );
-      }
-    }
-
-    let css = '';
-    if (solution?.css) {
-      const cssPath = `${basePath}/${solution.css}`;
-      try {
-        css = await this.fetchText(cssPath);
-      } catch (error) {
-        throw new Error(
-          `Failed to load solution CSS for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
-          { cause: error },
-        );
-      }
-    }
-
-    let vtt = '';
-    if (solution?.vtt) {
-      const vttPath = `${basePath}/${solution.vtt}`;
-      try {
-        vtt = await this.fetchText(vttPath);
-      } catch (error) {
-        throw new Error(
-          `Failed to load solution VTT for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
-          { cause: error },
-        );
-      }
-    }
-
-    return { html, js, css, vtt };
+    return result;
   }
 
   /**
-   * Loads starter code files (HTML, optionally JS, optionally CSS, optionally VTT) for a challenge.
+   * Loads starter code files (all supported file types) for a challenge.
    */
   private async loadStarterCode(
     challengeId: string,
     starter: ChallengeMeta['starter'],
   ): Promise<StarterCode> {
     const basePath = `${CHALLENGES_BASE_PATH}/${challengeId}`;
-    const htmlPath = `${basePath}/${starter.html}`;
+    const result = emptyCodeRecord();
 
-    let html: string;
-    try {
-      html = await this.fetchText(htmlPath);
-    } catch (error) {
-      throw new Error(
-        `Failed to load starter HTML for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
-        { cause: error },
-      );
-    }
-
-    let js = '';
-    if (starter.js) {
-      const jsPath = `${basePath}/${starter.js}`;
-      try {
-        js = await this.fetchText(jsPath);
-      } catch (error) {
-        throw new Error(
-          `Failed to load starter JS for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
-          { cause: error },
-        );
+    for (const fileType of EDITOR_FILE_TYPES) {
+      const filePath = starter[fileType.id as keyof typeof starter];
+      if (filePath) {
+        const fullPath = `${basePath}/${filePath}`;
+        try {
+          result[fileType.id] = await this.fetchText(fullPath);
+        } catch (error) {
+          throw new Error(
+            `Failed to load starter ${fileType.label} for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
+            { cause: error },
+          );
+        }
       }
     }
 
-    let css = '';
-    if (starter.css) {
-      const cssPath = `${basePath}/${starter.css}`;
-      try {
-        css = await this.fetchText(cssPath);
-      } catch (error) {
-        throw new Error(
-          `Failed to load starter CSS for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
-          { cause: error },
-        );
-      }
-    }
-
-    let vtt = '';
-    if (starter.vtt) {
-      const vttPath = `${basePath}/${starter.vtt}`;
-      try {
-        vtt = await this.fetchText(vttPath);
-      } catch (error) {
-        throw new Error(
-          `Failed to load starter VTT for challenge "${challengeId}": ${error instanceof Error ? error.message : String(error)}`,
-          { cause: error },
-        );
-      }
-    }
-
-    return { html, js, css, vtt };
+    return result;
   }
 
   /**

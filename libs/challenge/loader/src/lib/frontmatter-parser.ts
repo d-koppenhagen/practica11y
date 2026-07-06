@@ -1,5 +1,9 @@
 import { parse as parseYaml } from 'yaml';
 import type { ChallengeMeta } from '@practica11y/models';
+import {
+  EDITOR_FILE_TYPES,
+  type EditorFileType,
+} from '@practica11y/editor-types';
 
 const FRONTMATTER_REGEX = /^---\r?\n([\s\S]*?)\r?\n---/;
 
@@ -145,35 +149,19 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
       'Invalid field "starter.html": Must be a non-empty string (file path).',
     );
   }
-  if (
-    'css' in starter &&
-    starter['css'] !== undefined &&
-    starter['css'] !== null &&
-    typeof starter['css'] !== 'string'
-  ) {
-    throw new Error(
-      'Invalid field "starter.css": Must be a string (file path) if provided.',
-    );
-  }
-  if (
-    'js' in starter &&
-    starter['js'] !== undefined &&
-    starter['js'] !== null &&
-    typeof starter['js'] !== 'string'
-  ) {
-    throw new Error(
-      'Invalid field "starter.js": Must be a string (file path) if provided.',
-    );
-  }
-  if (
-    'vtt' in starter &&
-    starter['vtt'] !== undefined &&
-    starter['vtt'] !== null &&
-    typeof starter['vtt'] !== 'string'
-  ) {
-    throw new Error(
-      'Invalid field "starter.vtt": Must be a string (file path) if provided.',
-    );
+  // Validate optional starter file types
+  for (const fileType of EDITOR_FILE_TYPES) {
+    if (fileType.id === 'html') continue; // already validated as required
+    if (
+      fileType.id in starter &&
+      starter[fileType.id] !== undefined &&
+      starter[fileType.id] !== null &&
+      typeof starter[fileType.id] !== 'string'
+    ) {
+      throw new Error(
+        `Invalid field "starter.${fileType.id}": Must be a string (file path) if provided.`,
+      );
+    }
   }
 
   // Validators
@@ -206,45 +194,17 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
       );
     }
     const solution = data['solution'] as Record<string, unknown>;
-    if (
-      'html' in solution &&
-      solution['html'] !== undefined &&
-      solution['html'] !== null &&
-      typeof solution['html'] !== 'string'
-    ) {
-      throw new Error(
-        'Invalid field "solution.html": Must be a string (file path) if provided.',
-      );
-    }
-    if (
-      'css' in solution &&
-      solution['css'] !== undefined &&
-      solution['css'] !== null &&
-      typeof solution['css'] !== 'string'
-    ) {
-      throw new Error(
-        'Invalid field "solution.css": Must be a string (file path) if provided.',
-      );
-    }
-    if (
-      'js' in solution &&
-      solution['js'] !== undefined &&
-      solution['js'] !== null &&
-      typeof solution['js'] !== 'string'
-    ) {
-      throw new Error(
-        'Invalid field "solution.js": Must be a string (file path) if provided.',
-      );
-    }
-    if (
-      'vtt' in solution &&
-      solution['vtt'] !== undefined &&
-      solution['vtt'] !== null &&
-      typeof solution['vtt'] !== 'string'
-    ) {
-      throw new Error(
-        'Invalid field "solution.vtt": Must be a string (file path) if provided.',
-      );
+    for (const fileType of EDITOR_FILE_TYPES) {
+      if (
+        fileType.id in solution &&
+        solution[fileType.id] !== undefined &&
+        solution[fileType.id] !== null &&
+        typeof solution[fileType.id] !== 'string'
+      ) {
+        throw new Error(
+          `Invalid field "solution.${fileType.id}": Must be a string (file path) if provided.`,
+        );
+      }
     }
   }
 
@@ -275,14 +235,11 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
     data['solution'] !== null
   ) {
     const solution = data['solution'] as Record<string, unknown>;
-    solutionResult = {
-      ...(typeof solution['html'] === 'string'
-        ? { html: solution['html'] }
-        : {}),
-      ...(typeof solution['css'] === 'string' ? { css: solution['css'] } : {}),
-      ...(typeof solution['js'] === 'string' ? { js: solution['js'] } : {}),
-      ...(typeof solution['vtt'] === 'string' ? { vtt: solution['vtt'] } : {}),
-    };
+    solutionResult = Object.fromEntries(
+      EDITOR_FILE_TYPES.filter((t) => typeof solution[t.id] === 'string').map(
+        (t) => [t.id, solution[t.id] as string],
+      ),
+    ) as Partial<Record<EditorFileType, string>>;
   }
 
   return {
@@ -293,9 +250,11 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
     points: data['points'] as number,
     starter: {
       html: starter['html'] as string,
-      ...(starter['js'] ? { js: starter['js'] as string } : {}),
-      ...(starter['css'] ? { css: starter['css'] as string } : {}),
-      ...(starter['vtt'] ? { vtt: starter['vtt'] as string } : {}),
+      ...Object.fromEntries(
+        EDITOR_FILE_TYPES.filter((t) => t.id !== 'html' && starter[t.id]).map(
+          (t) => [t.id, starter[t.id] as string],
+        ),
+      ),
     },
     validators: data['validators'] as string[],
     ...(typeof data['previewTitle'] === 'string' &&

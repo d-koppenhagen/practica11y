@@ -9,9 +9,10 @@ import {
   CatbeeMonacoDiffEditorEvent,
   MonacoEditorOptions,
 } from '@ng-catbee/monaco-editor';
+import type { EditorFileType } from '@practica11y/editor-types';
 
 export interface DiffLanguageEntry {
-  language: string;
+  language: EditorFileType;
   label: string;
   monacoLanguage: string;
   original: string;

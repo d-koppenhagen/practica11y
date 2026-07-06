@@ -1,5 +1,8 @@
 {
   "name": "@practica11y/models",
   "version": "0.0.1",
+  "peerDependencies": {
+    "@practica11y/editor-types": "workspace:*"
+  },
   "sideEffects": false
 }
