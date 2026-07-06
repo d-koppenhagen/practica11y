@@ -35,6 +35,7 @@ import { DiffLanguageEntry } from '../editor-diff-view/editor-diff-view';
 class MockCatbeeMonacoEditor {
   readonly language = input<string>('');
   readonly options = input<Record<string, unknown>>({});
+  readonly autoFormat = input<boolean>(true);
   readonly height = input<string>('100%');
   readonly width = input<string>('100%');
   readonly value = model<string>('');

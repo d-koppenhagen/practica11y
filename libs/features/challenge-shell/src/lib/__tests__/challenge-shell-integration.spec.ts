@@ -49,6 +49,7 @@ beforeEach(() => {
 class MockMonacoEditor {
   readonly language = input<string>();
   readonly options = input<unknown>();
+  readonly autoFormat = input<boolean>();
   readonly height = input<string>();
   readonly width = input<string>();
   readonly value = input<string>();

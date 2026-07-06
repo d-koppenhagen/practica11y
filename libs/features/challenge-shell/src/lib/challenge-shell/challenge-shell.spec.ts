@@ -41,6 +41,7 @@ import { MarkdownContent } from '@practica11y/ui';
 class MockCatbeeMonacoEditor {
   readonly language = input<string>('');
   readonly options = input<Record<string, unknown>>({});
+  readonly autoFormat = input<boolean>(true);
   readonly height = input<string>('100%');
   readonly width = input<string>('100%');
   readonly value = model<string>('');
