@@ -231,6 +231,85 @@ a11y-shell-resizer {
 }
 
 /* ===================================================================
+   Diff toggle switch
+   =================================================================== */
+
+.diff-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.diff-toggle-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--p11y-text-muted, #6b7280);
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.diff-toggle--active .diff-toggle-label {
+  color: var(--p11y-primary, #2563eb);
+}
+
+.diff-toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 32px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--p11y-border, #d1d5db);
+  border-radius: 9px;
+  background-color: var(--p11y-bg-muted, #e5e7eb);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.diff-toggle-switch[aria-checked='true'] {
+  background-color: var(--p11y-primary, #2563eb);
+  border-color: var(--p11y-primary, #2563eb);
+}
+
+.diff-toggle-switch:hover {
+  border-color: var(--p11y-primary, #4f46e5);
+}
+
+.diff-toggle-switch:focus-visible {
+  outline: 2px solid var(--p11y-primary, #2563eb);
+  outline-offset: 2px;
+}
+
+.diff-toggle-knob {
+  position: absolute;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--p11y-text-muted, #6b7280);
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.diff-toggle-switch[aria-checked='true'] .diff-toggle-knob {
+  transform: translateX(14px);
+  background-color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diff-toggle-switch,
+  .diff-toggle-knob,
+  .diff-toggle-label {
+    transition: none;
+  }
+}
+
+/* ===================================================================
    Editor overrides
    =================================================================== */
 

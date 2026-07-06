@@ -288,3 +288,47 @@ See `docs/github-auth-proxy.md` for setup and deployment details.
 3. Valid → `authenticated`, trigger sync
 4. Invalid (401/403) → clear token, `unauthenticated`
 5. On logout → clear localStorage, reset signals
+
+## Diff View Flow
+
+The Diff View provides a side-by-side comparison of starter code (original) against the user's current code (modified) for each available language in a challenge. A toggle button switches between the normal tabbed editor and the stacked diff view.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Toggle as DiffToggle Button
+    participant Shell as ChallengeShell
+    participant DiffView as EditorDiffView
+    participant Editors as NormalView (Tabbed Editors)
+    participant Preview as Live Preview Pipeline
+
+    User->>Toggle: Click toggle
+    Toggle->>Shell: toggleDiffView()
+    Shell->>Shell: diffViewActive.set(!current)
+    Shell->>Shell: viewModeAnnouncement (aria-live)
+
+    alt DiffView active
+        Shell->>Editors: hidden
+        Shell->>DiffView: Render with diffEntries()
+    else NormalView active
+        Shell->>DiffView: hidden
+        Shell->>Editors: Render tabbed editors
+    end
+
+    Note over Shell: diffEntries = computed()
+    Shell->>DiffView: entries (per language)
+
+    User->>DiffView: Edit modified side
+    DiffView->>Shell: modifiedChange({ language, content })
+    Shell->>Shell: onDiffModifiedChange() → update content signal
+    Shell->>Preview: Trigger analysis pipeline (debounced)
+```
+
+### Detailed Flow
+
+1. **Toggle activation**: User clicks the DiffToggle button → `diffViewActive` signal is toggled. An `aria-live` region announces the mode change ("Switched to diff view" / "Switched to code editor").
+2. **Conditional rendering**: `@if (diffViewActive())` renders the `EditorDiffView`; otherwise the normal tabbed editors are shown. Editor tabs are hidden when diff is active.
+3. **Diff entries computation**: The `diffEntries` computed signal builds a `DiffLanguageEntry[]` array from the challenge starter signals (original side) and current content signals (modified side). HTML and CSS are always included; JS and VTT are included only when the challenge starter provides them.
+4. **Editing in diff view**: When the user edits the modified side of any diff editor, `CatbeeMonacoDiffEditor` emits an `editorDiffUpdate` event. `EditorDiffView` re-emits it as `modifiedChange({ language, content })`.
+5. **Content signal propagation**: `ChallengeShell.onDiffModifiedChange()` routes the change to the appropriate content signal (`htmlContent`, `cssContent`, `jsContent`, or `vttContent`) via the existing `onXxxContentChange()` methods. This triggers the standard analysis pipeline (debounce → sandbox update → accessibility engine → validation → feedback).
+6. **Auto-open on solution reveal**: An `effect` watches `solutionRevealed()`. When it becomes `true`, the effect sets `diffViewActive` to `true` and announces the switch, so the user immediately sees the diff between starter and solution code.

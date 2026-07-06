@@ -1,0 +1,19 @@
+<div class="diff-view-stack">
+  @for (entry of entries(); track entry.language) {
+    <section
+      class="diff-entry"
+      [attr.aria-label]="entry.label + ' diff editor'"
+    >
+      <h3 class="diff-entry-label">{{ entry.label }}</h3>
+      <ng-catbee-monaco-diff-editor
+        [model]="{ original: entry.original, modified: entry.modified }"
+        [language]="entry.monacoLanguage"
+        [options]="editorOptions()"
+        [originalEditable]="false"
+        [height]="'250px'"
+        [width]="'100%'"
+        (editorDiffUpdate)="onDiffUpdate(entry.language, $event)"
+      />
+    </section>
+  }
+</div>

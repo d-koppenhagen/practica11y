@@ -13,6 +13,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Challenge } from '@practica11y/models';
 import {
   CatbeeMonacoEditor,
+  CatbeeMonacoDiffEditor,
   MonacoEditorOptions,
 } from '@ng-catbee/monaco-editor';
 import { SandboxAxeViolation } from '@practica11y/sandbox';
@@ -47,6 +48,7 @@ import {
   ChallengeSuccessDialog,
   ChallengeSuccessDialogData,
 } from '../challenge-success-dialog/challenge-success-dialog';
+import { DiffLanguageEntry } from '../editor-diff-view/editor-diff-view';
 
 const GITHUB_REPO_URL = 'https://github.com/d-koppenhagen/practica11y';
 
@@ -56,6 +58,7 @@ type EditorTab = 'html' | 'js' | 'css' | 'vtt';
   selector: 'a11y-challenge-shell',
   imports: [
     CatbeeMonacoEditor,
+    CatbeeMonacoDiffEditor,
     AccessibilityTree,
     VirtualScreenReader,
     ColorContrastPanel,
@@ -100,6 +103,60 @@ export class ChallengeShell {
   protected readonly cssContent = signal<string>('');
   protected readonly vttContent = signal<string>('');
   protected readonly activeEditorTab = signal<EditorTab>('html');
+
+  /** Whether the diff view is currently active */
+  protected readonly diffViewActive = signal(false);
+
+  /** Announcement text for screen readers when view mode changes */
+  protected readonly viewModeAnnouncement = signal('');
+
+  /** Computed diff entries based on available languages and current content */
+  protected readonly diffEntries = computed<DiffLanguageEntry[]>(() => {
+    const challenge = this.challenge();
+    const entries: DiffLanguageEntry[] = [];
+
+    // Always include HTML
+    entries.push({
+      language: 'html',
+      label: 'HTML',
+      monacoLanguage: 'html',
+      original: challenge.starter.html,
+      modified: this.htmlContent(),
+    });
+
+    // Always include CSS
+    entries.push({
+      language: 'css',
+      label: 'CSS',
+      monacoLanguage: 'css',
+      original: challenge.starter.css,
+      modified: this.cssContent(),
+    });
+
+    // Only include JS if starter has JS
+    if (challenge.starter.js) {
+      entries.push({
+        language: 'js',
+        label: 'JavaScript',
+        monacoLanguage: 'javascript',
+        original: challenge.starter.js,
+        modified: this.jsContent(),
+      });
+    }
+
+    // Only include VTT if starter has VTT
+    if (challenge.starter.vtt) {
+      entries.push({
+        language: 'vtt',
+        label: 'VTT',
+        monacoLanguage: 'plaintext',
+        original: challenge.starter.vtt,
+        modified: this.vttContent(),
+      });
+    }
+
+    return entries;
+  });
   /** Active accessibility output tab — persisted via the layout store. */
   protected readonly activeTreeTab = computed(
     () => this.layoutStore.layout().activeTreeTab,
@@ -234,6 +291,8 @@ export class ChallengeShell {
       this.isPeeked.set(false);
       this.solutionAnnouncement.set('');
       this.revealError.set('');
+      this.diffViewActive.set(false);
+      this.viewModeAnnouncement.set('');
       this.pipeline.setChallenge(challenge);
       this.pipeline.updateCode(
         challenge.starter.html,
@@ -309,6 +368,14 @@ export class ChallengeShell {
           ...l,
           collapsed: { description, editor, preview, tree, feedback },
         }));
+      }
+    });
+
+    // Auto-open diff view when solution is revealed
+    effect(() => {
+      if (this.solutionRevealed()) {
+        this.diffViewActive.set(true);
+        this.viewModeAnnouncement.set('Switched to diff view');
       }
     });
   }
@@ -518,6 +585,34 @@ export class ChallengeShell {
     this.activeEditorTab.set(tab);
     if (this.layoutStore.layout().collapsed.editor) {
       this.layoutStore.setPanelCollapsed('editor', false);
+    }
+  }
+
+  protected toggleDiffView(): void {
+    const newState = !this.diffViewActive();
+    this.diffViewActive.set(newState);
+    this.viewModeAnnouncement.set(
+      newState ? 'Switched to diff view' : 'Switched to code editor',
+    );
+  }
+
+  protected onDiffModifiedChange(event: {
+    language: string;
+    content: string;
+  }): void {
+    switch (event.language) {
+      case 'html':
+        this.onHtmlContentChange(event.content);
+        break;
+      case 'js':
+        this.onJsContentChange(event.content);
+        break;
+      case 'css':
+        this.onCssContentChange(event.content);
+        break;
+      case 'vtt':
+        this.onVttContentChange(event.content);
+        break;
     }
   }
 
