@@ -7,7 +7,6 @@ import type {
 } from '@practica11y/models';
 import {
   EDITOR_FILE_TYPES,
-  EditorFileType,
   emptyCodeRecord,
 } from '@practica11y/editor-types';
 import { parseFrontmatter, parseMarkdownBody } from '../frontmatter-parser';
