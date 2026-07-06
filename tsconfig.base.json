@@ -43,6 +43,9 @@
       "@practica11y/types": ["./libs/shared/types/src/index.ts"],
       "@practica11y/color-contrast-checker": [
         "./libs/features/color-contrast-checker/src/index.ts"
+      ],
+      "@practica11y/editor-types": [
+        "./libs/challenge/editor-types/src/index.ts"
       ]
     }
   },

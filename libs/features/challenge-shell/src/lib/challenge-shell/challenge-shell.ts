@@ -20,6 +20,7 @@ import { SandboxAxeViolation } from '@practica11y/sandbox';
 import { AccessibilityTree } from '@practica11y/accessibility-tree';
 import { VirtualScreenReader } from '@practica11y/virtual-screen-reader';
 import { ColorContrastPanel } from '@practica11y/color-contrast-checker';
+import { EDITOR_FILE_TYPES, EditorFileType } from '@practica11y/editor-types';
 import { ChallengeLoader } from '@practica11y/loader';
 import {
   AccessibilityNode,
@@ -51,8 +52,6 @@ import {
 import { DiffLanguageEntry } from '../editor-diff-view/editor-diff-view';
 
 const GITHUB_REPO_URL = 'https://github.com/d-koppenhagen/practica11y';
-
-type EditorTab = 'html' | 'js' | 'css' | 'vtt';
 
 @Component({
   selector: 'a11y-challenge-shell',
@@ -102,7 +101,18 @@ export class ChallengeShell {
   protected readonly jsContent = signal<string>('');
   protected readonly cssContent = signal<string>('');
   protected readonly vttContent = signal<string>('');
-  protected readonly activeEditorTab = signal<EditorTab>('html');
+
+  /** Maps file type IDs to their corresponding content signals. */
+  private readonly contentSignals: Readonly<
+    Record<EditorFileType, ReturnType<typeof signal<string>>>
+  > = {
+    html: this.htmlContent,
+    css: this.cssContent,
+    js: this.jsContent,
+    vtt: this.vttContent,
+  };
+
+  protected readonly activeEditorTab = signal<EditorFileType>('html');
 
   /** Whether the diff view is currently active */
   protected readonly diffViewActive = signal(false);
@@ -115,44 +125,17 @@ export class ChallengeShell {
     const challenge = this.challenge();
     const entries: DiffLanguageEntry[] = [];
 
-    // Always include HTML
-    entries.push({
-      language: 'html',
-      label: 'HTML',
-      monacoLanguage: 'html',
-      original: challenge.starter.html,
-      modified: this.htmlContent(),
-    });
-
-    // Always include CSS
-    entries.push({
-      language: 'css',
-      label: 'CSS',
-      monacoLanguage: 'css',
-      original: challenge.starter.css,
-      modified: this.cssContent(),
-    });
-
-    // Only include JS if starter has JS
-    if (challenge.starter.js) {
-      entries.push({
-        language: 'js',
-        label: 'JavaScript',
-        monacoLanguage: 'javascript',
-        original: challenge.starter.js,
-        modified: this.jsContent(),
-      });
-    }
-
-    // Only include VTT if starter has VTT
-    if (challenge.starter.vtt) {
-      entries.push({
-        language: 'vtt',
-        label: 'VTT',
-        monacoLanguage: 'plaintext',
-        original: challenge.starter.vtt,
-        modified: this.vttContent(),
-      });
+    for (const fileType of EDITOR_FILE_TYPES) {
+      const starterValue = challenge.starter[fileType.id];
+      if (fileType.alwaysVisible || starterValue) {
+        entries.push({
+          language: fileType.id,
+          label: fileType.label,
+          monacoLanguage: fileType.monacoLanguage,
+          original: starterValue,
+          modified: this.contentSignals[fileType.id](),
+        });
+      }
     }
 
     return entries;
@@ -183,12 +166,7 @@ export class ChallengeShell {
   protected readonly revealError = signal('');
 
   /** Snapshot of the user's code before reveal, so they can switch back */
-  private userSnapshot: {
-    html: string;
-    js: string;
-    css: string;
-    vtt: string;
-  } | null = null;
+  private userSnapshot: Record<EditorFileType, string> | null = null;
   protected readonly hasUserSnapshot = signal(false);
 
   protected readonly editorOptions = computed<MonacoEditorOptions>(() => ({
@@ -282,10 +260,9 @@ export class ChallengeShell {
   constructor() {
     effect(() => {
       const challenge = this.challenge();
-      this.htmlContent.set(challenge.starter.html);
-      this.jsContent.set(challenge.starter.js);
-      this.cssContent.set(challenge.starter.css);
-      this.vttContent.set(challenge.starter.vtt);
+      for (const fileType of EDITOR_FILE_TYPES) {
+        this.contentSignals[fileType.id].set(challenge.starter[fileType.id]);
+      }
       this.feedbackVisible.set(false);
       this.solutionRevealed.set(false);
       this.isPeeked.set(false);
@@ -391,12 +368,7 @@ export class ChallengeShell {
       }
 
       const solution = challenge.solution;
-      if (
-        solution.html == null &&
-        solution.js == null &&
-        solution.css == null &&
-        solution.vtt == null
-      ) {
+      if (EDITOR_FILE_TYPES.every((t) => solution[t.id] == null)) {
         this.revealError.set(
           'Solution data appears to be empty or corrupt. Please try again.',
         );
@@ -406,28 +378,26 @@ export class ChallengeShell {
       this.revealError.set('');
 
       // Save the user's current code before overwriting with solution
-      this.userSnapshot = {
-        html: this.htmlContent(),
-        js: this.jsContent(),
-        css: this.cssContent(),
-        vtt: this.vttContent(),
-      };
+      this.userSnapshot = Object.fromEntries(
+        EDITOR_FILE_TYPES.map((t) => [t.id, this.contentSignals[t.id]()]),
+      ) as Record<EditorFileType, string>;
       this.hasUserSnapshot.set(true);
 
       // Only overwrite editor tabs where the solution provides content.
       // If a solution doesn't specify e.g. CSS, keep the current (starter) CSS.
-      const newHtml = solution.html || this.htmlContent();
-      const newJs = solution.js || this.jsContent();
-      const newCss = solution.css || this.cssContent();
-      const newVtt = solution.vtt || this.vttContent();
-
-      this.htmlContent.set(newHtml);
-      this.jsContent.set(newJs);
-      this.cssContent.set(newCss);
-      this.vttContent.set(newVtt);
+      for (const fileType of EDITOR_FILE_TYPES) {
+        const solutionValue = solution[fileType.id];
+        if (solutionValue) {
+          this.contentSignals[fileType.id].set(solutionValue);
+        }
+      }
       this.solutionRevealed.set(true);
       this.feedbackVisible.set(false);
-      this.pipeline.updateCode(newHtml, newJs, newCss);
+      this.pipeline.updateCode(
+        this.htmlContent(),
+        this.jsContent(),
+        this.cssContent(),
+      );
       this.solutionAnnouncement.set('Solution revealed');
       this.syncEditorValues();
     } catch (error: unknown) {
@@ -444,10 +414,9 @@ export class ChallengeShell {
 
   protected resetToStarter(): void {
     const challenge = this.challenge();
-    this.htmlContent.set(challenge.starter.html);
-    this.jsContent.set(challenge.starter.js);
-    this.cssContent.set(challenge.starter.css);
-    this.vttContent.set(challenge.starter.vtt);
+    for (const fileType of EDITOR_FILE_TYPES) {
+      this.contentSignals[fileType.id].set(challenge.starter[fileType.id]);
+    }
     this.solutionRevealed.set(false);
     this.feedbackVisible.set(false);
     this.revealError.set('');
@@ -464,10 +433,9 @@ export class ChallengeShell {
 
   protected restoreUserCode(): void {
     if (!this.userSnapshot) return;
-    this.htmlContent.set(this.userSnapshot.html);
-    this.jsContent.set(this.userSnapshot.js);
-    this.cssContent.set(this.userSnapshot.css);
-    this.vttContent.set(this.userSnapshot.vtt);
+    for (const fileType of EDITOR_FILE_TYPES) {
+      this.contentSignals[fileType.id].set(this.userSnapshot[fileType.id]);
+    }
     this.solutionRevealed.set(false);
     this.feedbackVisible.set(false);
     this.pipeline.updateCode(
@@ -569,19 +537,14 @@ export class ChallengeShell {
     }
   }
 
-  protected readonly editorTabs = computed<EditorTab[]>(() => {
-    const tabs: EditorTab[] = ['html'];
-    if (this.challenge().starter.js) {
-      tabs.push('js');
-    }
-    tabs.push('css');
-    if (this.challenge().starter.vtt) {
-      tabs.push('vtt');
-    }
-    return tabs;
+  protected readonly editorTabs = computed<EditorFileType[]>(() => {
+    const challenge = this.challenge();
+    return EDITOR_FILE_TYPES.filter(
+      (fileType) => fileType.alwaysVisible || challenge.starter[fileType.id],
+    ).map((fileType) => fileType.id);
   });
 
-  protected switchEditorTab(tab: EditorTab): void {
+  protected switchEditorTab(tab: EditorFileType): void {
     this.activeEditorTab.set(tab);
     if (this.layoutStore.layout().collapsed.editor) {
       this.layoutStore.setPanelCollapsed('editor', false);
@@ -675,14 +638,7 @@ export class ChallengeShell {
 
     for (let i = 0; i < editors.length && i < tabOrder.length; i++) {
       const tab = tabOrder[i];
-      const newValue =
-        tab === 'html'
-          ? this.htmlContent()
-          : tab === 'js'
-            ? this.jsContent()
-            : tab === 'css'
-              ? this.cssContent()
-              : this.vttContent();
+      const newValue = this.contentSignals[tab]();
 
       if (editors[i].getValue() !== newValue) {
         editors[i].setValue(newValue);
