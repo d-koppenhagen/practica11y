@@ -5,10 +5,7 @@ import type {
   ChallengeMeta,
   StarterCode,
 } from '@practica11y/models';
-import {
-  EDITOR_FILE_TYPES,
-  emptyCodeRecord,
-} from '@practica11y/editor-types';
+import { EDITOR_FILE_TYPES, emptyCodeRecord } from '@practica11y/editor-types';
 import { parseFrontmatter, parseMarkdownBody } from '../frontmatter-parser';
 
 /**

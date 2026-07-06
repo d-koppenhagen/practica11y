@@ -551,7 +551,7 @@ describe('ChallengeShell - Diff Content Integration', () => {
 
       shell.revealSolution();
       // Allow effects to run
-      TestBed.flushEffects();
+      TestBed.tick();
 
       expect(shell.solutionRevealed()).toBe(true);
       expect(shell.diffViewActive()).toBe(true);
@@ -566,7 +566,7 @@ describe('ChallengeShell - Diff Content Integration', () => {
       };
 
       shell.revealSolution();
-      TestBed.flushEffects();
+      TestBed.tick();
 
       expect(shell.viewModeAnnouncement()).toBe('Switched to diff view');
     });
@@ -580,12 +580,161 @@ describe('ChallengeShell - Diff Content Integration', () => {
       };
 
       shell.revealSolution();
-      TestBed.flushEffects();
+      TestBed.tick();
 
       const entries = shell.diffEntries();
       const htmlEntry = entries.find((e) => e.language === 'html')!;
       expect(htmlEntry.original).toBe(mockChallengeWithSolution.starter.html);
       expect(htmlEntry.modified).toBe(mockChallengeWithSolution.solution!.html);
+    });
+  });
+
+  describe('Reset/restore deactivates diff view', () => {
+    it('should deactivate diffViewActive on resetToStarter after reveal', async () => {
+      await createComponent(mockChallengeWithSolution);
+
+      const shell = component as unknown as {
+        revealSolution: () => void;
+        resetToStarter: () => void;
+        diffViewActive: () => boolean;
+      };
+
+      shell.revealSolution();
+      TestBed.tick();
+      expect(shell.diffViewActive()).toBe(true);
+
+      shell.resetToStarter();
+
+      expect(shell.diffViewActive()).toBe(false);
+    });
+
+    it('should deactivate diffViewActive on restoreUserCode after reveal', async () => {
+      await createComponent(mockChallengeWithSolution);
+
+      const shell = component as unknown as {
+        revealSolution: () => void;
+        restoreUserCode: () => void;
+        diffViewActive: () => boolean;
+      };
+
+      shell.revealSolution();
+      TestBed.tick();
+      expect(shell.diffViewActive()).toBe(true);
+
+      shell.restoreUserCode();
+
+      expect(shell.diffViewActive()).toBe(false);
+    });
+
+    it('should preserve correct htmlContent after resetToStarter from diff view', async () => {
+      await createComponent(mockChallengeWithSolution);
+
+      const shell = component as unknown as {
+        revealSolution: () => void;
+        resetToStarter: () => void;
+        htmlContent: () => string;
+        cssContent: () => string;
+      };
+
+      shell.revealSolution();
+      TestBed.tick();
+
+      shell.resetToStarter();
+
+      expect(shell.htmlContent()).toBe(mockChallengeWithSolution.starter.html);
+      expect(shell.cssContent()).toBe(mockChallengeWithSolution.starter.css);
+    });
+
+    it('should preserve correct htmlContent after restoreUserCode from diff view', async () => {
+      await createComponent(mockChallengeWithSolution);
+
+      const shell = component as unknown as {
+        revealSolution: () => void;
+        restoreUserCode: () => void;
+        htmlContent: () => string;
+        cssContent: () => string;
+      };
+
+      shell.revealSolution();
+      TestBed.tick();
+
+      shell.restoreUserCode();
+
+      // restoreUserCode should restore the user snapshot (starter content before reveal)
+      expect(shell.htmlContent()).toBe(mockChallengeWithSolution.starter.html);
+      expect(shell.cssContent()).toBe(mockChallengeWithSolution.starter.css);
+    });
+
+    it('should clear viewModeAnnouncement on resetToStarter', async () => {
+      await createComponent(mockChallengeWithSolution);
+
+      const shell = component as unknown as {
+        revealSolution: () => void;
+        resetToStarter: () => void;
+        viewModeAnnouncement: () => string;
+      };
+
+      shell.revealSolution();
+      TestBed.tick();
+      expect(shell.viewModeAnnouncement()).toBe('Switched to diff view');
+
+      shell.resetToStarter();
+
+      expect(shell.viewModeAnnouncement()).toBe('');
+    });
+
+    it('should call pipeline.updateCode with starter content on resetToStarter from diff view', async () => {
+      await createComponent(mockChallengeWithSolution);
+
+      const shell = component as unknown as {
+        revealSolution: () => void;
+        resetToStarter: () => void;
+      };
+
+      shell.revealSolution();
+      TestBed.tick();
+      mockPipeline.updateCode.mockClear();
+
+      shell.resetToStarter();
+
+      expect(mockPipeline.updateCode).toHaveBeenCalledWith(
+        mockChallengeWithSolution.starter.html,
+        mockChallengeWithSolution.starter.js,
+        mockChallengeWithSolution.starter.css,
+      );
+    });
+
+    it('should not have CSS content in htmlContent after resetToStarter (regression)', async () => {
+      // This is the specific regression test for the bug where CSS appeared
+      // as visible text in the live preview after reveal → reset.
+      const challengeHtmlOnlySolution: Challenge = {
+        ...mockChallengeHtmlCss,
+        solution: {
+          html: '<button>Fixed</button>',
+          js: '',
+          css: '',
+          vtt: '',
+        },
+      };
+      await createComponent(challengeHtmlOnlySolution);
+
+      const shell = component as unknown as {
+        revealSolution: () => void;
+        resetToStarter: () => void;
+        htmlContent: () => string;
+        cssContent: () => string;
+      };
+
+      shell.revealSolution();
+      TestBed.tick();
+
+      shell.resetToStarter();
+
+      // htmlContent must be the starter HTML, NOT the CSS
+      expect(shell.htmlContent()).toBe(challengeHtmlOnlySolution.starter.html);
+      expect(shell.htmlContent()).not.toContain('color: red');
+      // cssContent must be the starter CSS
+      expect(shell.cssContent()).toBe(challengeHtmlOnlySolution.starter.css);
     });
   });
 });

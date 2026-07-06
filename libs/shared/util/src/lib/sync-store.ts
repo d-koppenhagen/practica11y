@@ -199,15 +199,13 @@ export class SyncStore {
       xp: progress.xp,
       completedChallenges: progress.completedChallenges,
       peekedChallenges: progress.peekedChallenges,
-      achievements: progress.achievements.map(
-        (a): SerializedAchievement => ({
-          id: a.id,
-          title: a.title,
-          description: a.description,
-          icon: a.icon,
-          unlockedAt: a.unlockedAt?.toISOString(),
-        }),
-      ),
+      achievements: progress.achievements.map((a): SerializedAchievement => ({
+        id: a.id,
+        title: a.title,
+        description: a.description,
+        icon: a.icon,
+        unlockedAt: a.unlockedAt?.toISOString(),
+      })),
       currentLevel: progress.currentLevel,
       lastActivity: progress.lastActivity.toISOString(),
     };

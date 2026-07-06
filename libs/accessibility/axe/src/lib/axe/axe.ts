@@ -21,13 +21,11 @@ export class AxeAnalyzer {
       impact: violation.impact as AxeViolation['impact'],
       description: violation.description,
       helpUrl: violation.helpUrl,
-      nodes: violation.nodes.map(
-        (node: NodeResult): AxeViolationNode => ({
-          html: node.html,
-          target: node.target as string[],
-          failureSummary: node.failureSummary ?? '',
-        }),
-      ),
+      nodes: violation.nodes.map((node: NodeResult): AxeViolationNode => ({
+        html: node.html,
+        target: node.target as string[],
+        failureSummary: node.failureSummary ?? '',
+      })),
     };
   }
 }

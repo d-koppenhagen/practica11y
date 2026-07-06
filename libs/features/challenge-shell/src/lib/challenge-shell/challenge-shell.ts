@@ -414,6 +414,12 @@ export class ChallengeShell {
 
   protected resetToStarter(): void {
     const challenge = this.challenge();
+    // Deactivate diff view first — normal editors will re-create with
+    // correct values from signal bindings once Angular re-renders the @if.
+    const wasDiffView = this.diffViewActive();
+    this.diffViewActive.set(false);
+    this.viewModeAnnouncement.set('');
+
     for (const fileType of EDITOR_FILE_TYPES) {
       this.contentSignals[fileType.id].set(challenge.starter[fileType.id]);
     }
@@ -428,11 +434,23 @@ export class ChallengeShell {
       challenge.starter.css,
     );
     this.solutionAnnouncement.set('');
-    this.syncEditorValues();
+
+    // Only sync editors if we were NOT in diff mode. When transitioning
+    // from diff to normal view, the normal editors will be re-created by
+    // Angular and initialize with the correct signal values automatically.
+    if (!wasDiffView) {
+      this.syncEditorValues();
+    }
   }
 
   protected restoreUserCode(): void {
     if (!this.userSnapshot) return;
+    // Deactivate diff view first — normal editors will re-create with
+    // correct values from signal bindings once Angular re-renders the @if.
+    const wasDiffView = this.diffViewActive();
+    this.diffViewActive.set(false);
+    this.viewModeAnnouncement.set('');
+
     for (const fileType of EDITOR_FILE_TYPES) {
       this.contentSignals[fileType.id].set(this.userSnapshot[fileType.id]);
     }
@@ -444,7 +462,10 @@ export class ChallengeShell {
       this.userSnapshot.css,
     );
     this.solutionAnnouncement.set('');
-    this.syncEditorValues();
+
+    if (!wasDiffView) {
+      this.syncEditorValues();
+    }
   }
 
   protected onResizeCol1(delta: number): void {
@@ -620,6 +641,12 @@ export class ChallengeShell {
    * are not reliably accessible via viewChildren.
    */
   private syncEditorValues(): void {
+    // In diff view mode, the diff editor binds via [model] input and
+    // manages its own content. Calling getEditors() would return diff
+    // sub-editors whose positional mapping doesn't match editorTabs(),
+    // leading to content being written to the wrong editor/signal.
+    if (this.diffViewActive()) return;
+
     const editors = (
       globalThis as unknown as {
         monaco?: {
