@@ -1,0 +1,19 @@
+.diff-view-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.diff-entry {
+  display: flex;
+  flex-direction: column;
+}
+
+.diff-entry-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
