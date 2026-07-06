@@ -425,4 +425,55 @@ describe('AnalysisPipeline', () => {
       expect(pipeline).toBeTruthy();
     });
   });
+
+  describe('updateTreeOnly', () => {
+    it('should preserve the existing timestamp to prevent dialog re-triggering', async () => {
+      pipeline.setChallenge(mockChallenge);
+      await pipeline.runPipeline(document);
+
+      const resultAfterPipeline = pipeline.analysisResult()!;
+      const originalTimestamp = resultAfterPipeline.timestamp;
+
+      // Simulate a small delay so Date.now() would differ
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      pipeline.updateTreeOnly(document);
+
+      const resultAfterTreeUpdate = pipeline.analysisResult()!;
+      expect(resultAfterTreeUpdate.timestamp).toBe(originalTimestamp);
+      expect(resultAfterTreeUpdate.challengeCompleted).toBe(true);
+    });
+
+    it('should update treeNodes without changing other result properties', async () => {
+      pipeline.setChallenge(mockChallenge);
+      await pipeline.runPipeline(document);
+
+      const resultBefore = pipeline.analysisResult()!;
+
+      // Change what analyzeLocal returns for the tree update
+      const updatedTree = { role: 'document', name: 'updated', children: [] };
+      mockAccessibilityEngine.analyzeLocal.mockReturnValue({
+        treeNodes: updatedTree,
+        keyboardResults: mockAnalysisResult.keyboardResults,
+        focusResults: mockAnalysisResult.focusResults,
+      });
+
+      pipeline.updateTreeOnly(document);
+
+      const resultAfter = pipeline.analysisResult()!;
+      expect(resultAfter.accessibilityAnalysis.treeNodes).toEqual(updatedTree);
+      expect(resultAfter.validationResults).toEqual(
+        resultBefore.validationResults,
+      );
+      expect(resultAfter.challengeCompleted).toBe(
+        resultBefore.challengeCompleted,
+      );
+    });
+
+    it('should do nothing when no analysis result exists', () => {
+      expect(pipeline.analysisResult()).toBeNull();
+      pipeline.updateTreeOnly(document);
+      expect(pipeline.analysisResult()).toBeNull();
+    });
+  });
 });

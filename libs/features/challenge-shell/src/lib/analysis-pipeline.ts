@@ -240,6 +240,7 @@ export class AnalysisPipeline {
   /**
    * Lightweight tree-only update for interaction state changes (input values, focus).
    * Does NOT re-run validators or axe — just regenerates the tree.
+   * Preserves the existing timestamp so that the success dialog is not re-triggered.
    */
   updateTreeOnly(doc: Document): void {
     const currentResult = this.analysisResult();
@@ -253,7 +254,6 @@ export class AnalysisPipeline {
         ...currentResult.accessibilityAnalysis,
         treeNodes,
       },
-      timestamp: Date.now(),
     });
   }
 
