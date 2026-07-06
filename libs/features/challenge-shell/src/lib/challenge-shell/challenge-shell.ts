@@ -399,7 +399,9 @@ export class ChallengeShell {
         this.cssContent(),
       );
       this.solutionAnnouncement.set('Solution revealed');
-      this.syncEditorValues();
+      // No syncEditorValues() call here — the auto-open effect will
+      // immediately switch to diff view, so regular editors are about
+      // to be destroyed and diff editors will initialize from signals.
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : 'An unexpected error occurred';

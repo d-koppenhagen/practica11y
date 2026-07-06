@@ -736,5 +736,47 @@ describe('ChallengeShell - Diff Content Integration', () => {
       // cssContent must be the starter CSS
       expect(shell.cssContent()).toBe(challengeHtmlOnlySolution.starter.css);
     });
+
+    it('should not corrupt jsContent with cssContent when JS tab is active before reveal (regression)', async () => {
+      // Regression: when JS tab was active and revealSolution was called,
+      // syncEditorValues() would write CSS content into the JS editor due to
+      // a positional mismatch between @defer-rendered editors and editorTabs().
+      const challengeHtmlOnlySolution: Challenge = {
+        ...mockChallengeHtmlCssJs,
+        solution: {
+          html: '<button>Fixed</button>',
+          js: '',
+          css: '',
+          vtt: '',
+        },
+      };
+      await createComponent(challengeHtmlOnlySolution);
+
+      const shell = component as unknown as {
+        activeEditorTab: { set: (v: string) => void };
+        switchEditorTab: (tab: string) => void;
+        revealSolution: () => void;
+        jsContent: () => string;
+        cssContent: () => string;
+        htmlContent: () => string;
+      };
+
+      // Switch to JS tab before revealing
+      shell.switchEditorTab('js' as never);
+      fixture.detectChanges();
+
+      shell.revealSolution();
+      TestBed.tick();
+
+      // jsContent must remain the JS starter, not CSS content
+      expect(shell.jsContent()).toBe(challengeHtmlOnlySolution.starter.js);
+      expect(shell.jsContent()).not.toContain('padding');
+      // cssContent must remain the CSS starter
+      expect(shell.cssContent()).toBe(challengeHtmlOnlySolution.starter.css);
+      // htmlContent should be the solution HTML
+      expect(shell.htmlContent()).toBe(
+        challengeHtmlOnlySolution.solution!.html,
+      );
+    });
   });
 });
