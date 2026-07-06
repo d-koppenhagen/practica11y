@@ -1,14 +1,18 @@
-@switch (state()) { @case ('button') {
-<button class="check-solution-btn" (click)="onCheckSolution()">
-  Check Solution
-</button>
-} @case ('loading') {
-<div role="status" aria-live="polite" class="feedback-loading">
-  <span class="shell-spinner"></span>
-  <span>Analyzing…</span>
-</div>
-} @case ('results') {
-<div aria-live="polite" aria-atomic="true" class="feedback-results">
-  <a11y-challenge-feedback [result]="analysisResult()" />
-</div>
-} }
+@switch (state()) {
+  @case ('button') {
+    <button class="check-solution-btn" (click)="onCheckSolution()">
+      Check Solution
+    </button>
+  }
+  @case ('loading') {
+    <div role="status" aria-live="polite" class="feedback-loading">
+      <span class="shell-spinner"></span>
+      <span>Analyzing…</span>
+    </div>
+  }
+  @case ('results') {
+    <div aria-live="polite" aria-atomic="true" class="feedback-results">
+      <a11y-challenge-feedback [result]="analysisResult()" />
+    </div>
+  }
+}

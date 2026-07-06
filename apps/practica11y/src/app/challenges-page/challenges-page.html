@@ -2,39 +2,39 @@
   <h1 class="challenges-heading">Accessibility Challenges</h1>
 
   @if (availableChallenges().length > 0) {
-  <button
-    type="button"
-    class="random-challenge-btn"
-    (click)="rollRandomChallenge()"
-    [disabled]="diceRolling()"
-    aria-label="Start a random challenge"
-  >
-    <svg
-      class="dice-icon"
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+    <button
+      type="button"
+      class="random-challenge-btn"
+      (click)="rollRandomChallenge()"
+      [disabled]="diceRolling()"
+      aria-label="Start a random challenge"
     >
-      <rect x="2" y="2" width="20" height="20" rx="3" ry="3" />
-      <circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none" />
-      <circle cx="16" cy="8" r="1.5" fill="currentColor" stroke="none" />
-      <circle cx="8" cy="16" r="1.5" fill="currentColor" stroke="none" />
-      <circle cx="16" cy="16" r="1.5" fill="currentColor" stroke="none" />
-      <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
-    </svg>
-    Random Challenge
-  </button>
+      <svg
+        class="dice-icon"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="2" y="2" width="20" height="20" rx="3" ry="3" />
+        <circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none" />
+        <circle cx="16" cy="8" r="1.5" fill="currentColor" stroke="none" />
+        <circle cx="8" cy="16" r="1.5" fill="currentColor" stroke="none" />
+        <circle cx="16" cy="16" r="1.5" fill="currentColor" stroke="none" />
+        <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+      </svg>
+      Random Challenge
+    </button>
   }
 </div>
 
 @if (loadError()) {
-<p class="text-red-600 p-4 mb-4 border border-red-200 rounded" role="alert">
-  {{ loadError() }}
-</p>
+  <p class="text-red-600 p-4 mb-4 border border-red-200 rounded" role="alert">
+    {{ loadError() }}
+  </p>
 }
 
 <a11y-challenge-list
@@ -44,10 +44,10 @@
 />
 
 @if (randomChallenge(); as challenge) {
-<app-random-challenge-dice
-  [challenge]="challenge"
-  [trigger]="diceRolling()"
-  (navigateToChallenge)="onDiceNavigate($event)"
-  (dismissed)="onDiceDismissed()"
-/>
+  <app-random-challenge-dice
+    [challenge]="challenge"
+    [trigger]="diceRolling()"
+    (navigateToChallenge)="onDiceNavigate($event)"
+    (dismissed)="onDiceDismissed()"
+  />
 }

@@ -1,127 +1,128 @@
 @if (visible()) {
-<div
-  class="dice-overlay"
-  [attr.aria-hidden]="phase() !== 'landed'"
-  [attr.aria-busy]="phase() === 'rolling'"
->
-  <!-- Shiny particle burst background (visible after landing) -->
-  @if (phase() === 'landed') {
-  <div class="shine-burst" aria-hidden="true">
-    @for (ray of shineRays; track ray.id) {
+  <div
+    class="dice-overlay"
+    [attr.aria-hidden]="phase() !== 'landed'"
+    [attr.aria-busy]="phase() === 'rolling'"
+  >
+    <!-- Shiny particle burst background (visible after landing) -->
+    @if (phase() === 'landed') {
+      <div class="shine-burst" aria-hidden="true">
+        @for (ray of shineRays; track ray.id) {
+          <div
+            class="shine-ray"
+            [style.--ray-angle]="ray.angle"
+            [style.--ray-delay]="ray.delay"
+            [style.--ray-length]="ray.length"
+            [style.--ray-color]="ray.color"
+          ></div>
+        }
+        @for (sparkle of sparkles; track sparkle.id) {
+          <div
+            class="sparkle"
+            [style.--sparkle-x]="sparkle.x"
+            [style.--sparkle-y]="sparkle.y"
+            [style.--sparkle-delay]="sparkle.delay"
+            [style.--sparkle-size]="sparkle.size"
+            [style.--sparkle-color]="sparkle.color"
+          ></div>
+        }
+      </div>
+    }
+
+    <!-- 3D Dice -->
     <div
-      class="shine-ray"
-      [style.--ray-angle]="ray.angle"
-      [style.--ray-delay]="ray.delay"
-      [style.--ray-length]="ray.length"
-      [style.--ray-color]="ray.color"
-    ></div>
-    } @for (sparkle of sparkles; track sparkle.id) {
-    <div
-      class="sparkle"
-      [style.--sparkle-x]="sparkle.x"
-      [style.--sparkle-y]="sparkle.y"
-      [style.--sparkle-delay]="sparkle.delay"
-      [style.--sparkle-size]="sparkle.size"
-      [style.--sparkle-color]="sparkle.color"
-    ></div>
+      class="dice-scene"
+      aria-hidden="true"
+      [class.dice-rolling]="phase() === 'rolling'"
+      [class.dice-landed]="phase() === 'landed'"
+    >
+      <div class="dice-cube">
+        <!-- Face 1 (front) -->
+        <div class="dice-face dice-face--front">
+          <div class="dots dots--1">
+            <span class="dot"></span>
+          </div>
+        </div>
+        <!-- Face 6 (back) -->
+        <div class="dice-face dice-face--back">
+          <div class="dots dots--6">
+            <span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span> <span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+        <!-- Face 3 (right) -->
+        <div class="dice-face dice-face--right">
+          <div class="dots dots--3">
+            <span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span>
+          </div>
+        </div>
+        <!-- Face 4 (left) -->
+        <div class="dice-face dice-face--left">
+          <div class="dots dots--4">
+            <span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+        <!-- Face 5 (top) -->
+        <div class="dice-face dice-face--top">
+          <div class="dots dots--5">
+            <span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+        <!-- Face 2 (bottom — landing face with challenge title) -->
+        <div class="dice-face dice-face--bottom">
+          <span class="dice-challenge-title">{{ challenge().title }}</span>
+        </div>
+      </div>
+      <div class="dice-shadow"></div>
+    </div>
+
+    <!-- Challenge name + action buttons shown after landing -->
+    @if (phase() === 'landed') {
+      <div
+        class="landed-content"
+        role="dialog"
+        aria-labelledby="dice-result-title"
+        aria-describedby="dice-result-desc"
+        cdkTrapFocus
+        [cdkTrapFocusAutoCapture]="true"
+      >
+        <p id="dice-result-desc" class="landed-label">Your random challenge:</p>
+        <h2 id="dice-result-title" class="landed-title-text">
+          {{ challenge().title }}
+        </h2>
+
+        <div class="landed-actions">
+          <button
+            type="button"
+            class="action-btn action-btn--primary"
+            (click)="startChallenge()"
+            cdkFocusInitial
+          >
+            Start Challenge
+          </button>
+          <button
+            type="button"
+            class="action-btn action-btn--secondary"
+            (click)="dismiss()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     }
   </div>
-  }
 
-  <!-- 3D Dice -->
-  <div
-    class="dice-scene"
-    aria-hidden="true"
-    [class.dice-rolling]="phase() === 'rolling'"
-    [class.dice-landed]="phase() === 'landed'"
-  >
-    <div class="dice-cube">
-      <!-- Face 1 (front) -->
-      <div class="dice-face dice-face--front">
-        <div class="dots dots--1">
-          <span class="dot"></span>
-        </div>
-      </div>
-      <!-- Face 6 (back) -->
-      <div class="dice-face dice-face--back">
-        <div class="dots dots--6">
-          <span class="dot"></span><span class="dot"></span
-          ><span class="dot"></span> <span class="dot"></span
-          ><span class="dot"></span><span class="dot"></span>
-        </div>
-      </div>
-      <!-- Face 3 (right) -->
-      <div class="dice-face dice-face--right">
-        <div class="dots dots--3">
-          <span class="dot"></span><span class="dot"></span
-          ><span class="dot"></span>
-        </div>
-      </div>
-      <!-- Face 4 (left) -->
-      <div class="dice-face dice-face--left">
-        <div class="dots dots--4">
-          <span class="dot"></span><span class="dot"></span>
-          <span class="dot"></span><span class="dot"></span>
-        </div>
-      </div>
-      <!-- Face 5 (top) -->
-      <div class="dice-face dice-face--top">
-        <div class="dots dots--5">
-          <span class="dot"></span><span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span><span class="dot"></span>
-        </div>
-      </div>
-      <!-- Face 2 (bottom — landing face with challenge title) -->
-      <div class="dice-face dice-face--bottom">
-        <span class="dice-challenge-title">{{ challenge().title }}</span>
-      </div>
-    </div>
-    <div class="dice-shadow"></div>
+  <!-- Screen reader live region (outside overlay so always readable) -->
+  <div class="sr-only" role="status" aria-live="polite" aria-atomic="true">
+    @if (phase() === 'rolling') {
+      Rolling dice to pick a random challenge…
+    } @else if (phase() === 'landed') {
+      Random challenge selected: {{ challenge().title }}.
+    }
   </div>
-
-  <!-- Challenge name + action buttons shown after landing -->
-  @if (phase() === 'landed') {
-  <div
-    class="landed-content"
-    role="dialog"
-    aria-labelledby="dice-result-title"
-    aria-describedby="dice-result-desc"
-    cdkTrapFocus
-    [cdkTrapFocusAutoCapture]="true"
-  >
-    <p id="dice-result-desc" class="landed-label">Your random challenge:</p>
-    <h2 id="dice-result-title" class="landed-title-text">
-      {{ challenge().title }}
-    </h2>
-
-    <div class="landed-actions">
-      <button
-        type="button"
-        class="action-btn action-btn--primary"
-        (click)="startChallenge()"
-        cdkFocusInitial
-      >
-        Start Challenge
-      </button>
-      <button
-        type="button"
-        class="action-btn action-btn--secondary"
-        (click)="dismiss()"
-      >
-        Cancel
-      </button>
-    </div>
-  </div>
-  }
-</div>
-
-<!-- Screen reader live region (outside overlay so always readable) -->
-<div class="sr-only" role="status" aria-live="polite" aria-atomic="true">
-  @if (phase() === 'rolling') {
-  <!-- Random -->
-  Rolling dice to pick a random challenge… } @else if (phase() === 'landed') {
-  <!-- Selection -->
-  Random challenge selected: {{ challenge().title }}. }
-</div>
 }

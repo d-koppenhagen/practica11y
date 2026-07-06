@@ -271,14 +271,14 @@
       <summary class="licenses-summary">Third-Party Licenses</summary>
       <div class="licenses-content">
         @if (licensesLoading()) {
-        <p class="about-text">Loading licenses…</p>
+          <p class="about-text">Loading licenses…</p>
         } @else if (licensesError()) {
-        <p class="about-text">
-          Could not load the licenses file. It is only available in the
-          production build.
-        </p>
+          <p class="about-text">
+            Could not load the licenses file. It is only available in the
+            production build.
+          </p>
         } @else if (licensesText(); as text) {
-        <pre class="licenses-text">{{ text }}</pre>
+          <pre class="licenses-text">{{ text }}</pre>
         }
       </div>
     </details>

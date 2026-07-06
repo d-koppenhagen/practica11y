@@ -1,40 +1,43 @@
 <header class="panel-header" [class.panel-header--collapsible]="collapsible()">
   @if (collapsible()) {
-  <button
-    class="panel-toggle"
-    type="button"
-    [attr.aria-expanded]="ariaExpanded()"
-    [attr.aria-label]="'Toggle ' + panelLabel()"
-    (click)="toggleCollapse()"
-  >
-    <svg
-      class="panel-toggle-icon"
-      [class.panel-toggle-icon--collapsed]="collapsed()"
-      aria-hidden="true"
-      width="12"
-      height="12"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+    <button
+      class="panel-toggle"
+      type="button"
+      [attr.aria-expanded]="ariaExpanded()"
+      [attr.aria-label]="'Toggle ' + panelLabel()"
+      (click)="toggleCollapse()"
     >
-      <polyline points="6 9 12 15 18 9" />
-    </svg>
-  </button>
-  } @if (!(collapsed() && effectiveCollapseDirection() === 'horizontal')) {
-  <ng-content select="[panelHeader]" />
+      <svg
+        class="panel-toggle-icon"
+        [class.panel-toggle-icon--collapsed]="collapsed()"
+        aria-hidden="true"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </button>
+  }
+  @if (!(collapsed() && effectiveCollapseDirection() === 'horizontal')) {
+    <ng-content select="[panelHeader]" />
   }
 </header>
 @if (!collapsed()) {
-<div
-  class="panel-body"
-  [class.panel-body--no-scroll]="!scrollBody()"
-  [attr.tabindex]="scrollBody() ? 0 : null"
-  [attr.role]="scrollBody() ? 'region' : null"
-  [attr.aria-label]="scrollBody() && panelLabel() ? panelLabel() + ' content' : null"
->
-  <ng-content />
-</div>
+  <div
+    class="panel-body"
+    [class.panel-body--no-scroll]="!scrollBody()"
+    [attr.tabindex]="scrollBody() ? 0 : null"
+    [attr.role]="scrollBody() ? 'region' : null"
+    [attr.aria-label]="
+      scrollBody() && panelLabel() ? panelLabel() + ' content' : null
+    "
+  >
+    <ng-content />
+  </div>
 }

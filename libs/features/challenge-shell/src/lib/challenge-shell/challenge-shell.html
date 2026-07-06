@@ -11,8 +11,9 @@
     [style.flex]="descriptionFlex()"
   >
     <h1 panelHeader id="description-heading">
-      {{ challenge().title }} @if (challengeCompleted()) {
-      <span class="completion-badge" aria-label="Completed">✓</span>
+      {{ challenge().title }}
+      @if (challengeCompleted()) {
+        <span class="completion-badge" aria-label="Completed">✓</span>
       }
     </h1>
     <a11y-markdown-content
@@ -20,36 +21,36 @@
       [source]="challenge().description"
     />
     @if (challenge().links.length > 0) {
-    <nav class="shell-description-links" aria-label="Further reading">
-      <h2>Further Reading</h2>
-      <ul>
-        @for (link of challenge().links; track link.url) {
-        <li>
-          <a [href]="link.url" target="_blank" rel="noopener noreferrer">
-            {{ link.text }}
-            <span class="sr-only">(opens in new tab)</span>
-            <svg
-              aria-hidden="true"
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-              />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
-          </a>
-        </li>
-        }
-      </ul>
-    </nav>
+      <nav class="shell-description-links" aria-label="Further reading">
+        <h2>Further Reading</h2>
+        <ul>
+          @for (link of challenge().links; track link.url) {
+            <li>
+              <a [href]="link.url" target="_blank" rel="noopener noreferrer">
+                {{ link.text }}
+                <span class="sr-only">(opens in new tab)</span>
+                <svg
+                  aria-hidden="true"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                  />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </a>
+            </li>
+          }
+        </ul>
+      </nav>
     }
   </a11y-shell-panel>
 
@@ -98,113 +99,125 @@
           id="editor-panel-html"
           role="tabpanel"
           aria-labelledby="editor-tab-html"
-          [class]="'shell-editor-panel' + (activeEditorTab() !== 'html' ? ' shell-editor-panel--hidden' : '')"
+          [class]="
+            'shell-editor-panel' +
+            (activeEditorTab() !== 'html' ? ' shell-editor-panel--hidden' : '')
+          "
         >
           @defer (on viewport) {
-          <ng-catbee-monaco-editor
-            [language]="'html'"
-            [options]="editorOptions()"
-            [height]="'100%'"
-            [width]="'100%'"
-            [(value)]="htmlContent"
-            (valueChange)="onHtmlContentChange($event)"
-          />
+            <ng-catbee-monaco-editor
+              [language]="'html'"
+              [options]="editorOptions()"
+              [height]="'100%'"
+              [width]="'100%'"
+              [(value)]="htmlContent"
+              (valueChange)="onHtmlContentChange($event)"
+            />
           } @placeholder {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading editor…</span>
-          </div>
+            <div class="defer-placeholder" role="status" aria-live="polite">
+              <span class="shell-spinner"></span>
+              <span>Loading editor…</span>
+            </div>
           } @loading (minimum 200ms) {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading editor…</span>
-          </div>
+            <div class="defer-placeholder" role="status" aria-live="polite">
+              <span class="shell-spinner"></span>
+              <span>Loading editor…</span>
+            </div>
           }
         </div>
         @if (challenge().starter.js) {
-        <div
-          id="editor-panel-js"
-          role="tabpanel"
-          aria-labelledby="editor-tab-js"
-          [class]="'shell-editor-panel' + (activeEditorTab() !== 'js' ? ' shell-editor-panel--hidden' : '')"
-        >
-          @defer (on viewport) {
-          <ng-catbee-monaco-editor
-            [language]="'javascript'"
-            [options]="editorOptions()"
-            [height]="'100%'"
-            [width]="'100%'"
-            [(value)]="jsContent"
-            (valueChange)="onJsContentChange($event)"
-          />
-          } @placeholder {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading editor…</span>
+          <div
+            id="editor-panel-js"
+            role="tabpanel"
+            aria-labelledby="editor-tab-js"
+            [class]="
+              'shell-editor-panel' +
+              (activeEditorTab() !== 'js' ? ' shell-editor-panel--hidden' : '')
+            "
+          >
+            @defer (on viewport) {
+              <ng-catbee-monaco-editor
+                [language]="'javascript'"
+                [options]="editorOptions()"
+                [height]="'100%'"
+                [width]="'100%'"
+                [(value)]="jsContent"
+                (valueChange)="onJsContentChange($event)"
+              />
+            } @placeholder {
+              <div class="defer-placeholder" role="status" aria-live="polite">
+                <span class="shell-spinner"></span>
+                <span>Loading editor…</span>
+              </div>
+            } @loading (minimum 200ms) {
+              <div class="defer-placeholder" role="status" aria-live="polite">
+                <span class="shell-spinner"></span>
+                <span>Loading editor…</span>
+              </div>
+            }
           </div>
-          } @loading (minimum 200ms) {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading editor…</span>
-          </div>
-          }
-        </div>
         }
         <div
           id="editor-panel-css"
           role="tabpanel"
           aria-labelledby="editor-tab-css"
-          [class]="'shell-editor-panel' + (activeEditorTab() !== 'css' ? ' shell-editor-panel--hidden' : '')"
+          [class]="
+            'shell-editor-panel' +
+            (activeEditorTab() !== 'css' ? ' shell-editor-panel--hidden' : '')
+          "
         >
           @defer (on viewport) {
-          <ng-catbee-monaco-editor
-            [language]="'css'"
-            [options]="editorOptions()"
-            [height]="'100%'"
-            [width]="'100%'"
-            [(value)]="cssContent"
-            (valueChange)="onCssContentChange($event)"
-          />
+            <ng-catbee-monaco-editor
+              [language]="'css'"
+              [options]="editorOptions()"
+              [height]="'100%'"
+              [width]="'100%'"
+              [(value)]="cssContent"
+              (valueChange)="onCssContentChange($event)"
+            />
           } @placeholder {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading editor…</span>
-          </div>
+            <div class="defer-placeholder" role="status" aria-live="polite">
+              <span class="shell-spinner"></span>
+              <span>Loading editor…</span>
+            </div>
           } @loading (minimum 200ms) {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading editor…</span>
-          </div>
+            <div class="defer-placeholder" role="status" aria-live="polite">
+              <span class="shell-spinner"></span>
+              <span>Loading editor…</span>
+            </div>
           }
         </div>
         @if (challenge().starter.vtt) {
-        <div
-          id="editor-panel-vtt"
-          role="tabpanel"
-          aria-labelledby="editor-tab-vtt"
-          [class]="'shell-editor-panel' + (activeEditorTab() !== 'vtt' ? ' shell-editor-panel--hidden' : '')"
-        >
-          @defer (on viewport) {
-          <ng-catbee-monaco-editor
-            [language]="'plaintext'"
-            [options]="editorOptions()"
-            [height]="'100%'"
-            [width]="'100%'"
-            [(value)]="vttContent"
-            (valueChange)="onVttContentChange($event)"
-          />
-          } @placeholder {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading editor…</span>
+          <div
+            id="editor-panel-vtt"
+            role="tabpanel"
+            aria-labelledby="editor-tab-vtt"
+            [class]="
+              'shell-editor-panel' +
+              (activeEditorTab() !== 'vtt' ? ' shell-editor-panel--hidden' : '')
+            "
+          >
+            @defer (on viewport) {
+              <ng-catbee-monaco-editor
+                [language]="'plaintext'"
+                [options]="editorOptions()"
+                [height]="'100%'"
+                [width]="'100%'"
+                [(value)]="vttContent"
+                (valueChange)="onVttContentChange($event)"
+              />
+            } @placeholder {
+              <div class="defer-placeholder" role="status" aria-live="polite">
+                <span class="shell-spinner"></span>
+                <span>Loading editor…</span>
+              </div>
+            } @loading (minimum 200ms) {
+              <div class="defer-placeholder" role="status" aria-live="polite">
+                <span class="shell-spinner"></span>
+                <span>Loading editor…</span>
+              </div>
+            }
           </div>
-          } @loading (minimum 200ms) {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading editor…</span>
-          </div>
-          }
-        </div>
         }
       </a11y-shell-panel>
 
@@ -303,20 +316,20 @@
           [hidden]="activeTreeTab() !== 'tree'"
         >
           @defer (on idle) {
-          <a11y-accessibility-tree
-            [tree]="accessibilityTree()"
-            [pageTitle]="sandboxPageTitle()"
-          />
+            <a11y-accessibility-tree
+              [tree]="accessibilityTree()"
+              [pageTitle]="sandboxPageTitle()"
+            />
           } @placeholder {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading accessibility tree…</span>
-          </div>
+            <div class="defer-placeholder" role="status" aria-live="polite">
+              <span class="shell-spinner"></span>
+              <span>Loading accessibility tree…</span>
+            </div>
           } @loading (minimum 200ms) {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading accessibility tree…</span>
-          </div>
+            <div class="defer-placeholder" role="status" aria-live="polite">
+              <span class="shell-spinner"></span>
+              <span>Loading accessibility tree…</span>
+            </div>
           }
         </div>
         <div
@@ -327,27 +340,29 @@
           [hidden]="activeTreeTab() !== 'screen-reader'"
         >
           @defer (on idle) {
-          <a11y-virtual-screen-reader
-            [sandboxDocument]="sandboxDocument()"
-            [revision]="srRevision()"
-            [visible]="activeTreeTab() === 'screen-reader'"
-            [rate]="screenReaderRate()"
-            (rateChange)="updateScreenReaderRate($event)"
-            [speechEnabled]="screenReaderSpeechEnabled()"
-            (speechEnabledChange)="updateScreenReaderSpeechEnabled($event)"
-            [highlightEnabled]="screenReaderHighlightEnabled()"
-            (highlightEnabledChange)="updateScreenReaderHighlightEnabled($event)"
-          />
+            <a11y-virtual-screen-reader
+              [sandboxDocument]="sandboxDocument()"
+              [revision]="srRevision()"
+              [visible]="activeTreeTab() === 'screen-reader'"
+              [rate]="screenReaderRate()"
+              (rateChange)="updateScreenReaderRate($event)"
+              [speechEnabled]="screenReaderSpeechEnabled()"
+              (speechEnabledChange)="updateScreenReaderSpeechEnabled($event)"
+              [highlightEnabled]="screenReaderHighlightEnabled()"
+              (highlightEnabledChange)="
+                updateScreenReaderHighlightEnabled($event)
+              "
+            />
           } @placeholder {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading screen reader…</span>
-          </div>
+            <div class="defer-placeholder" role="status" aria-live="polite">
+              <span class="shell-spinner"></span>
+              <span>Loading screen reader…</span>
+            </div>
           } @loading (minimum 200ms) {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading screen reader…</span>
-          </div>
+            <div class="defer-placeholder" role="status" aria-live="polite">
+              <span class="shell-spinner"></span>
+              <span>Loading screen reader…</span>
+            </div>
           }
         </div>
         <div
@@ -358,17 +373,17 @@
           [hidden]="activeTreeTab() !== 'color-contrast'"
         >
           @defer (on idle) {
-          <a11y-color-contrast-panel [sandboxIframe]="previewIframe()" />
+            <a11y-color-contrast-panel [sandboxIframe]="previewIframe()" />
           } @placeholder {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading color contrast checker…</span>
-          </div>
+            <div class="defer-placeholder" role="status" aria-live="polite">
+              <span class="shell-spinner"></span>
+              <span>Loading color contrast checker…</span>
+            </div>
           } @loading (minimum 200ms) {
-          <div class="defer-placeholder" role="status" aria-live="polite">
-            <span class="shell-spinner"></span>
-            <span>Loading color contrast checker…</span>
-          </div>
+            <div class="defer-placeholder" role="status" aria-live="polite">
+              <span class="shell-spinner"></span>
+              <span>Loading color contrast checker…</span>
+            </div>
           }
         </div>
       </a11y-shell-panel>
@@ -394,31 +409,31 @@
         <div panelHeader class="feedback-header">
           <h2 id="feedback-heading">Feedback</h2>
           @if (challenge().discussionUrl) {
-          <a
-            class="feedback-discussion-btn"
-            [href]="challenge().discussionUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Discuss this challenge"
-            title="Discuss this challenge"
-          >
-            <span class="panel-btn-label">Discuss</span>
-            <svg
-              aria-hidden="true"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+            <a
+              class="feedback-discussion-btn"
+              [href]="challenge().discussionUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Discuss this challenge"
+              title="Discuss this challenge"
             >
-              <path
-                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-              />
-            </svg>
-          </a>
+              <span class="panel-btn-label">Discuss</span>
+              <svg
+                aria-hidden="true"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                />
+              </svg>
+            </a>
           }
         </div>
         <a11y-feedback-panel

@@ -30,7 +30,8 @@
     </h2>
     <p class="success-dialog-subtitle">
       Nicely done — you completed
-      <strong>{{ data.challengeTitle }}</strong>.
+      <strong>{{ data.challengeTitle }}</strong
+      >.
     </p>
   </div>
 
@@ -51,88 +52,89 @@
 
   <nav class="success-dialog-nav" aria-label="Challenge navigation">
     @if (data.previousChallenge; as prev) {
-    <a
-      class="success-dialog-nav-link"
-      [routerLink]="['/challenges', prev.id]"
-      [attr.aria-label]="'Previous challenge: ' + prev.title"
-      (click)="close()"
-    >
-      <svg
-        aria-hidden="true"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+      <a
+        class="success-dialog-nav-link"
+        [routerLink]="['/challenges', prev.id]"
+        [attr.aria-label]="'Previous challenge: ' + prev.title"
+        (click)="close()"
       >
-        <polyline points="15 18 9 12 15 6" />
-      </svg>
-      <span class="success-dialog-nav-text">
-        <span class="success-dialog-nav-hint">Previous</span>
-        <span class="success-dialog-nav-title">{{ prev.title }}</span>
-      </span>
-    </a>
-    } @if (data.nextChallenge; as next) {
-    <a
-      class="success-dialog-nav-link success-dialog-nav-link--next"
-      [routerLink]="['/challenges', next.id]"
-      [attr.aria-label]="'Next challenge: ' + next.title"
-      (click)="close()"
-    >
-      <span class="success-dialog-nav-text">
-        <span class="success-dialog-nav-hint">Next</span>
-        <span class="success-dialog-nav-title">{{ next.title }}</span>
-      </span>
-      <svg
-        aria-hidden="true"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        <span class="success-dialog-nav-text">
+          <span class="success-dialog-nav-hint">Previous</span>
+          <span class="success-dialog-nav-title">{{ prev.title }}</span>
+        </span>
+      </a>
+    }
+    @if (data.nextChallenge; as next) {
+      <a
+        class="success-dialog-nav-link success-dialog-nav-link--next"
+        [routerLink]="['/challenges', next.id]"
+        [attr.aria-label]="'Next challenge: ' + next.title"
+        (click)="close()"
       >
-        <polyline points="9 18 15 12 9 6" />
-      </svg>
-    </a>
+        <span class="success-dialog-nav-text">
+          <span class="success-dialog-nav-hint">Next</span>
+          <span class="success-dialog-nav-title">{{ next.title }}</span>
+        </span>
+        <svg
+          aria-hidden="true"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </a>
     }
   </nav>
 
   @if (data.discussionUrl) {
-  <div class="success-dialog-discussion">
-    <a
-      class="success-dialog-discussion-link"
-      [href]="data.discussionUrl"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <svg
-        aria-hidden="true"
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+    <div class="success-dialog-discussion">
+      <a
+        class="success-dialog-discussion-link"
+        [href]="data.discussionUrl"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        <path
-          d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-        />
-      </svg>
-      Discuss this challenge
-      <span class="sr-only">(opens in new tab)</span>
-    </a>
-    <p class="success-dialog-discussion-hint">
-      Share your approach, ask questions, or help others
-    </p>
-  </div>
+        <svg
+          aria-hidden="true"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          />
+        </svg>
+        Discuss this challenge
+        <span class="sr-only">(opens in new tab)</span>
+      </a>
+      <p class="success-dialog-discussion-hint">
+        Share your approach, ask questions, or help others
+      </p>
+    </div>
   }
 
   <div class="success-dialog-feedback">

@@ -1,19 +1,19 @@
 @if (visible()) {
-<!-- Decorative animation container — hidden from assistive technology -->
-<div class="cheat-animation-container" aria-hidden="true">
-  @if (reducedMotion()) {
-  <div class="static-indicator">
-    <span class="static-emoji">🕵️</span>
-    <span class="static-text">Peeking…</span>
+  <!-- Decorative animation container — hidden from assistive technology -->
+  <div class="cheat-animation-container" aria-hidden="true">
+    @if (reducedMotion()) {
+      <div class="static-indicator">
+        <span class="static-emoji">🕵️</span>
+        <span class="static-text">Peeking…</span>
+      </div>
+    } @else {
+      <div class="animation-scene">
+        <div class="top-secret-stamp">TOP SECRET</div>
+        <div class="sneaky-eyes">👀</div>
+      </div>
+    }
   </div>
-  } @else {
-  <div class="animation-scene">
-    <div class="top-secret-stamp">TOP SECRET</div>
-    <div class="sneaky-eyes">👀</div>
-  </div>
-  }
-</div>
 
-<!-- Live region for assistive technology — announces reveal state -->
-<div class="sr-announcement" role="status">Revealing solution…</div>
+  <!-- Live region for assistive technology — announces reveal state -->
+  <div class="sr-announcement" role="status">Revealing solution…</div>
 }

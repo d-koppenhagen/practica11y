@@ -38,7 +38,7 @@
           >
             <option value="all">All</option>
             @for (tag of availableTags(); track tag) {
-            <option [value]="tag">{{ tag }}</option>
+              <option [value]="tag">{{ tag }}</option>
             }
           </select>
         </div>
@@ -78,73 +78,89 @@
   </div>
 
   @for (group of groupedChallenges(); track group.key) {
-  <section
-    class="challenge-group"
-    [attr.aria-labelledby]="'heading-' + group.key"
-  >
-    <h2
-      [id]="'heading-' + group.key"
-      class="group-heading"
-      [class.group-heading--beginner]="group.key === 'beginner'"
-      [class.group-heading--intermediate]="group.key === 'intermediate'"
-      [class.group-heading--advanced]="group.key === 'advanced'"
+    <section
+      class="challenge-group"
+      [attr.aria-labelledby]="'heading-' + group.key"
     >
-      {{ group.label }}
-    </h2>
-
-    <ul class="challenge-items" role="list">
-      @for (challenge of group.challenges; track challenge.id) {
-      <li
-        class="challenge-item"
-        [class.challenge-item--disabled]="challenge.disabled"
+      <h2
+        [id]="'heading-' + group.key"
+        class="group-heading"
+        [class.group-heading--beginner]="group.key === 'beginner'"
+        [class.group-heading--intermediate]="group.key === 'intermediate'"
+        [class.group-heading--advanced]="group.key === 'advanced'"
       >
-        <button
-          class="challenge-button"
-          type="button"
-          (click)="selectChallenge(challenge)"
-          [attr.aria-disabled]="challenge.disabled ? 'true' : null"
-          [attr.aria-label]="challenge.title + (challenge.disabled ? ' (coming soon)' : '') + (isCompleted(challenge.id) ? ' (completed)' : '')"
-        >
-          <span class="challenge-title">
-            {{ challenge.title }} @if (challenge.disabled) {
-            <span class="coming-soon-badge" aria-hidden="true"
-              >Coming soon</span
-            >
-            }
-          </span>
+        {{ group.label }}
+      </h2>
 
-          @if (isCompleted(challenge.id)) {
-          <span class="completion-status completed" aria-label="Completed"
-            >✓</span
+      <ul class="challenge-items" role="list">
+        @for (challenge of group.challenges; track challenge.id) {
+          <li
+            class="challenge-item"
+            [class.challenge-item--disabled]="challenge.disabled"
           >
-          } @else {
-          <span class="completion-status pending" aria-hidden="true"></span>
-          }
-
-          <span class="challenge-meta">
-            <span
-              class="difficulty-badge"
-              [class.difficulty-beginner]="challenge.difficulty === 'beginner'"
-              [class.difficulty-intermediate]="challenge.difficulty === 'intermediate'"
-              [class.difficulty-advanced]="challenge.difficulty === 'advanced'"
+            <button
+              class="challenge-button"
+              type="button"
+              (click)="selectChallenge(challenge)"
+              [attr.aria-disabled]="challenge.disabled ? 'true' : null"
+              [attr.aria-label]="
+                challenge.title +
+                (challenge.disabled ? ' (coming soon)' : '') +
+                (isCompleted(challenge.id) ? ' (completed)' : '')
+              "
             >
-              {{ challenge.difficulty }}
-            </span>
+              <span class="challenge-title">
+                {{ challenge.title }}
+                @if (challenge.disabled) {
+                  <span class="coming-soon-badge" aria-hidden="true"
+                    >Coming soon</span
+                  >
+                }
+              </span>
 
-            <span class="challenge-tags">
-              @for (tag of challenge.tags; track tag) {
-              <span class="tag-badge">{{ tag }}</span>
+              @if (isCompleted(challenge.id)) {
+                <span class="completion-status completed" aria-label="Completed"
+                  >✓</span
+                >
+              } @else {
+                <span
+                  class="completion-status pending"
+                  aria-hidden="true"
+                ></span>
               }
-            </span>
 
-            <span class="challenge-points">{{ challenge.points }} Points</span>
-          </span>
-        </button>
-      </li>
-      }
-    </ul>
-  </section>
+              <span class="challenge-meta">
+                <span
+                  class="difficulty-badge"
+                  [class.difficulty-beginner]="
+                    challenge.difficulty === 'beginner'
+                  "
+                  [class.difficulty-intermediate]="
+                    challenge.difficulty === 'intermediate'
+                  "
+                  [class.difficulty-advanced]="
+                    challenge.difficulty === 'advanced'
+                  "
+                >
+                  {{ challenge.difficulty }}
+                </span>
+
+                <span class="challenge-tags">
+                  @for (tag of challenge.tags; track tag) {
+                    <span class="tag-badge">{{ tag }}</span>
+                  }
+                </span>
+
+                <span class="challenge-points"
+                  >{{ challenge.points }} Points</span
+                >
+              </span>
+            </button>
+          </li>
+        }
+      </ul>
+    </section>
   } @empty {
-  <p class="empty-state">No challenges found.</p>
+    <p class="empty-state">No challenges found.</p>
   }
 </section>
