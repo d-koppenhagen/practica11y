@@ -208,6 +208,31 @@
             </svg>
           }
         </button>
+
+        <button
+          type="button"
+          class="vsr-btn vsr-btn--toggle"
+          (click)="toggleTabOrder()"
+          [attr.aria-pressed]="tabOrderEnabled()"
+          [attr.aria-label]="
+            tabOrderEnabled()
+              ? 'Hide tab order overlay'
+              : 'Show tab order overlay'
+          "
+          [title]="tabOrderEnabled() ? 'Hide tab order' : 'Show tab order'"
+        >
+          <svg
+            aria-hidden="true"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M7 7H5v2h2V7zm0 4H5v2h2v-2zm0 4H5v2h2v-2zm12-8h-8v2h8V7zm0 4h-8v2h8v-2zm0 4h-8v2h8v-2z"
+            />
+          </svg>
+        </button>
       </div>
 
       <output
@@ -231,7 +256,12 @@
             <button
               type="button"
               class="vsr-log-item"
-              [class.vsr-log-item--active]="$index === currentIndex()"
+              [class.vsr-log-item--active]="
+                $index === currentIndex() && activeSource() === 'manual'
+              "
+              [class.vsr-log-item--focus]="
+                $index === currentIndex() && activeSource() === 'focus-sync'
+              "
               [attr.aria-current]="$index === currentIndex() ? 'true' : null"
               (click)="jumpTo($index)"
             >

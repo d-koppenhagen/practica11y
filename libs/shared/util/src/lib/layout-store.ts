@@ -32,6 +32,8 @@ export interface ShellLayout {
   screenReaderSpeechEnabled: boolean;
   /** Whether the virtual screen reader highlight overlay is enabled. */
   screenReaderHighlightEnabled: boolean;
+  /** Whether the virtual screen reader tab order overlay is enabled. */
+  screenReaderTabOrderEnabled: boolean;
 }
 
 function getDefaultLayout(): ShellLayout {
@@ -49,6 +51,7 @@ function getDefaultLayout(): ShellLayout {
     screenReaderRate: 1,
     screenReaderSpeechEnabled: true,
     screenReaderHighlightEnabled: true,
+    screenReaderTabOrderEnabled: false,
   };
 }
 
@@ -117,6 +120,11 @@ export class LayoutStore {
   /** Update the virtual screen reader highlight enabled state */
   setScreenReaderHighlightEnabled(screenReaderHighlightEnabled: boolean): void {
     this.layout.update((l) => ({ ...l, screenReaderHighlightEnabled }));
+  }
+
+  /** Update the virtual screen reader tab order overlay enabled state */
+  setScreenReaderTabOrderEnabled(screenReaderTabOrderEnabled: boolean): void {
+    this.layout.update((l) => ({ ...l, screenReaderTabOrderEnabled }));
   }
 
   private async init(): Promise<void> {

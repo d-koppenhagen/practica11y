@@ -16,6 +16,9 @@ import { generateSpokenSteps, type SpokenStep } from './screen-reader-engine';
 
 type PlayerStatus = 'idle' | 'generating' | 'ready' | 'empty' | 'error';
 
+/** Indicates whether the active step was set by focus sync or manual interaction. */
+type ActiveSource = 'manual' | 'focus-sync';
+
 /** Minimum and maximum playback rate, matching the SpeechSynthesis range we expose. */
 const MIN_RATE = 0.5;
 const MAX_RATE = 2;
@@ -72,6 +75,20 @@ export class VirtualScreenReader {
    */
   readonly highlightEnabled = model<boolean>(true);
 
+  /**
+   * Whether the tab order overlay in the preview is enabled. When active,
+   * numbered badges are rendered on each focusable element showing the
+   * effective tab navigation order (positive tabindex first, then DOM order).
+   */
+  readonly tabOrderEnabled = model<boolean>(false);
+
+  /**
+   * The currently focused element inside the preview iframe. When this changes
+   * (e.g. the user presses Tab or activates a skip link), the VSR syncs its
+   * active step to the matching spoken phrase — unless auto-play is running.
+   */
+  readonly focusedElement = input<Element | null>(null);
+
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly steps = signal<SpokenStep[]>([]);
@@ -81,6 +98,9 @@ export class VirtualScreenReader {
   protected readonly currentIndex = signal<number>(-1);
   protected readonly isPlaying = signal<boolean>(false);
   protected readonly status = signal<PlayerStatus>('idle');
+
+  /** Tracks whether the current active step was set by focus sync or manual action. */
+  protected readonly activeSource = signal<ActiveSource>('manual');
 
   protected readonly minRate = MIN_RATE;
   protected readonly maxRate = MAX_RATE;
@@ -119,6 +139,10 @@ export class VirtualScreenReader {
   /** Highlight overlay rendered inside the preview document, and its owner doc. */
   private highlightEl: HTMLElement | null = null;
   private highlightDoc: Document | null = null;
+
+  /** Tab order badge elements rendered inside the preview document. */
+  private tabOrderBadges: HTMLElement[] = [];
+  private tabOrderDoc: Document | null = null;
 
   /** Last document reference used to detect actual document swaps vs. revision bumps. */
   private lastDoc: Document | null = null;
@@ -168,9 +192,46 @@ export class VirtualScreenReader {
       this.updateHighlight(this.sandboxDocument(), node);
     });
 
+    // Sync the active step to the focused element in the preview.
+    // When the user tabs or uses a skip link, move the cursor to the
+    // corresponding spoken step without interrupting auto-play.
+    effect(() => {
+      const focused = this.focusedElement();
+      const steps = this.steps();
+
+      // Don't sync while auto-playing or when there's nothing to sync.
+      if (!focused || steps.length === 0 || this.isPlaying()) {
+        return;
+      }
+
+      const matchIndex = this.findStepForElement(focused, steps);
+      if (matchIndex >= 0 && matchIndex !== this.currentIndex()) {
+        this.activeSource.set('focus-sync');
+        this.currentIndex.set(matchIndex);
+      }
+    });
+
+    // Show/hide the tab order badges in the preview.
+    effect(() => {
+      const doc = this.sandboxDocument();
+      const isVisible = this.visible();
+      const isEnabled = this.tabOrderEnabled();
+
+      // Subscribe to revision so badges update when DOM changes.
+      this.revision();
+
+      if (!isVisible || !isEnabled || !doc?.body) {
+        this.removeTabOrderBadges();
+        return;
+      }
+
+      this.renderTabOrderBadges(doc);
+    });
+
     this.destroyRef.onDestroy(() => {
       this.pause();
       this.removeHighlight();
+      this.removeTabOrderBadges();
       this.generationToken++;
     });
   }
@@ -250,7 +311,16 @@ export class VirtualScreenReader {
     }
   }
 
+  protected toggleTabOrder(): void {
+    const next = !this.tabOrderEnabled();
+    this.tabOrderEnabled.set(next);
+    if (!next) {
+      this.removeTabOrderBadges();
+    }
+  }
+
   private goTo(index: number): void {
+    this.activeSource.set('manual');
     this.currentIndex.set(index);
     this.speak(this.phrases()[index] ?? '');
     if (this.isPlaying()) {
@@ -373,7 +443,7 @@ export class VirtualScreenReader {
       padding: '0',
       boxSizing: 'border-box',
       pointerEvents: 'none',
-      zIndex: '2147483647',
+      zIndex: '2147483646',
       border: '2px solid #4f46e5',
       outline: '2px solid rgba(255, 255, 255, 0.9)',
       borderRadius: '2px',
@@ -408,6 +478,143 @@ export class VirtualScreenReader {
     this.highlightEl?.remove();
     this.highlightEl = null;
     this.highlightDoc = null;
+  }
+
+  /**
+   * Computes the effective tab order for the given document and renders
+   * numbered badge overlays on each focusable element. The order follows the
+   * browser's tab navigation algorithm: positive tabindex values first (sorted
+   * ascending), then tabindex=0 / naturally focusable elements in DOM order.
+   */
+  private renderTabOrderBadges(doc: Document): void {
+    this.removeTabOrderBadges();
+
+    const container = doc.getElementById('user-content') ?? doc.body;
+    const selector =
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]';
+    const elements = container.querySelectorAll(selector);
+
+    // Categorize into positive-tabindex and zero/natural-tabindex groups
+    const positiveGroup: { el: HTMLElement; tabIndex: number }[] = [];
+    const naturalGroup: HTMLElement[] = [];
+
+    elements.forEach((el) => {
+      const htmlEl = el as HTMLElement;
+      const tabIndex = htmlEl.tabIndex;
+
+      // Skip hidden or unfocusable elements
+      if (tabIndex < 0) return;
+      if (this.isElementHidden(htmlEl, doc)) return;
+
+      if (tabIndex > 0) {
+        positiveGroup.push({ el: htmlEl, tabIndex });
+      } else {
+        naturalGroup.push(htmlEl);
+      }
+    });
+
+    // Sort positive group by tabindex (ascending)
+    positiveGroup.sort((a, b) => a.tabIndex - b.tabIndex);
+
+    // Merge: positive first, then natural (DOM order preserved)
+    const ordered = [...positiveGroup.map((item) => item.el), ...naturalGroup];
+
+    if (ordered.length === 0) return;
+
+    const view = doc.defaultView;
+
+    ordered.forEach((el, index) => {
+      const badge = doc.createElement('div');
+      badge.setAttribute('aria-hidden', 'true');
+      badge.dataset['p11yTabBadge'] = '';
+      badge.textContent = String(index + 1);
+
+      const rect = el.getBoundingClientRect();
+      const scrollX = view?.scrollX ?? 0;
+      const scrollY = view?.scrollY ?? 0;
+
+      Object.assign(badge.style, {
+        position: 'absolute',
+        top: `${rect.top + scrollY - 10}px`,
+        left: `${rect.left + scrollX - 10}px`,
+        margin: '0',
+        padding: '0',
+        boxSizing: 'border-box',
+        pointerEvents: 'none',
+        zIndex: '2147483647',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '20px',
+        height: '20px',
+        borderRadius: '50%',
+        backgroundColor: '#0f766e',
+        color: '#ffffff',
+        fontSize: '11px',
+        fontWeight: '700',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+        lineHeight: '1',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+        border: '2px solid #ffffff',
+      } satisfies Partial<CSSStyleDeclaration>);
+
+      doc.body.appendChild(badge);
+      this.tabOrderBadges.push(badge);
+    });
+
+    this.tabOrderDoc = doc;
+  }
+
+  private isElementHidden(el: HTMLElement, doc: Document): boolean {
+    if (el.hasAttribute('hidden')) return true;
+    if (el.getAttribute('aria-hidden') === 'true') return true;
+    const style = doc.defaultView?.getComputedStyle(el);
+    if (style?.display === 'none' || style?.visibility === 'hidden')
+      return true;
+    return false;
+  }
+
+  private removeTabOrderBadges(): void {
+    for (const badge of this.tabOrderBadges) {
+      badge.remove();
+    }
+    this.tabOrderBadges = [];
+    this.tabOrderDoc = null;
+  }
+
+  /**
+   * Finds the step index whose node matches (or contains) the given element.
+   * Checks for exact node match first, then walks up the ancestor chain to
+   * find the closest announced element.
+   */
+  private findStepForElement(element: Element, steps: SpokenStep[]): number {
+    // First pass: exact node match
+    for (let i = 0; i < steps.length; i++) {
+      const stepNode = steps[i].node;
+      if (stepNode === element) {
+        return i;
+      }
+      // Text nodes: compare parent element
+      if (
+        stepNode?.parentElement === element &&
+        stepNode.nodeType === Node.TEXT_NODE
+      ) {
+        return i;
+      }
+    }
+
+    // Second pass: find the closest ancestor that has a step
+    let current: Element | null = element;
+    while (current) {
+      for (let i = 0; i < steps.length; i++) {
+        if (steps[i].node === current) {
+          return i;
+        }
+      }
+      current = current.parentElement;
+    }
+
+    return -1;
   }
 
   private async regenerate(doc: Document | null): Promise<void> {

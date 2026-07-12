@@ -463,6 +463,7 @@
               [sandboxDocument]="sandboxDocument()"
               [revision]="srRevision()"
               [visible]="activeTreeTab() === 'screen-reader'"
+              [focusedElement]="previewFocusedElement()"
               [rate]="screenReaderRate()"
               (rateChange)="updateScreenReaderRate($event)"
               [speechEnabled]="screenReaderSpeechEnabled()"
@@ -470,6 +471,10 @@
               [highlightEnabled]="screenReaderHighlightEnabled()"
               (highlightEnabledChange)="
                 updateScreenReaderHighlightEnabled($event)
+              "
+              [tabOrderEnabled]="screenReaderTabOrderEnabled()"
+              (tabOrderEnabledChange)="
+                updateScreenReaderTabOrderEnabled($event)
               "
             />
           } @placeholder {

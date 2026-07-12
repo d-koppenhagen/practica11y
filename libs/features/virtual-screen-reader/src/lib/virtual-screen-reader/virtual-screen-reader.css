@@ -238,6 +238,17 @@
   font-weight: 600;
 }
 
+.vsr-log-item--focus {
+  background-color: color-mix(
+    in srgb,
+    var(--p11y-focus-ring, #2563eb) 10%,
+    transparent
+  );
+  border-left-color: var(--p11y-focus-ring, #2563eb);
+  color: var(--p11y-text, #111827);
+  font-weight: 500;
+}
+
 .vsr-log-index {
   flex-shrink: 0;
   min-width: 1.75rem;

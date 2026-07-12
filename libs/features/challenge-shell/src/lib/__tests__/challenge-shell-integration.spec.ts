@@ -73,12 +73,15 @@ class MockVirtualScreenReader {
   readonly sandboxDocument = input<Document | null>();
   readonly revision = input<number>();
   readonly visible = input<boolean>();
+  readonly focusedElement = input<Element | null>();
   readonly rate = input<number>();
   readonly speechEnabled = input<boolean>();
   readonly highlightEnabled = input<boolean>();
+  readonly tabOrderEnabled = input<boolean>();
   readonly rateChange = output<number>();
   readonly speechEnabledChange = output<boolean>();
   readonly highlightEnabledChange = output<boolean>();
+  readonly tabOrderEnabledChange = output<boolean>();
 }
 
 @Component({

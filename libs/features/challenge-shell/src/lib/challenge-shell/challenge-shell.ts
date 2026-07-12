@@ -156,6 +156,10 @@ export class ChallengeShell {
   protected readonly screenReaderHighlightEnabled = computed(
     () => this.layoutStore.layout().screenReaderHighlightEnabled,
   );
+  /** Virtual screen reader tab order overlay enabled — persisted via the layout store. */
+  protected readonly screenReaderTabOrderEnabled = computed(
+    () => this.layoutStore.layout().screenReaderTabOrderEnabled,
+  );
   protected readonly challengeCompleted = signal(false);
   protected readonly solutionRevealed = signal(false);
   protected readonly isPeeked = signal(false);
@@ -239,6 +243,9 @@ export class ChallengeShell {
 
   /** Live preview document, exposed to the virtual screen reader. */
   protected readonly sandboxDocument = signal<Document | null>(null);
+
+  /** The currently focused element inside the preview iframe. */
+  protected readonly previewFocusedElement = signal<Element | null>(null);
 
   /** Bumped whenever the preview DOM changes, to re-run the screen reader. */
   protected readonly srRevision = signal<number>(0);
@@ -522,6 +529,7 @@ export class ChallengeShell {
       this.sandboxPageTitle.set(doc.title || null);
       this.sandboxDocument.set(doc);
       this.srRevision.update((value) => value + 1);
+      this.previewFocusedElement.set(null);
     }
 
     // Capture iframe reference for the color contrast panel
@@ -557,6 +565,18 @@ export class ChallengeShell {
       this.sandboxPageTitle.set(doc.title || null);
       this.sandboxDocument.set(doc);
       this.srRevision.update((value) => value + 1);
+
+      // Track the focused element for VSR focus sync
+      const activeEl = doc.activeElement;
+      if (
+        activeEl &&
+        activeEl !== doc.body &&
+        activeEl !== doc.documentElement
+      ) {
+        this.previewFocusedElement.set(activeEl);
+      } else {
+        this.previewFocusedElement.set(null);
+      }
     }
   }
 
@@ -619,6 +639,10 @@ export class ChallengeShell {
 
   protected updateScreenReaderHighlightEnabled(enabled: boolean): void {
     this.layoutStore.setScreenReaderHighlightEnabled(enabled);
+  }
+
+  protected updateScreenReaderTabOrderEnabled(enabled: boolean): void {
+    this.layoutStore.setScreenReaderTabOrderEnabled(enabled);
   }
 
   protected openPreviewInNewTab(): void {
