@@ -525,7 +525,7 @@ describe('ChallengeList', () => {
       };
     }
 
-    it('should show "New" badge when challenge was created within the last 7 days', () => {
+    it('should show "New" badge when challenge was created within the last 14 days', () => {
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2026-07-12'));
 
@@ -541,9 +541,9 @@ describe('ChallengeList', () => {
       expect(newBadge.textContent).toContain('New');
     });
 
-    it('should not show "New" badge when challenge is older than 7 days', () => {
+    it('should not show "New" badge when challenge is older than 14 days', () => {
       vi.useFakeTimers();
-      vi.setSystemTime(new Date('2026-07-20'));
+      vi.setSystemTime(new Date('2026-07-25'));
 
       const challenge = createChallengeWithDates({
         createdAt: '2026-07-10',
@@ -556,7 +556,7 @@ describe('ChallengeList', () => {
       expect(newBadge).toBeNull();
     });
 
-    it('should show "Updated" badge when challenge was updated within the last 7 days', () => {
+    it('should show "Updated" badge when challenge was updated within the last 14 days', () => {
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2026-07-12'));
 
@@ -574,9 +574,9 @@ describe('ChallengeList', () => {
       expect(updatedBadge.textContent).toContain('Updated');
     });
 
-    it('should not show "Updated" badge when updatedAt is older than 7 days', () => {
+    it('should not show "Updated" badge when updatedAt is older than 14 days', () => {
       vi.useFakeTimers();
-      vi.setSystemTime(new Date('2026-07-20'));
+      vi.setSystemTime(new Date('2026-07-25'));
 
       const challenge = createChallengeWithDates({
         createdAt: '2026-06-01',
@@ -591,7 +591,7 @@ describe('ChallengeList', () => {
       expect(updatedBadge).toBeNull();
     });
 
-    it('should show "New" badge instead of "Updated" when both are within 7 days', () => {
+    it('should show "New" badge instead of "Updated" when both are within 14 days', () => {
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2026-07-12'));
 
@@ -660,9 +660,9 @@ describe('ChallengeList', () => {
       expect(button.getAttribute('aria-label')).toContain('(updated)');
     });
 
-    it('should show badge on day 7 (boundary: exactly 7 days old)', () => {
+    it('should show badge on day 14 (boundary: exactly 14 days old)', () => {
       vi.useFakeTimers();
-      vi.setSystemTime(new Date('2026-07-17'));
+      vi.setSystemTime(new Date('2026-07-24'));
 
       const challenge = createChallengeWithDates({
         createdAt: '2026-07-10',
@@ -675,9 +675,9 @@ describe('ChallengeList', () => {
       expect(newBadge).toBeTruthy();
     });
 
-    it('should not show badge on day 8 (boundary: 8 days old)', () => {
+    it('should not show badge on day 15 (boundary: 15 days old)', () => {
       vi.useFakeTimers();
-      vi.setSystemTime(new Date('2026-07-18'));
+      vi.setSystemTime(new Date('2026-07-25'));
 
       const challenge = createChallengeWithDates({
         createdAt: '2026-07-10',

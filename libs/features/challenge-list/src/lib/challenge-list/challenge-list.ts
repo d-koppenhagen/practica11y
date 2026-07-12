@@ -17,7 +17,7 @@ export interface ChallengeGroup {
 }
 
 /** Number of days after which "New" and "Updated" badges expire */
-const BADGE_EXPIRY_DAYS = 7;
+const BADGE_EXPIRY_DAYS = 14;
 
 @Component({
   selector: 'a11y-challenge-list',
