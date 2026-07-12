@@ -107,6 +107,8 @@ export class ChallengeLoader {
       links: meta.links ?? [],
       discussionUrl: meta.discussionUrl,
       solution,
+      createdAt: meta.createdAt,
+      updatedAt: meta.updatedAt,
     };
   }
 
@@ -133,6 +135,8 @@ export class ChallengeLoader {
       links: meta.links ?? [],
       disabled: true,
       discussionUrl: meta.discussionUrl,
+      createdAt: meta.createdAt,
+      updatedAt: meta.updatedAt,
     };
   }
 

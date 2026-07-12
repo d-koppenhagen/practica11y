@@ -227,6 +227,31 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
     }
   }
 
+  // createdAt (required)
+  validateRequiredString(data, 'createdAt');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data['createdAt'] as string)) {
+    throw new Error(
+      'Invalid field "createdAt": Must be a date string in YYYY-MM-DD format.',
+    );
+  }
+
+  // updatedAt (optional)
+  if (
+    'updatedAt' in data &&
+    data['updatedAt'] !== undefined &&
+    data['updatedAt'] !== null &&
+    data['updatedAt'] !== ''
+  ) {
+    if (typeof data['updatedAt'] !== 'string') {
+      throw new Error('Invalid field "updatedAt": Must be a string.');
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(data['updatedAt'] as string)) {
+      throw new Error(
+        'Invalid field "updatedAt": Must be a date string in YYYY-MM-DD format.',
+      );
+    }
+  }
+
   // Build solution object if present
   let solutionResult: ChallengeMeta['solution'] | undefined;
   if (
@@ -257,6 +282,7 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
       ),
     },
     validators: data['validators'] as string[],
+    createdAt: data['createdAt'] as string,
     ...(typeof data['previewTitle'] === 'string' &&
     data['previewTitle'].trim() !== ''
       ? { previewTitle: data['previewTitle'] as string }
@@ -267,6 +293,9 @@ function validateChallengeMeta(data: Record<string, unknown>): ChallengeMeta {
     ...(typeof data['discussionUrl'] === 'string' &&
     data['discussionUrl'].trim() !== ''
       ? { discussionUrl: data['discussionUrl'] as string }
+      : {}),
+    ...(typeof data['updatedAt'] === 'string' && data['updatedAt'].trim() !== ''
+      ? { updatedAt: data['updatedAt'] as string }
       : {}),
     ...(solutionResult ? { solution: solutionResult } : {}),
   };

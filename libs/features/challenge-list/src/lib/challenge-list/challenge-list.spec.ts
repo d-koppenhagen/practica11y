@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChallengeList } from './challenge-list';
 import { Challenge } from '@practica11y/models';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 const mockChallenges: Challenge[] = [
   {
@@ -14,6 +15,7 @@ const mockChallenges: Challenge[] = [
     validatorIds: ['semantic-button'],
     previewTitle: 'Challenge: Clickable Div | Preview',
     links: [],
+    createdAt: '2026-06-18',
   },
   {
     id: 'challenge-2',
@@ -26,6 +28,7 @@ const mockChallenges: Challenge[] = [
     validatorIds: ['focus-trap'],
     previewTitle: 'Challenge: Focus Trap | Preview',
     links: [],
+    createdAt: '2026-06-18',
   },
   {
     id: 'challenge-3',
@@ -38,6 +41,7 @@ const mockChallenges: Challenge[] = [
     validatorIds: ['color-contrast'],
     previewTitle: 'Challenge: Color Contrast | Preview',
     links: [],
+    createdAt: '2026-06-18',
   },
 ];
 
@@ -494,6 +498,196 @@ describe('ChallengeList', () => {
         const headings = getGroupHeadings();
         expect(headings).toEqual(['Beginner', 'Intermediate', 'Advanced']);
       });
+    });
+  });
+
+  describe('New and Updated badges', () => {
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    function createChallengeWithDates(
+      overrides: Partial<Challenge> = {},
+    ): Challenge {
+      return {
+        id: 'badge-test',
+        title: 'Badge Test',
+        difficulty: 'beginner',
+        tags: ['semantics'],
+        points: 100,
+        description: 'Test',
+        starter: { html: '<div></div>', js: '', css: '', vtt: '' },
+        validatorIds: ['axe-no-violations'],
+        previewTitle: 'Challenge: Badge Test | Preview',
+        links: [],
+        createdAt: '2026-07-10',
+        ...overrides,
+      };
+    }
+
+    it('should show "New" badge when challenge was created within the last 7 days', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-12'));
+
+      const challenge = createChallengeWithDates({
+        createdAt: '2026-07-10',
+      });
+
+      fixture.componentRef.setInput('challenges', [challenge]);
+      fixture.detectChanges();
+
+      const newBadge = fixture.nativeElement.querySelector('.new-badge');
+      expect(newBadge).toBeTruthy();
+      expect(newBadge.textContent).toContain('New');
+    });
+
+    it('should not show "New" badge when challenge is older than 7 days', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-20'));
+
+      const challenge = createChallengeWithDates({
+        createdAt: '2026-07-10',
+      });
+
+      fixture.componentRef.setInput('challenges', [challenge]);
+      fixture.detectChanges();
+
+      const newBadge = fixture.nativeElement.querySelector('.new-badge');
+      expect(newBadge).toBeNull();
+    });
+
+    it('should show "Updated" badge when challenge was updated within the last 7 days', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-12'));
+
+      const challenge = createChallengeWithDates({
+        createdAt: '2026-06-01',
+        updatedAt: '2026-07-10',
+      });
+
+      fixture.componentRef.setInput('challenges', [challenge]);
+      fixture.detectChanges();
+
+      const updatedBadge =
+        fixture.nativeElement.querySelector('.updated-badge');
+      expect(updatedBadge).toBeTruthy();
+      expect(updatedBadge.textContent).toContain('Updated');
+    });
+
+    it('should not show "Updated" badge when updatedAt is older than 7 days', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-20'));
+
+      const challenge = createChallengeWithDates({
+        createdAt: '2026-06-01',
+        updatedAt: '2026-07-10',
+      });
+
+      fixture.componentRef.setInput('challenges', [challenge]);
+      fixture.detectChanges();
+
+      const updatedBadge =
+        fixture.nativeElement.querySelector('.updated-badge');
+      expect(updatedBadge).toBeNull();
+    });
+
+    it('should show "New" badge instead of "Updated" when both are within 7 days', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-12'));
+
+      const challenge = createChallengeWithDates({
+        createdAt: '2026-07-10',
+        updatedAt: '2026-07-11',
+      });
+
+      fixture.componentRef.setInput('challenges', [challenge]);
+      fixture.detectChanges();
+
+      const newBadge = fixture.nativeElement.querySelector('.new-badge');
+      const updatedBadge =
+        fixture.nativeElement.querySelector('.updated-badge');
+      expect(newBadge).toBeTruthy();
+      expect(updatedBadge).toBeNull();
+    });
+
+    it('should not show any badge for disabled challenges', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-12'));
+
+      const challenge = createChallengeWithDates({
+        createdAt: '2026-07-10',
+        disabled: true,
+      });
+
+      fixture.componentRef.setInput('challenges', [challenge]);
+      fixture.detectChanges();
+
+      const newBadge = fixture.nativeElement.querySelector('.new-badge');
+      const updatedBadge =
+        fixture.nativeElement.querySelector('.updated-badge');
+      expect(newBadge).toBeNull();
+      expect(updatedBadge).toBeNull();
+    });
+
+    it('should include badge info in aria-label for accessibility', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-12'));
+
+      const challenge = createChallengeWithDates({
+        createdAt: '2026-07-10',
+      });
+
+      fixture.componentRef.setInput('challenges', [challenge]);
+      fixture.detectChanges();
+
+      const button = fixture.nativeElement.querySelector('.challenge-button');
+      expect(button.getAttribute('aria-label')).toContain('(new)');
+    });
+
+    it('should include "updated" in aria-label when Updated badge is shown', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-12'));
+
+      const challenge = createChallengeWithDates({
+        createdAt: '2026-06-01',
+        updatedAt: '2026-07-10',
+      });
+
+      fixture.componentRef.setInput('challenges', [challenge]);
+      fixture.detectChanges();
+
+      const button = fixture.nativeElement.querySelector('.challenge-button');
+      expect(button.getAttribute('aria-label')).toContain('(updated)');
+    });
+
+    it('should show badge on day 7 (boundary: exactly 7 days old)', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-17'));
+
+      const challenge = createChallengeWithDates({
+        createdAt: '2026-07-10',
+      });
+
+      fixture.componentRef.setInput('challenges', [challenge]);
+      fixture.detectChanges();
+
+      const newBadge = fixture.nativeElement.querySelector('.new-badge');
+      expect(newBadge).toBeTruthy();
+    });
+
+    it('should not show badge on day 8 (boundary: 8 days old)', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-18'));
+
+      const challenge = createChallengeWithDates({
+        createdAt: '2026-07-10',
+      });
+
+      fixture.componentRef.setInput('challenges', [challenge]);
+      fixture.detectChanges();
+
+      const newBadge = fixture.nativeElement.querySelector('.new-badge');
+      expect(newBadge).toBeNull();
     });
   });
 });

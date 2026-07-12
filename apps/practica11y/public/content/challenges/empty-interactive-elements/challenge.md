@@ -6,6 +6,7 @@ tags:
   - aria
   - semantics
 points: 100
+createdAt: '2026-06-30'
 starter:
   html: starter.html
   css: starter.css

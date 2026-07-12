@@ -6,6 +6,7 @@ tags:
   - visual
   - media-query
 points: 100
+createdAt: '2026-06-18'
 starter:
   html: starter.html
   css: starter.css

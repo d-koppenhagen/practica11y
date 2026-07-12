@@ -7,6 +7,7 @@ tags:
   - keyboard
   - SPA
 points: 150
+createdAt: '2026-06-18'
 starter:
   html: starter.html
   js: starter.js

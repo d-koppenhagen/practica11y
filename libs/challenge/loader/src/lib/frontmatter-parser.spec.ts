@@ -10,6 +10,7 @@ tags:
   - semantics
   - keyboard
 points: 100
+createdAt: '2026-06-18'
 starter:
   html: starter.html
   css: starter.css
@@ -30,6 +31,7 @@ const VALID_META: ChallengeMeta = {
   difficulty: 'beginner',
   tags: ['semantics', 'keyboard'],
   points: 100,
+  createdAt: '2026-06-18',
   starter: {
     html: 'starter.html',
     css: 'starter.css',
@@ -56,6 +58,7 @@ difficulty: intermediate
 tags:
   - forms
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: index.html
 validators:
@@ -105,6 +108,7 @@ title: Test
 difficulty: beginner
 tags: []
 points: 10
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -121,6 +125,7 @@ id: test
 difficulty: beginner
 tags: []
 points: 10
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -140,6 +145,7 @@ title: Test
 difficulty: expert
 tags: []
 points: 10
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -159,6 +165,7 @@ title: Test
 difficulty: beginner
 tags: not-an-array
 points: 10
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -193,6 +200,7 @@ title: Test
 difficulty: beginner
 tags: []
 points: 10
+createdAt: '2026-06-18'
 validators:
   - color-contrast
   - axe-no-violations
@@ -210,6 +218,7 @@ title: Test
 difficulty: beginner
 tags: []
 points: 10
+createdAt: '2026-06-18'
 starter:
   css: style.css
 validators:
@@ -227,6 +236,7 @@ title: Test
 difficulty: beginner
 tags: []
 points: 10
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 ---`;
@@ -244,6 +254,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -266,6 +277,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 solution:
@@ -294,6 +306,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 solution:
@@ -318,6 +331,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 solution: "not-an-object"
@@ -342,6 +356,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 solution:
@@ -367,6 +382,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 solution:
@@ -392,6 +408,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 solution:
@@ -417,6 +434,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 solution:
@@ -442,6 +460,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 solution:
@@ -469,6 +488,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -494,6 +514,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -516,6 +537,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -539,6 +561,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -563,6 +586,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -587,6 +611,7 @@ difficulty: beginner
 tags:
   - semantics
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -627,6 +652,7 @@ title: Test
 difficulty: beginner
 tags: []
 points: 10
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -654,6 +680,7 @@ title: Test
 difficulty: beginner
 tags: []
 points: 10
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:
@@ -678,6 +705,7 @@ title: Test
 difficulty: beginner
 tags: []
 points: 10
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:

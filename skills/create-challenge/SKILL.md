@@ -49,6 +49,7 @@ tags:
   - semantics
   - aria
 points: 100 # Points awarded when solved
+createdAt: '2026-01-15' # ISO date (YYYY-MM-DD) when challenge was created
 starter:
   html: starter.html # Required
   css: starter.css # Optional
@@ -94,17 +95,19 @@ Explain clearly and concisely what the user needs to fix:
 | `difficulty` | `'beginner' \| 'intermediate' \| 'advanced'` | Difficulty level                                                     |
 | `tags`       | `string[]`                                   | Topic tags (e.g. `semantics`, `aria`, `keyboard`, `forms`, `images`) |
 | `points`     | `number`                                     | Points for gamification                                              |
+| `createdAt`  | `string`                                     | ISO date (YYYY-MM-DD) when the challenge was created                 |
 | `starter`    | `object`                                     | Paths to starter files (at least `html`)                             |
 | `validators` | `string[]`                                   | IDs of validators that check the solution                            |
 
 **Optional fields:**
 
-| Field           | Type              | Description                                                         |
-| --------------- | ----------------- | ------------------------------------------------------------------- |
-| `solution`      | `object`          | Paths to solution files (html, css, js) — shown via "Peek Solution" |
-| `previewTitle`  | `string`          | Custom title for the preview iframe                                 |
-| `links`         | `{ text, url }[]` | External reference links (MDN, WCAG, Deque, etc.)                   |
-| `discussionUrl` | `string`          | URL to a GitHub Discussion for this challenge                       |
+| Field           | Type              | Description                                                                                                      |
+| --------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `updatedAt`     | `string`          | ISO date (YYYY-MM-DD) when the challenge was last updated (content change). Triggers "Updated" badge for 7 days. |
+| `solution`      | `object`          | Paths to solution files (html, css, js) — shown via "Peek Solution"                                              |
+| `previewTitle`  | `string`          | Custom title for the preview iframe                                                                              |
+| `links`         | `{ text, url }[]` | External reference links (MDN, WCAG, Deque, etc.)                                                                |
+| `discussionUrl` | `string`          | URL to a GitHub Discussion for this challenge                                                                    |
 
 **Validator convention — default common validators:**
 
@@ -358,7 +361,7 @@ pnpm nx test validators
 ## Checklist
 
 - [ ] Folder `apps/practica11y/public/content/challenges/<id>/` created
-- [ ] `challenge.md` with complete frontmatter and description
+- [ ] `challenge.md` with complete frontmatter and description (including `createdAt` set to today's date)
 - [ ] `starter.html` with realistic, broken code
 - [ ] Optional: `starter.css` and/or `starter.js`
 - [ ] Solution file(s) provided (`solution.html`, `solution.css`, `solution.js`)

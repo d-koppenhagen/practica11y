@@ -134,6 +134,9 @@ When adding challenges:
 
 - Update the challenge registry.
 - Include clear learning objectives in the frontmatter.
+- Always set `createdAt` to today's date (YYYY-MM-DD format).
+- When making content changes to existing challenges, add or update `updatedAt` to today's date.
+- Challenges with `createdAt` within 7 days show a "New" badge; those with `updatedAt` within 7 days show an "Updated" badge.
 
 ## Testing
 

@@ -5,6 +5,7 @@ difficulty: beginner
 tags:
   - sandbox
 points: 0
+createdAt: '2026-06-21'
 starter:
   html: starter.html
   css: starter.css

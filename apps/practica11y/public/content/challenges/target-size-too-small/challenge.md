@@ -6,6 +6,7 @@ tags:
   - interaction
   - motor
 points: 100
+createdAt: '2026-07-05'
 starter:
   html: starter.html
   css: starter.css

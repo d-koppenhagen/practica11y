@@ -36,6 +36,10 @@ export interface Challenge {
   discussionUrl?: string;
   /** Reference solution code, undefined if challenge has no solution */
   solution?: StarterCode;
+  /** ISO date string (YYYY-MM-DD) when the challenge was created */
+  createdAt: string;
+  /** ISO date string (YYYY-MM-DD) when the challenge was last updated (content change) */
+  updatedAt?: string;
 }
 
 /**
@@ -57,4 +61,8 @@ export interface ChallengeMeta {
   discussionUrl?: string;
   /** Optional solution file paths, same structure as starter */
   solution?: Partial<Record<EditorFileType, string>>;
+  /** ISO date string (YYYY-MM-DD) when the challenge was created */
+  createdAt: string;
+  /** ISO date string (YYYY-MM-DD) when the challenge was last updated (content change) */
+  updatedAt?: string;
 }

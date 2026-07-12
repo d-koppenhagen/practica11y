@@ -6,6 +6,7 @@ tags:
   - semantics
   - tables
 points: 200
+createdAt: '2026-07-04'
 starter:
   html: starter.html
   css: starter.css

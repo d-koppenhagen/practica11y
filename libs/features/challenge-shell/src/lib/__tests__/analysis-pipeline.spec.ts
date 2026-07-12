@@ -53,6 +53,7 @@ describe('AnalysisPipeline', () => {
     validatorIds: ['axe-no-violations', 'has-landmarks'],
     previewTitle: 'Challenge: Test Challenge | Preview',
     links: [],
+    createdAt: '2026-06-18',
   };
 
   beforeEach(() => {

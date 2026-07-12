@@ -98,6 +98,11 @@
             class="challenge-item"
             [class.challenge-item--disabled]="challenge.disabled"
           >
+            @if (!challenge.disabled && isNew(challenge)) {
+              <span class="new-badge" aria-hidden="true">New</span>
+            } @else if (!challenge.disabled && isUpdated(challenge)) {
+              <span class="updated-badge" aria-hidden="true">Updated</span>
+            }
             <button
               class="challenge-button"
               type="button"
@@ -106,7 +111,9 @@
               [attr.aria-label]="
                 challenge.title +
                 (challenge.disabled ? ' (coming soon)' : '') +
-                (isCompleted(challenge.id) ? ' (completed)' : '')
+                (isCompleted(challenge.id) ? ' (completed)' : '') +
+                (isNew(challenge) ? ' (new)' : '') +
+                (isUpdated(challenge) ? ' (updated)' : '')
               "
             >
               <span class="challenge-title">

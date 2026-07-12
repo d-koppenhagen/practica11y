@@ -11,6 +11,7 @@ tags:
   - semantics
   - keyboard
 points: 100
+createdAt: '2026-06-18'
 starter:
   html: starter.html
   css: starter.css
@@ -33,6 +34,7 @@ tags:
   - images
   - alt-text
 points: 100
+createdAt: '2026-06-18'
 starter:
   html: starter/index.html
   css: starter/styles.css
@@ -57,6 +59,7 @@ difficulty: beginner
 tags:
   - forms
 points: 50
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 solution:
@@ -183,6 +186,7 @@ difficulty: intermediate
 tags:
   - forms
 points: 75
+createdAt: '2026-06-18'
 starter:
   html: starter.html
 validators:

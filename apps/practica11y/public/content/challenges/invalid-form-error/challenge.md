@@ -6,6 +6,7 @@ tags:
   - forms
   - aria
 points: 200
+createdAt: '2026-06-18'
 starter:
   html: starter.html
   js: starter.js

@@ -6,6 +6,7 @@ tags:
   - SPA
   - semantics
 points: 75
+createdAt: '2026-06-18'
 previewTitle: 'MyPage'
 starter:
   html: starter.html

@@ -166,6 +166,7 @@ const mockChallenge: Challenge = {
   validatorIds: ['axe-no-violations'],
   previewTitle: 'Challenge: Test Challenge | Preview',
   links: [],
+  createdAt: '2026-06-18',
 };
 
 describe('ChallengeShell tab integration', () => {

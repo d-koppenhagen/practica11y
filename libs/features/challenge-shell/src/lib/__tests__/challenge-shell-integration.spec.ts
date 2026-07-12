@@ -142,6 +142,7 @@ const mockChallenge: Challenge = {
   tags: ['semantics'],
   validatorIds: ['axe-no-violations'],
   links: [],
+  createdAt: '2026-06-18',
   discussionUrl: '',
   starter: {
     html: '<h1>Hello</h1>',

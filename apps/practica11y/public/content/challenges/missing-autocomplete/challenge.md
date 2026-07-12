@@ -5,6 +5,7 @@ difficulty: intermediate
 tags:
   - forms
 points: 150
+createdAt: '2026-07-05'
 starter:
   html: starter.html
   css: starter.css

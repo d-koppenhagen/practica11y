@@ -180,11 +180,11 @@ const mockChallenge: Challenge = {
   validatorIds: ['axe-no-violations'],
   previewTitle: 'Challenge: Test Challenge | Preview',
   links: [],
+  createdAt: '2026-06-18',
 };
 
 describe('ChallengeShell - Diff Toggle', () => {
   let fixture: ComponentFixture<ChallengeShell>;
-  let component: ChallengeShell;
   let mockPipeline: MockAnalysisPipeline;
 
   beforeEach(async () => {
@@ -262,7 +262,6 @@ describe('ChallengeShell - Diff Toggle', () => {
       .compileComponents();
 
     fixture = TestBed.createComponent(ChallengeShell);
-    component = fixture.componentInstance;
     fixture.componentRef.setInput('challenge', mockChallenge);
     fixture.detectChanges();
 

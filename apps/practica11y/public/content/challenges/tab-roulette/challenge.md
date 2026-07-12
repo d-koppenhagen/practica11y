@@ -6,6 +6,8 @@ tags:
   - keyboard
   - focus
 points: 75
+createdAt: '2026-07-12'
+updatedAt: '2026-07-12'
 starter:
   html: starter.html
   css: starter.css

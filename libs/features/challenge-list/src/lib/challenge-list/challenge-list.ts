@@ -16,6 +16,9 @@ export interface ChallengeGroup {
   challenges: Challenge[];
 }
 
+/** Number of days after which "New" and "Updated" badges expire */
+const BADGE_EXPIRY_DAYS = 7;
+
 @Component({
   selector: 'a11y-challenge-list',
   imports: [],
@@ -74,6 +77,15 @@ export class ChallengeList {
     return this.completedChallengeIds().includes(challengeId);
   }
 
+  protected isNew(challenge: Challenge): boolean {
+    return this.isWithinDays(challenge.createdAt, BADGE_EXPIRY_DAYS);
+  }
+
+  protected isUpdated(challenge: Challenge): boolean {
+    if (!challenge.updatedAt) return false;
+    return this.isWithinDays(challenge.updatedAt, BADGE_EXPIRY_DAYS);
+  }
+
   protected selectChallenge(challenge: Challenge): void {
     if (challenge.disabled) return;
     this.challengeSelected.emit(challenge.id);
@@ -127,5 +139,13 @@ export class ChallengeList {
         label: tag,
         challenges: items,
       }));
+  }
+
+  private isWithinDays(dateStr: string, days: number): boolean {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = diffMs / (1000 * 60 * 60 * 24);
+    return diffDays >= 0 && diffDays <= days;
   }
 }

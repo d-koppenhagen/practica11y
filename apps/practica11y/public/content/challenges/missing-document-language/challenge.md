@@ -6,6 +6,7 @@ tags:
   - semantics
   - internationalization
 points: 75
+createdAt: '2026-07-04'
 starter:
   html: starter.html
 solution:

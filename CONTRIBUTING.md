@@ -313,6 +313,7 @@ Step by step to create a new accessibility challenge:
      - semantics
      - aria
    points: 100
+   createdAt: '2026-01-15' # YYYY-MM-DD, date when challenge was created
    starter:
      html: starter.html # required
      css: starter.css # optional

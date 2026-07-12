@@ -183,6 +183,7 @@ const mockChallengeHtmlCss: Challenge = {
   validatorIds: ['axe-no-violations'],
   previewTitle: 'Challenge: HTML CSS | Preview',
   links: [],
+  createdAt: '2026-06-18',
 };
 
 const mockChallengeHtmlCssJs: Challenge = {
@@ -201,6 +202,7 @@ const mockChallengeHtmlCssJs: Challenge = {
   validatorIds: ['axe-no-violations'],
   previewTitle: 'Challenge: HTML CSS JS | Preview',
   links: [],
+  createdAt: '2026-06-18',
 };
 
 const mockChallengeWithSolution: Challenge = {

@@ -85,9 +85,10 @@
 }
 
 .challenge-item {
+  position: relative;
   border: 1px solid var(--p11y-border, #e5e7eb);
   border-radius: var(--p11y-radius, 0.5rem);
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Challenge button - mobile-first: two-row layout */
@@ -101,6 +102,7 @@
   padding: 0.75rem 1rem;
   background: var(--p11y-bg-surface, #fff);
   border: none;
+  border-radius: var(--p11y-radius, 0.5rem);
   cursor: pointer;
   text-align: left;
   font-size: 1rem;
@@ -292,4 +294,34 @@
   font-style: italic;
   color: var(--p11y-text-muted, #6b7280);
   white-space: nowrap;
+}
+
+/* New / Updated badges */
+.new-badge,
+.updated-badge {
+  position: absolute;
+  top: -0.5rem;
+  left: -0.5rem;
+  z-index: 1;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  line-height: 1.4;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+}
+
+.new-badge {
+  background-color: var(--p11y-primary-bg, #dbeafe);
+  color: var(--p11y-primary, #2563eb);
+  font-size: 0.6em;
+}
+
+.updated-badge {
+  background-color: var(--p11y-info-bg, #e0e7ff);
+  color: var(--p11y-info-text, #4f46e5);
+  font-size: 0.6em;
 }
