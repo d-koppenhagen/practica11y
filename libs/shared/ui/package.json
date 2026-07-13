@@ -4,7 +4,8 @@
   "dependencies": {
     "@practica11y/util": "workspace:*",
     "@angular/aria": "catalog:",
-    "@angular/cdk": "catalog:"
+    "@angular/cdk": "catalog:",
+    "@angular/common": "catalog:"
   },
   "peerDependencies": {
     "@angular/core": "catalog:"

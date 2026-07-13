@@ -128,8 +128,7 @@ describe('ChallengeList', () => {
     });
 
     it('should display points for each challenge', () => {
-      const points =
-        fixture.nativeElement.querySelectorAll('.challenge-points');
+      const points = fixture.nativeElement.querySelectorAll('.points-badge');
       expect(points[0].textContent).toContain('100');
       expect(points[1].textContent).toContain('200');
       expect(points[2].textContent).toContain('300');
@@ -536,7 +535,9 @@ describe('ChallengeList', () => {
       fixture.componentRef.setInput('challenges', [challenge]);
       fixture.detectChanges();
 
-      const newBadge = fixture.nativeElement.querySelector('.new-badge');
+      const newBadge = fixture.nativeElement.querySelector(
+        '.freshness-badge--new',
+      );
       expect(newBadge).toBeTruthy();
       expect(newBadge.textContent).toContain('New');
     });
@@ -552,7 +553,9 @@ describe('ChallengeList', () => {
       fixture.componentRef.setInput('challenges', [challenge]);
       fixture.detectChanges();
 
-      const newBadge = fixture.nativeElement.querySelector('.new-badge');
+      const newBadge = fixture.nativeElement.querySelector(
+        '.freshness-badge--new',
+      );
       expect(newBadge).toBeNull();
     });
 
@@ -568,8 +571,9 @@ describe('ChallengeList', () => {
       fixture.componentRef.setInput('challenges', [challenge]);
       fixture.detectChanges();
 
-      const updatedBadge =
-        fixture.nativeElement.querySelector('.updated-badge');
+      const updatedBadge = fixture.nativeElement.querySelector(
+        '.freshness-badge--updated',
+      );
       expect(updatedBadge).toBeTruthy();
       expect(updatedBadge.textContent).toContain('Updated');
     });
@@ -586,8 +590,9 @@ describe('ChallengeList', () => {
       fixture.componentRef.setInput('challenges', [challenge]);
       fixture.detectChanges();
 
-      const updatedBadge =
-        fixture.nativeElement.querySelector('.updated-badge');
+      const updatedBadge = fixture.nativeElement.querySelector(
+        '.freshness-badge--updated',
+      );
       expect(updatedBadge).toBeNull();
     });
 
@@ -603,9 +608,12 @@ describe('ChallengeList', () => {
       fixture.componentRef.setInput('challenges', [challenge]);
       fixture.detectChanges();
 
-      const newBadge = fixture.nativeElement.querySelector('.new-badge');
-      const updatedBadge =
-        fixture.nativeElement.querySelector('.updated-badge');
+      const newBadge = fixture.nativeElement.querySelector(
+        '.freshness-badge--new',
+      );
+      const updatedBadge = fixture.nativeElement.querySelector(
+        '.freshness-badge--updated',
+      );
       expect(newBadge).toBeTruthy();
       expect(updatedBadge).toBeNull();
     });
@@ -622,9 +630,12 @@ describe('ChallengeList', () => {
       fixture.componentRef.setInput('challenges', [challenge]);
       fixture.detectChanges();
 
-      const newBadge = fixture.nativeElement.querySelector('.new-badge');
-      const updatedBadge =
-        fixture.nativeElement.querySelector('.updated-badge');
+      const newBadge = fixture.nativeElement.querySelector(
+        '.freshness-badge--new',
+      );
+      const updatedBadge = fixture.nativeElement.querySelector(
+        '.freshness-badge--updated',
+      );
       expect(newBadge).toBeNull();
       expect(updatedBadge).toBeNull();
     });
@@ -671,7 +682,9 @@ describe('ChallengeList', () => {
       fixture.componentRef.setInput('challenges', [challenge]);
       fixture.detectChanges();
 
-      const newBadge = fixture.nativeElement.querySelector('.new-badge');
+      const newBadge = fixture.nativeElement.querySelector(
+        '.freshness-badge--new',
+      );
       expect(newBadge).toBeTruthy();
     });
 
@@ -686,7 +699,9 @@ describe('ChallengeList', () => {
       fixture.componentRef.setInput('challenges', [challenge]);
       fixture.detectChanges();
 
-      const newBadge = fixture.nativeElement.querySelector('.new-badge');
+      const newBadge = fixture.nativeElement.querySelector(
+        '.freshness-badge--new',
+      );
       expect(newBadge).toBeNull();
     });
   });

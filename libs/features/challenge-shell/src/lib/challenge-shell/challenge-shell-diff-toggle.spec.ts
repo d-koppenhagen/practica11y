@@ -9,8 +9,7 @@ import { By } from '@angular/platform-browser';
 import { Challenge } from '@practica11y/models';
 import { AccessibilityNode, AnalysisPipelineResult } from '@practica11y/types';
 import { SandboxAxeViolation } from '@practica11y/sandbox';
-import { ProgressStore } from '@practica11y/util';
-import { MarkdownContent } from '@practica11y/ui';
+import { ChallengeMetaBar, MarkdownContent } from '@practica11y/ui';
 
 import { ChallengeShell } from './challenge-shell';
 import { AnalysisPipeline } from '../analysis-pipeline';
@@ -242,6 +241,7 @@ describe('ChallengeShell - Diff Toggle', () => {
             FeedbackPanel,
             PreviewPanel,
             MarkdownContent,
+            ChallengeMetaBar,
           ],
           providers: [
             { provide: AnalysisPipeline, useValue: mockPipeline },

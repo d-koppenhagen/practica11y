@@ -7,6 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { Challenge } from '@practica11y/models';
+import { DifficultyBadge, FreshnessBadge, PointsBadge } from '@practica11y/ui';
 
 export type GroupBy = 'difficulty' | 'tag';
 
@@ -21,7 +22,7 @@ const BADGE_EXPIRY_DAYS = 14;
 
 @Component({
   selector: 'a11y-challenge-list',
-  imports: [],
+  imports: [DifficultyBadge, FreshnessBadge, PointsBadge],
   templateUrl: './challenge-list.html',
   styleUrl: './challenge-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

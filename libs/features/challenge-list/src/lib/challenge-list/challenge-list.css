@@ -168,31 +168,6 @@
   outline-offset: -2px;
 }
 
-/* Difficulty badge */
-.difficulty-badge {
-  display: inline-block;
-  padding: 0.125rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.difficulty-beginner {
-  background-color: var(--p11y-success-bg);
-  color: var(--p11y-success-text);
-}
-
-.difficulty-intermediate {
-  background-color: var(--p11y-warning-bg);
-  color: var(--p11y-warning-text);
-}
-
-.difficulty-advanced {
-  background-color: var(--p11y-error-bg);
-  color: var(--p11y-error-text);
-}
-
 /* Tags */
 .challenge-tags {
   display: flex;
@@ -207,13 +182,6 @@
   font-size: 0.6875rem;
   background-color: var(--p11y-bg-muted, #e5e7eb);
   color: var(--p11y-text-secondary, #374151);
-}
-
-/* Points */
-.challenge-points {
-  font-size: 0.75rem;
-  color: var(--p11y-text-muted, #6b7280);
-  white-space: nowrap;
 }
 
 /* Completion status */
@@ -297,31 +265,11 @@
 }
 
 /* New / Updated badges */
-.new-badge,
-.updated-badge {
+.list-freshness-badge {
   position: absolute;
   top: -0.5rem;
   left: -0.5rem;
   z-index: 1;
-  padding: 0.125rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-  white-space: nowrap;
-  line-height: 1.4;
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
-}
-
-.new-badge {
-  background-color: var(--p11y-primary-bg, #dbeafe);
-  color: var(--p11y-primary, #2563eb);
-  font-size: 0.6em;
-}
-
-.updated-badge {
-  background-color: var(--p11y-info-bg, #e0e7ff);
-  color: var(--p11y-info-text, #4f46e5);
   font-size: 0.6em;
 }

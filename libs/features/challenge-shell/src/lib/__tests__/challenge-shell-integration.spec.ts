@@ -14,13 +14,12 @@ import {
 import { ChallengeLoader } from '@practica11y/loader';
 import { ChallengeShell } from '../challenge-shell/challenge-shell';
 import { EditorTabs } from '../editor-tabs/editor-tabs';
-import { EditorActions } from '../editor-actions/editor-actions';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
 import { ShellPanel } from '../shell-panel/shell-panel';
 import { ShellResizer } from '../shell-resizer/shell-resizer';
-import { MarkdownContent } from '@practica11y/ui';
+import { ChallengeMetaBar, MarkdownContent } from '@practica11y/ui';
 
 // Mock window.matchMedia for CheatAnimation (used by FeedbackPanel)
 beforeEach(() => {
@@ -250,6 +249,7 @@ async function setup(challenge: Challenge = mockChallenge) {
       FeedbackPanel,
       PreviewPanel,
       MarkdownContent,
+      ChallengeMetaBar,
       // Mock heavy third-party components used in @defer blocks
       MockMonacoEditor,
       MockAccessibilityTree,

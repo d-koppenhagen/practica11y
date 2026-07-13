@@ -8,7 +8,6 @@ import { Component, input, model, output, signal } from '@angular/core';
 import { Challenge } from '@practica11y/models';
 import { AccessibilityNode, AnalysisPipelineResult } from '@practica11y/types';
 import { SandboxAxeViolation } from '@practica11y/sandbox';
-import { ProgressStore } from '@practica11y/util';
 
 import { ChallengeShell } from './challenge-shell';
 import { AnalysisPipeline } from '../analysis-pipeline';
@@ -17,11 +16,10 @@ import { ShellPanel } from '../shell-panel/shell-panel';
 import { ShellResizer } from '../shell-resizer/shell-resizer';
 import { Confetti } from '../confetti/confetti';
 import { EditorTabs } from '../editor-tabs/editor-tabs';
-import { EditorActions } from '../editor-actions/editor-actions';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
-import { MarkdownContent } from '@practica11y/ui';
+import { ChallengeMetaBar, MarkdownContent } from '@practica11y/ui';
 import { DiffLanguageEntry } from '../editor-diff-view/editor-diff-view';
 
 // --- Stub components ---
@@ -277,6 +275,7 @@ describe('ChallengeShell - Diff Content Integration', () => {
             FeedbackPanel,
             PreviewPanel,
             MarkdownContent,
+            ChallengeMetaBar,
           ],
           providers: [
             { provide: AnalysisPipeline, useValue: mockPipeline },

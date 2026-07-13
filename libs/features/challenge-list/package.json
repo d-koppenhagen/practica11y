@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/core": "catalog:",
-    "@practica11y/models": "workspace:*"
+    "@practica11y/models": "workspace:*",
+    "@practica11y/ui": "workspace:*"
   },
   "sideEffects": false
 }

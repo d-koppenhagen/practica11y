@@ -16,6 +16,12 @@
         <span class="completion-badge" aria-label="Completed">✓</span>
       }
     </h1>
+    <a11y-challenge-meta-bar
+      [difficulty]="challenge().difficulty"
+      [points]="challenge().points"
+      [createdAt]="challenge().createdAt"
+      [updatedAt]="challenge().updatedAt"
+    />
     <a11y-markdown-content
       class="shell-description-content"
       [source]="challenge().description"

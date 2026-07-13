@@ -34,7 +34,7 @@ import {
   ThemeService,
   TreeTab,
 } from '@practica11y/util';
-import { MarkdownContent } from '@practica11y/ui';
+import { ChallengeMetaBar, MarkdownContent } from '@practica11y/ui';
 
 import { AnalysisPipeline } from '../analysis-pipeline';
 import { ShellLayout } from '../shell-layout';
@@ -69,6 +69,7 @@ const GITHUB_REPO_URL = 'https://github.com/d-koppenhagen/practica11y';
     FeedbackPanel,
     PreviewPanel,
     MarkdownContent,
+    ChallengeMetaBar,
   ],
   providers: [AnalysisPipeline, ShellLayout],
   templateUrl: './challenge-shell.html',

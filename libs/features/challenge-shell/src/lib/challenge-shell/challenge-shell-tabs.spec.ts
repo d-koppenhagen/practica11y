@@ -17,11 +17,10 @@ import { ShellPanel } from '../shell-panel/shell-panel';
 import { ShellResizer } from '../shell-resizer/shell-resizer';
 import { Confetti } from '../confetti/confetti';
 import { EditorTabs } from '../editor-tabs/editor-tabs';
-import { EditorActions } from '../editor-actions/editor-actions';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
-import { MarkdownContent } from '@practica11y/ui';
+import { ChallengeMetaBar, MarkdownContent } from '@practica11y/ui';
 
 // --- Stub components ---
 
@@ -252,6 +251,7 @@ describe('ChallengeShell tab integration', () => {
             FeedbackPanel,
             PreviewPanel,
             MarkdownContent,
+            ChallengeMetaBar,
           ],
           providers: [
             { provide: AnalysisPipeline, useValue: mockPipeline },

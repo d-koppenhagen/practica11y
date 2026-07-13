@@ -99,9 +99,17 @@
             [class.challenge-item--disabled]="challenge.disabled"
           >
             @if (!challenge.disabled && isNew(challenge)) {
-              <span class="new-badge" aria-hidden="true">New</span>
+              <a11y-freshness-badge
+                class="list-freshness-badge"
+                [createdAt]="challenge.createdAt"
+                [updatedAt]="challenge.updatedAt"
+              />
             } @else if (!challenge.disabled && isUpdated(challenge)) {
-              <span class="updated-badge" aria-hidden="true">Updated</span>
+              <a11y-freshness-badge
+                class="list-freshness-badge"
+                [createdAt]="challenge.createdAt"
+                [updatedAt]="challenge.updatedAt"
+              />
             }
             <button
               class="challenge-button"
@@ -137,20 +145,7 @@
               }
 
               <span class="challenge-meta">
-                <span
-                  class="difficulty-badge"
-                  [class.difficulty-beginner]="
-                    challenge.difficulty === 'beginner'
-                  "
-                  [class.difficulty-intermediate]="
-                    challenge.difficulty === 'intermediate'
-                  "
-                  [class.difficulty-advanced]="
-                    challenge.difficulty === 'advanced'
-                  "
-                >
-                  {{ challenge.difficulty }}
-                </span>
+                <a11y-difficulty-badge [difficulty]="challenge.difficulty" />
 
                 <span class="challenge-tags">
                   @for (tag of challenge.tags; track tag) {
@@ -158,9 +153,7 @@
                   }
                 </span>
 
-                <span class="challenge-points"
-                  >{{ challenge.points }} Points</span
-                >
+                <a11y-points-badge [points]="challenge.points" />
               </span>
             </button>
           </li>
