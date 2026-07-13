@@ -47,6 +47,7 @@ Rules:
 - When adding a new dependency, first add it to the `catalog:` section in `pnpm-workspace.yaml` with the pinned version, then reference it as `"catalog:"` in the relevant `package.json`.
 - When bumping a dependency version, update it in `pnpm-workspace.yaml` only — all packages that use `catalog:` will pick up the new version automatically.
 - The root `package.json` uses `catalog:` for all `dependencies` and `devDependencies`. Sub-project `package.json` files (e.g., `apps/practica11y-e2e/package.json`) follow the same pattern.
+- **Always run `pnpm install` after modifying any `package.json`** to regenerate `pnpm-lock.yaml`. The updated lockfile **must** be included in the same commit. CI uses `--frozen-lockfile` and will fail if the lockfile is out of sync with `package.json`.
 
 ## Commands
 
