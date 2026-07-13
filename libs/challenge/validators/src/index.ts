@@ -30,3 +30,4 @@ export { semanticTableStructure } from './lib/semantic-table-structure';
 export { autocompleteAttributes } from './lib/autocomplete-attributes';
 export { targetSizeMinimum } from './lib/target-size-minimum';
 export { noPositiveTabindex } from './lib/no-positive-tabindex';
+export { skeletonAriaHidden } from './lib/skeleton-aria-hidden';

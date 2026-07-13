@@ -43,6 +43,7 @@ import {
   autocompleteAttributes,
   targetSizeMinimum,
   noPositiveTabindex,
+  skeletonAriaHidden,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -105,6 +106,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(autocompleteAttributes);
     this.challengeValidator.registerValidator(targetSizeMinimum);
     this.challengeValidator.registerValidator(noPositiveTabindex);
+    this.challengeValidator.registerValidator(skeletonAriaHidden);
   }
 
   /** Debounced code change signal (300ms) */
