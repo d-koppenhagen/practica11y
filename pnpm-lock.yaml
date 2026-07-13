@@ -509,6 +509,9 @@ importers:
       '@practica11y/models':
         specifier: workspace:*
         version: link:../../challenge/models
+      '@practica11y/ui':
+        specifier: workspace:*
+        version: link:../../shared/ui
 
   libs/features/challenge-shell:
     dependencies:
@@ -620,6 +623,9 @@ importers:
       '@angular/cdk':
         specifier: 'catalog:'
         version: 22.0.3(@angular/common@22.0.5(@angular/core@22.0.5(@angular/compiler@22.0.5)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.5(@angular/compiler@22.0.5)(rxjs@7.8.2))(@angular/platform-browser@22.0.5(@angular/common@22.0.5(@angular/core@22.0.5(@angular/compiler@22.0.5)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.5(@angular/compiler@22.0.5)(rxjs@7.8.2)))(rxjs@7.8.2)
+      '@angular/common':
+        specifier: 'catalog:'
+        version: 22.0.5(@angular/core@22.0.5(@angular/compiler@22.0.5)(rxjs@7.8.2))(rxjs@7.8.2)
       '@angular/core':
         specifier: 'catalog:'
         version: 22.0.5(@angular/compiler@22.0.5)(rxjs@7.8.2)
