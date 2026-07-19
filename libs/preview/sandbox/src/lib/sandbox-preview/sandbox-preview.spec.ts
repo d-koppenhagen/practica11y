@@ -184,6 +184,44 @@ describe('SandboxPreview', () => {
     });
   });
 
+  describe('simulation CSS injection', () => {
+    it('should include simulation CSS in a style block when simulationCss is provided', () => {
+      fixture.componentRef.setInput(
+        'simulationCss',
+        ':root { color-scheme: dark; }',
+      );
+      fixture.detectChanges();
+
+      const srcdoc = unwrapSafeHtml(component.srcdoc());
+      expect(srcdoc).toContain('<style id="p11y-simulation">');
+      expect(srcdoc).toContain(':root { color-scheme: dark; }');
+    });
+
+    it('should omit simulation style block when simulationCss is empty', () => {
+      fixture.componentRef.setInput('simulationCss', '');
+      fixture.detectChanges();
+
+      const srcdoc = unwrapSafeHtml(component.srcdoc());
+      expect(srcdoc).not.toContain('p11y-simulation');
+    });
+
+    it('should place simulation CSS before user CSS in the output', () => {
+      fixture.componentRef.setInput(
+        'simulationCss',
+        ':root { color-scheme: dark; }',
+      );
+      fixture.componentRef.setInput('cssContent', '.card { color: red; }');
+      fixture.detectChanges();
+
+      const srcdoc = unwrapSafeHtml(component.srcdoc());
+      const simulationIndex = srcdoc.indexOf('p11y-simulation');
+      const userCssIndex = srcdoc.indexOf('.card { color: red; }');
+      expect(simulationIndex).toBeGreaterThan(-1);
+      expect(userCssIndex).toBeGreaterThan(-1);
+      expect(simulationIndex).toBeLessThan(userCssIndex);
+    });
+  });
+
   describe('sandbox attributes', () => {
     it('should have an iframe element', () => {
       fixture.detectChanges();

@@ -66,10 +66,18 @@ class MockSandboxPreview {
   readonly cssContent = input<string>('');
   readonly vttContent = input<string>('');
   readonly previewTitle = input<string>('Preview');
+  readonly simulationCss = input<string>('');
   readonly domReady = output<MessageEvent>();
   readonly axeResult = output<SandboxAxeViolation[]>();
   readonly axeError = output<string>();
 }
+
+@Component({
+  selector: 'a11y-simulation-popover',
+  standalone: true,
+  template: '',
+})
+class MockSimulationPopover {}
 
 @Component({
   selector: 'a11y-accessibility-tree',
@@ -276,6 +284,7 @@ describe('ChallengeShell - Diff Content Integration', () => {
             PreviewPanel,
             MarkdownContent,
             ChallengeMetaBar,
+            MockSimulationPopover,
           ],
           providers: [
             { provide: AnalysisPipeline, useValue: mockPipeline },

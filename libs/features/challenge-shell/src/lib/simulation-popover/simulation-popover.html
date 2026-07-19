@@ -1,0 +1,149 @@
+<button
+  type="button"
+  class="simulation-trigger"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  #triggerBtn
+  [attr.aria-expanded]="isOpen()"
+  aria-label="Simulate user preferences"
+  (click)="toggle()"
+  (keydown.escape)="close()"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <line x1="4" y1="21" x2="4" y2="14" />
+    <line x1="4" y1="10" x2="4" y2="3" />
+    <line x1="12" y1="21" x2="12" y2="12" />
+    <line x1="12" y1="8" x2="12" y2="3" />
+    <line x1="20" y1="21" x2="20" y2="16" />
+    <line x1="20" y1="12" x2="20" y2="3" />
+    <line x1="1" y1="14" x2="7" y2="14" />
+    <line x1="9" y1="8" x2="15" y2="8" />
+    <line x1="17" y1="16" x2="23" y2="16" />
+  </svg>
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen()"
+  [cdkConnectedOverlayPositions]="positions"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  cdkConnectedOverlayBackdropClass="simulation-backdrop"
+  (backdropClick)="close()"
+  (detach)="close()"
+>
+  <div
+    ngMenu
+    #simMenu="ngMenu"
+    class="simulation-menu"
+    (itemSelected)="handleItemSelected($event)"
+    (keydown.escape)="close()"
+  >
+    <div class="menu-group">
+      <span class="menu-group-label" id="group-motion">Reduced Motion</span>
+      <button
+        type="button"
+        ngMenuItem
+        value="motion:no-preference"
+        role="menuitemradio"
+        [attr.aria-checked]="reducedMotion() === 'no-preference'"
+        class="menu-item"
+      >
+        No preference
+      </button>
+      <button
+        type="button"
+        ngMenuItem
+        value="motion:reduce"
+        role="menuitemradio"
+        [attr.aria-checked]="reducedMotion() === 'reduce'"
+        class="menu-item"
+      >
+        Reduce
+      </button>
+    </div>
+
+    <hr class="menu-divider" />
+
+    <div class="menu-group">
+      <span class="menu-group-label" id="group-scheme">Color Scheme</span>
+      <button
+        type="button"
+        ngMenuItem
+        value="scheme:light"
+        role="menuitemradio"
+        [attr.aria-checked]="colorScheme() === 'light'"
+        class="menu-item"
+      >
+        Light
+      </button>
+      <button
+        type="button"
+        ngMenuItem
+        value="scheme:dark"
+        role="menuitemradio"
+        [attr.aria-checked]="colorScheme() === 'dark'"
+        class="menu-item"
+      >
+        Dark
+      </button>
+    </div>
+
+    <hr class="menu-divider" />
+
+    <div class="menu-group">
+      <span class="menu-group-label" id="group-contrast">Contrast</span>
+      <button
+        type="button"
+        ngMenuItem
+        value="contrast:no-preference"
+        role="menuitemradio"
+        [attr.aria-checked]="contrast() === 'no-preference'"
+        class="menu-item"
+      >
+        No preference
+      </button>
+      <button
+        type="button"
+        ngMenuItem
+        value="contrast:more"
+        role="menuitemradio"
+        [attr.aria-checked]="contrast() === 'more'"
+        class="menu-item"
+      >
+        More
+      </button>
+      <button
+        type="button"
+        ngMenuItem
+        value="contrast:less"
+        role="menuitemradio"
+        [attr.aria-checked]="contrast() === 'less'"
+        class="menu-item"
+      >
+        Less
+      </button>
+      <button
+        type="button"
+        ngMenuItem
+        value="contrast:custom"
+        role="menuitemradio"
+        [attr.aria-checked]="contrast() === 'custom'"
+        class="menu-item"
+      >
+        Custom
+      </button>
+    </div>
+  </div>
+</ng-template>

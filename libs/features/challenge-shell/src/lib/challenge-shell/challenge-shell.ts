@@ -45,6 +45,7 @@ import { EditorActions } from '../editor-actions/editor-actions';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
+import { SimulationPopover } from '../simulation-popover/simulation-popover';
 import {
   ChallengeSuccessDialog,
   ChallengeSuccessDialogData,
@@ -70,6 +71,7 @@ const GITHUB_REPO_URL = 'https://github.com/d-koppenhagen/practica11y';
     PreviewPanel,
     MarkdownContent,
     ChallengeMetaBar,
+    SimulationPopover,
   ],
   providers: [AnalysisPipeline, ShellLayout],
   templateUrl: './challenge-shell.html',

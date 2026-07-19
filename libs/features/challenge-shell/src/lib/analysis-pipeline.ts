@@ -30,6 +30,8 @@ import {
   imageAltTextLimit,
   imageAriaDescribedby,
   reducedMotion,
+  prefersColorScheme,
+  prefersContrast,
   ariaInvalidErrors,
   errorFocusManagement,
   videoHasCaptions,
@@ -93,6 +95,8 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(imageAltTextLimit);
     this.challengeValidator.registerValidator(imageAriaDescribedby);
     this.challengeValidator.registerValidator(reducedMotion);
+    this.challengeValidator.registerValidator(prefersColorScheme);
+    this.challengeValidator.registerValidator(prefersContrast);
     this.challengeValidator.registerValidator(ariaInvalidErrors);
     this.challengeValidator.registerValidator(errorFocusManagement);
     this.challengeValidator.registerValidator(videoHasCaptions);

@@ -1,10 +1,12 @@
 import {
   Component,
   ChangeDetectionStrategy,
+  inject,
   input,
   output,
 } from '@angular/core';
 import { SandboxPreview, SandboxAxeViolation } from '@practica11y/sandbox';
+import { PreferenceSimulationStore } from '@practica11y/util';
 
 @Component({
   selector: 'a11y-preview-panel',
@@ -14,6 +16,9 @@ import { SandboxPreview, SandboxAxeViolation } from '@practica11y/sandbox';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PreviewPanel {
+  private readonly simulationStore = inject(PreferenceSimulationStore);
+  protected readonly simulationCss = this.simulationStore.simulationCss;
+
   readonly htmlContent = input.required<string>();
   readonly jsContent = input.required<string>();
   readonly cssContent = input.required<string>();
