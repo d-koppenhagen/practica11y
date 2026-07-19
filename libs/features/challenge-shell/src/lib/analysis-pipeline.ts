@@ -161,7 +161,7 @@ export class AnalysisPipeline {
       validationResults: currentResult?.validationResults ?? [],
       accessibilityAnalysis,
       challengeCompleted: currentResult?.challengeCompleted ?? false,
-      timestamp: Date.now(),
+      timestamp: currentResult?.timestamp ?? Date.now(),
     });
   }
 
