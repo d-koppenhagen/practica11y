@@ -32,25 +32,5 @@ export function buildSimulationCss(prefs: SimulationPreferences): string {
     }
   }
 
-  if (prefs.contrast === 'more') {
-    blocks.push(`/* prefers-contrast: more simulation */
-:root {
-  --p11y-sim-border-color: #000;
-  --p11y-sim-text-color: #000;
-  --p11y-sim-bg-color: #fff;
-}
-* { border-color: #000 !important; }
-*:not(:root):not(body) { box-shadow: none !important; }`);
-  } else if (prefs.contrast === 'less') {
-    blocks.push(`/* prefers-contrast: less simulation */
-:root {
-  --p11y-sim-border-color: #ccc;
-}
-* { border-color: #ccc !important; }`);
-  } else if (prefs.contrast === 'custom') {
-    blocks.push(`/* prefers-contrast: custom simulation */
-:root { forced-colors: none; }`);
-  }
-
   return blocks.join('\n');
 }

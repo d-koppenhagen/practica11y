@@ -102,7 +102,9 @@ describe('PreferenceSimulationStore', () => {
 
     it('should update reactively when contrast changes', () => {
       store.setContrast('more');
-      expect(store.simulationCss()).toContain('border-color: #000 !important');
+      // contrast preferences no longer produce simulation CSS
+      // (handled by extractSimulatedMediaRules instead)
+      expect(store.simulationCss()).toBe('');
     });
   });
 

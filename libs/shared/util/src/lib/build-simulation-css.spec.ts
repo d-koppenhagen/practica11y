@@ -51,37 +51,15 @@ describe('buildSimulationCss', () => {
   });
 
   describe('prefers-contrast', () => {
-    it('should produce border/box-shadow overrides for "more"', () => {
-      const result = buildSimulationCss({
-        ...defaults,
-        contrast: 'more',
-      });
-
-      expect(result).toContain('border-color: #000 !important');
-      expect(result).toContain('box-shadow: none !important');
-    });
-
-    it('should produce border override for "less"', () => {
-      const result = buildSimulationCss({
-        ...defaults,
-        contrast: 'less',
-      });
-
-      expect(result).toContain('border-color: #ccc !important');
-    });
-
-    it('should produce forced-colors rule for "custom"', () => {
-      const result = buildSimulationCss({
-        ...defaults,
-        contrast: 'custom',
-      });
-
-      expect(result).toContain('forced-colors: none');
+    it('should produce no output for contrast preferences (handled by extractSimulatedMediaRules)', () => {
+      expect(buildSimulationCss({ ...defaults, contrast: 'more' })).toBe('');
+      expect(buildSimulationCss({ ...defaults, contrast: 'less' })).toBe('');
+      expect(buildSimulationCss({ ...defaults, contrast: 'custom' })).toBe('');
     });
   });
 
   describe('combinations', () => {
-    it('should produce all corresponding blocks for multiple non-default preferences', () => {
+    it('should produce all corresponding blocks for multiple non-default preferences (excluding contrast)', () => {
       const result = buildSimulationCss({
         reducedMotion: 'reduce',
         colorScheme: 'dark',
@@ -93,9 +71,9 @@ describe('buildSimulationCss', () => {
       expect(result).toContain('transition-duration: 0.01ms !important');
       // color-scheme block
       expect(result).toContain(':root { color-scheme: dark;');
-      // contrast block
-      expect(result).toContain('border-color: #000 !important');
-      expect(result).toContain('box-shadow: none !important');
+      // contrast should NOT produce any CSS
+      expect(result).not.toContain('border-color');
+      expect(result).not.toContain('box-shadow');
     });
 
     it('should inject explicit light color-scheme when reducedMotion is non-default but colorScheme is light', () => {

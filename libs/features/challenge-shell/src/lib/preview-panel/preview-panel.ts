@@ -27,10 +27,11 @@ export class PreviewPanel {
    * and the extracted user media query rules that match the simulated preferences.
    */
   protected readonly simulationCss = computed(() => {
+    // Early return if all preferences are at their defaults
+    if (!this.simulationStore.hasOverrides()) return '';
+
     const baseCss = this.simulationStore.simulationCss();
     const userCss = this.cssContent();
-
-    if (!baseCss) return '';
 
     const extractedRules = extractSimulatedMediaRules(userCss, {
       reducedMotion: this.simulationStore.reducedMotion(),
@@ -38,7 +39,9 @@ export class PreviewPanel {
       contrast: this.simulationStore.contrast(),
     });
 
-    return extractedRules ? `${baseCss}\n${extractedRules}` : baseCss;
+    // Combine base simulation CSS with extracted user rules
+    const parts = [baseCss, extractedRules].filter(Boolean);
+    return parts.join('\n');
   });
 
   readonly htmlContent = input.required<string>();
