@@ -205,7 +205,7 @@ describe('SandboxPreview', () => {
       expect(srcdoc).not.toContain('p11y-simulation');
     });
 
-    it('should place simulation CSS before user CSS in the output', () => {
+    it('should place simulation CSS after user CSS in the output', () => {
       fixture.componentRef.setInput(
         'simulationCss',
         ':root { color-scheme: dark; }',
@@ -218,7 +218,7 @@ describe('SandboxPreview', () => {
       const userCssIndex = srcdoc.indexOf('.card { color: red; }');
       expect(simulationIndex).toBeGreaterThan(-1);
       expect(userCssIndex).toBeGreaterThan(-1);
-      expect(simulationIndex).toBeLessThan(userCssIndex);
+      expect(simulationIndex).toBeGreaterThan(userCssIndex);
     });
   });
 

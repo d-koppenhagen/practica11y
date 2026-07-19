@@ -4,9 +4,13 @@ import {
   inject,
   input,
   output,
+  computed,
 } from '@angular/core';
 import { SandboxPreview, SandboxAxeViolation } from '@practica11y/sandbox';
-import { PreferenceSimulationStore } from '@practica11y/util';
+import {
+  PreferenceSimulationStore,
+  extractSimulatedMediaRules,
+} from '@practica11y/util';
 
 @Component({
   selector: 'a11y-preview-panel',
@@ -17,7 +21,25 @@ import { PreferenceSimulationStore } from '@practica11y/util';
 })
 export class PreviewPanel {
   private readonly simulationStore = inject(PreferenceSimulationStore);
-  protected readonly simulationCss = this.simulationStore.simulationCss;
+
+  /**
+   * Combined simulation CSS: includes both the generic overrides (from buildSimulationCss)
+   * and the extracted user media query rules that match the simulated preferences.
+   */
+  protected readonly simulationCss = computed(() => {
+    const baseCss = this.simulationStore.simulationCss();
+    const userCss = this.cssContent();
+
+    if (!baseCss) return '';
+
+    const extractedRules = extractSimulatedMediaRules(userCss, {
+      reducedMotion: this.simulationStore.reducedMotion(),
+      colorScheme: this.simulationStore.colorScheme(),
+      contrast: this.simulationStore.contrast(),
+    });
+
+    return extractedRules ? `${baseCss}\n${extractedRules}` : baseCss;
+  });
 
   readonly htmlContent = input.required<string>();
   readonly jsContent = input.required<string>();

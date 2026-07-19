@@ -140,10 +140,10 @@ export class SandboxPreview {
     ::-webkit-scrollbar-thumb { background-color: ${scrollbarThumb}; border-radius: 4px; border: 2px solid transparent; background-clip: content-box; }
     ::-webkit-scrollbar-thumb:hover { background-color: ${scrollbarThumbHover}; }
     ::-webkit-scrollbar-corner { background: transparent; }
-  </style>${simulationStyleBlock}
+  </style>
   <style>
     ${css}
-  </style>
+  </style>${simulationStyleBlock}
 </head>
 <body>
   <div id="user-content">${html}</div>${vttScript}${userScript}

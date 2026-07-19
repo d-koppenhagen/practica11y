@@ -1,5 +1,6 @@
 export { AuthStore } from './lib/auth-store';
 export { buildSimulationCss } from './lib/build-simulation-css';
+export { extractSimulatedMediaRules } from './lib/extract-simulated-media-rules';
 export type {
   ColorSchemePreference,
   ContrastPreference,
