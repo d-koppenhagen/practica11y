@@ -6,8 +6,8 @@ tags:
   - visual
   - media-query
 points: 150
-createdAt: '2025-07-19'
-updatedAt: '2025-07-19'
+createdAt: '2026-07-19'
+updatedAt: '2026-07-19'
 starter:
   html: starter.html
   css: starter.css
@@ -25,23 +25,28 @@ links:
     url: 'https://web.dev/articles/prefers-contrast'
 ---
 
-This pricing card uses subtle visual patterns common in modern UI: barely-visible borders, soft box-shadows for depth, ghost buttons with faint outlines, and a badge with no border. Users who prefer increased contrast may struggle to perceive where one element ends and another begins.
+This pricing card uses subtle visual patterns common in modern UI: barely-visible borders, soft box-shadows for depth, ghost buttons with faint outlines, and a badge with no border. Users who prefer increased contrast may struggle to perceive where one element ends and another begins. The disclaimer text is too faint and the link relies solely on color.
 
 ## Your Task
 
-Add a `prefers-contrast: more` media query to make all visual boundaries sharp and unambiguous for high-contrast users.
+Fix the base accessibility issues and add a `prefers-contrast: more` media query to make all visual boundaries sharp and unambiguous for high-contrast users.
 
-- Replace subtle card shadow with a solid, visible border
-- Strengthen the separator lines between feature list items
-- Add clear borders to both buttons (primary and ghost)
-- Give the badge a visible border
-- Underline links for non-color identification
+- Fix the disclaimer text contrast to meet WCAG AA (4.5:1 ratio)
+- Underline the disclaimer link so it does not rely solely on color
+- Add a `@media (prefers-contrast: more)` block that:
+  - Replaces the subtle card shadow with a solid, visible border
+  - Strengthens the separator lines between feature list items
+  - Adds clear borders to both buttons (primary and ghost)
+  - Gives the badge a visible border
+  - Further strengthens disclaimer text and link contrast
 
 ## Tips
 
+- The disclaimer text color `#9ca3af` only has ~2.9:1 contrast on white — use `#6b7280` or darker for 4.5:1
+- Links in text blocks must be identifiable without relying solely on color — add `text-decoration: underline`
 - Use `@media (prefers-contrast: more) { ... }` to target users who prefer high contrast
 - Replace decorative `box-shadow` with solid `border` for clear boundaries
-- Use `border: 2px solid #000` for maximum clarity
+- Use `border: 2px solid #000` for maximum clarity inside the high-contrast query
 - Ensure ALL interactive elements have visible boundaries, not just the primary button
-- Links should be identifiable without relying solely on color — add `text-decoration: underline`
+- Use `text-decoration-thickness: 2px` for extra emphasis in high contrast mode
 - You can test this using the simulation controls in the preview panel
