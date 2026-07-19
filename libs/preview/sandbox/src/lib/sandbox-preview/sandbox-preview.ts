@@ -34,6 +34,7 @@ export class SandboxPreview {
   readonly cssContent = input<string>('');
   readonly vttContent = input<string>('');
   readonly previewTitle = input<string>('Preview');
+  readonly simulationCss = input<string>('');
   readonly domReady: OutputEmitterRef<MessageEvent> = output<MessageEvent>();
   readonly axeResult: OutputEmitterRef<SandboxAxeViolation[]> =
     output<SandboxAxeViolation[]>();
@@ -52,8 +53,9 @@ export class SandboxPreview {
     const vtt = this.vttContent();
     const theme = this.themeService.theme();
     const title = this.previewTitle();
+    const simCss = this.simulationCss();
     return this.sanitizer.bypassSecurityTrustHtml(
-      this.buildSrcdoc(html, js, css, vtt, theme, title),
+      this.buildSrcdoc(html, js, css, vtt, theme, title, simCss),
     );
   });
 
@@ -96,6 +98,7 @@ export class SandboxPreview {
     vtt: string,
     theme: 'light' | 'dark',
     title: string,
+    simulationCss: string,
   ): string {
     const scrollbarThumb = theme === 'dark' ? '#4a5568' : '#cbd5e0';
     const scrollbarThumbHover = theme === 'dark' ? '#718096' : '#a0aec0';
@@ -119,6 +122,10 @@ export class SandboxPreview {
   })();</script>`
       : '';
 
+    const simulationStyleBlock = simulationCss
+      ? `\n  <style id="p11y-simulation">${simulationCss}</style>`
+      : '';
+
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -133,8 +140,10 @@ export class SandboxPreview {
     ::-webkit-scrollbar-thumb { background-color: ${scrollbarThumb}; border-radius: 4px; border: 2px solid transparent; background-clip: content-box; }
     ::-webkit-scrollbar-thumb:hover { background-color: ${scrollbarThumbHover}; }
     ::-webkit-scrollbar-corner { background: transparent; }
-    ${css}
   </style>
+  <style>
+    ${css}
+  </style>${simulationStyleBlock}
 </head>
 <body>
   <div id="user-content">${html}</div>${vttScript}${userScript}

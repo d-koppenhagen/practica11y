@@ -369,6 +369,12 @@ a11y-shell-resizer {
   font-weight: inherit;
 }
 
+.preview-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 .preview-open-btn {
   display: inline-flex;
   align-items: center;

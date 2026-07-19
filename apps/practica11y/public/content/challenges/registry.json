@@ -15,6 +15,8 @@
     { "id": "image-bar-chart" },
     { "id": "color-contrast-fail" },
     { "id": "reduced-motion" },
+    { "id": "prefers-contrast" },
+    { "id": "prefers-color-scheme" },
     { "id": "invalid-form-error" },
     { "id": "missing-video-captions" },
     { "id": "placeholder-as-label" },

@@ -101,11 +101,18 @@ class MockSandboxPreview {
   readonly cssContent = input<string>();
   readonly vttContent = input<string>();
   readonly previewTitle = input<string>();
+  readonly simulationCss = input<string>('');
   readonly domReady = output<MessageEvent>();
   readonly axeResult = output<unknown[]>();
   readonly axeError = output<string>();
   readonly interactionChange = output<void>();
 }
+
+@Component({
+  selector: 'a11y-simulation-popover',
+  template: '',
+})
+class MockSimulationPopover {}
 
 @Component({
   selector: 'a11y-challenge-feedback',
@@ -256,6 +263,7 @@ async function setup(challenge: Challenge = mockChallenge) {
       MockVirtualScreenReader,
       MockColorContrastPanel,
       MockSandboxPreview,
+      MockSimulationPopover,
       MockChallengeFeedback,
     ],
     deferBlockStates: DeferBlockState.Complete,

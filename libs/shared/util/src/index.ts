@@ -1,8 +1,17 @@
 export { AuthStore } from './lib/auth-store';
+export { buildSimulationCss } from './lib/build-simulation-css';
+export { extractSimulatedMediaRules } from './lib/extract-simulated-media-rules';
+export type {
+  ColorSchemePreference,
+  ContrastPreference,
+  ReducedMotionPreference,
+  SimulationPreferences,
+} from './lib/build-simulation-css';
 export type { AppError } from './lib/error-service';
 export { ErrorService } from './lib/error-service';
 export { Gamification } from './lib/gamification';
 export { LayoutStore } from './lib/layout-store';
+export { PreferenceSimulationStore } from './lib/preference-simulation-store';
 export type {
   ShellLayout,
   PanelCollapsedState,

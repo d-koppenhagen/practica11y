@@ -24,7 +24,8 @@
     "test": {
       "executor": "@nx/angular:unit-test",
       "options": {
-        "watch": false
+        "watch": false,
+        "setupFiles": ["libs/features/challenge-shell/src/test-setup.ts"]
       }
     }
   }

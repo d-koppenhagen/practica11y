@@ -1,8 +1,9 @@
 import { render } from '@testing-library/angular';
 import { Component, input, output, OutputEmitterRef } from '@angular/core';
-import { DeferBlockState } from '@angular/core/testing';
+import { DeferBlockState, TestBed } from '@angular/core/testing';
 import { PreviewPanel } from './preview-panel';
 import { SandboxAxeViolation } from '@practica11y/sandbox';
+import { PreferenceSimulationStore } from '@practica11y/util';
 
 @Component({
   selector: 'a11y-sandbox-preview',
@@ -14,6 +15,7 @@ class MockSandboxPreview {
   readonly cssContent = input<string>('');
   readonly vttContent = input<string>('');
   readonly previewTitle = input<string>('Preview');
+  readonly simulationCss = input<string>('');
   readonly domReady: OutputEmitterRef<MessageEvent> = output<MessageEvent>();
   readonly axeResult: OutputEmitterRef<SandboxAxeViolation[]> =
     output<SandboxAxeViolation[]>();
@@ -192,6 +194,23 @@ describe('PreviewPanel', () => {
         typeof MockSandboxPreview
       >;
       expect(mockInstance.previewTitle()).toBe('My Custom Title');
+    });
+  });
+
+  describe('SimulationCss integration', () => {
+    it('should pass simulationCss from the store to SandboxPreview', async () => {
+      const { fixture } = await setup();
+      const store = TestBed.inject(PreferenceSimulationStore);
+      store.setColorScheme('dark');
+      fixture.detectChanges();
+
+      const mockSandbox = fixture.debugElement.query(
+        (el) => el.name === 'a11y-sandbox-preview',
+      );
+      const mockInstance = mockSandbox.componentInstance as InstanceType<
+        typeof MockSandboxPreview
+      >;
+      expect(mockInstance.simulationCss()).not.toBe('');
     });
   });
 });

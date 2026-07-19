@@ -332,3 +332,8 @@ body {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+/* SimulationPopover backdrop — transparent, just catches clicks */
+.simulation-backdrop {
+  background: transparent;
+}
