@@ -29,6 +29,22 @@ updates:
           - 'rxjs'
           - '@nx/*'
           - 'nx'
+        update-types:
+          - 'minor'
+          - 'patch'
+      other-major:
+        patterns:
+          - '*'
+        exclude-patterns:
+          - '@angular/*'
+          - '@angular-devkit/*'
+          - '@schematics/angular'
+          - 'angular-eslint'
+          - 'rxjs'
+          - '@nx/*'
+          - 'nx'
+        update-types:
+          - 'major'
     open-pull-requests-limit: 10
 
   - package-ecosystem: 'github-actions'
