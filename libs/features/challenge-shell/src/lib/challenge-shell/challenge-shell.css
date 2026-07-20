@@ -402,6 +402,46 @@ a11y-shell-resizer {
   outline-offset: 2px;
 }
 
+.preview-focus-highlight-btn,
+.preview-tab-order-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--p11y-text-muted, #6b7280);
+  border-radius: 4px;
+  font-size: var(--font-size-xs, 0.75rem);
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.preview-focus-highlight-btn:hover,
+.preview-tab-order-btn:hover {
+  color: var(--p11y-primary, #4f46e5);
+  background-color: var(--p11y-bg-muted, #f3f4f6);
+}
+
+.preview-focus-highlight-btn:focus-visible,
+.preview-tab-order-btn:focus-visible {
+  outline: 2px solid var(--p11y-primary, #2563eb);
+  outline-offset: 2px;
+}
+
+.preview-focus-highlight-btn[aria-pressed='true'] {
+  color: #f87171;
+  background-color: rgba(248, 113, 113, 0.15);
+}
+
+.preview-tab-order-btn[aria-pressed='true'] {
+  color: var(--p11y-primary, #4f46e5);
+  background-color: rgba(79, 70, 229, 0.08);
+}
+
 .shell-preview ::ng-deep .panel-body {
   display: flex;
   flex-direction: column;

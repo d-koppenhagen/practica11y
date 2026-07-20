@@ -47,6 +47,7 @@ import {
   targetSizeMinimum,
   noPositiveTabindex,
   skeletonAriaHidden,
+  focusReturnAfterDialog,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -78,6 +79,7 @@ export class AnalysisPipeline {
 
   constructor() {
     // Register all available validators
+    this.challengeValidator.registerValidator(validHtmlSyntax);
     this.challengeValidator.registerValidator(axeNoViolations);
     this.challengeValidator.registerValidator(hasLandmarks);
     this.challengeValidator.registerValidator(hasAllLandmarks);
@@ -91,7 +93,6 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(keyboardAccessible);
     this.challengeValidator.registerValidator(imageAltText);
     this.challengeValidator.registerValidator(focusTrapImplemented);
-    this.challengeValidator.registerValidator(validHtmlSyntax);
     this.challengeValidator.registerValidator(pageTitle);
     this.challengeValidator.registerValidator(imageAltTextLimit);
     this.challengeValidator.registerValidator(imageAriaDescribedby);
@@ -113,6 +114,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(targetSizeMinimum);
     this.challengeValidator.registerValidator(noPositiveTabindex);
     this.challengeValidator.registerValidator(skeletonAriaHidden);
+    this.challengeValidator.registerValidator(focusReturnAfterDialog);
   }
 
   /** Debounced code change signal (300ms) */

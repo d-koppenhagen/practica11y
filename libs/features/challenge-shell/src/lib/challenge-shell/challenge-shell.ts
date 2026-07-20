@@ -163,6 +163,10 @@ export class ChallengeShell {
   protected readonly screenReaderTabOrderEnabled = computed(
     () => this.layoutStore.layout().screenReaderTabOrderEnabled,
   );
+  /** Focus highlight overlay enabled — persisted via the layout store. */
+  protected readonly focusHighlightEnabled = computed(
+    () => this.layoutStore.layout().focusHighlightEnabled,
+  );
   protected readonly challengeCompleted = signal(false);
   protected readonly solutionRevealed = signal(false);
   protected readonly isPeeked = signal(false);
@@ -316,6 +320,20 @@ export class ChallengeShell {
         this.lastSuccessDialogTimestamp = result.timestamp;
         this.openSuccessDialog();
       }
+    });
+
+    // Focus highlight overlay: show/hide based on focused element and toggle state.
+    effect(() => {
+      const enabled = this.focusHighlightEnabled();
+      const focused = this.previewFocusedElement();
+      const doc = this.sandboxDocument();
+
+      if (!enabled) {
+        this.hideFocusHighlight();
+        return;
+      }
+
+      this.updateFocusHighlight(doc, focused);
     });
 
     // Restore collapsed state from store once panels are available
@@ -533,6 +551,7 @@ export class ChallengeShell {
       this.sandboxDocument.set(doc);
       this.srRevision.update((value) => value + 1);
       this.previewFocusedElement.set(null);
+      this.removeFocusHighlight();
     }
 
     // Capture iframe reference for the color contrast panel
@@ -648,6 +667,20 @@ export class ChallengeShell {
     this.layoutStore.setScreenReaderTabOrderEnabled(enabled);
   }
 
+  protected toggleFocusHighlight(): void {
+    const next = !this.focusHighlightEnabled();
+    this.layoutStore.setFocusHighlightEnabled(next);
+    if (!next) {
+      this.removeFocusHighlight();
+    }
+  }
+
+  protected toggleTabOrder(): void {
+    this.layoutStore.setScreenReaderTabOrderEnabled(
+      !this.screenReaderTabOrderEnabled(),
+    );
+  }
+
   protected openPreviewInNewTab(): void {
     const html = this.htmlContent();
     const js = this.jsContent();
@@ -722,6 +755,114 @@ export class ChallengeShell {
       return iframe.contentDocument;
     } catch {
       return null;
+    }
+  }
+
+  // --- Focus highlight overlay ---
+
+  private focusHighlightEl: HTMLElement | null = null;
+  private focusHighlightDoc: Document | null = null;
+  private focusHighlightContainer: Element | null = null;
+
+  private updateFocusHighlight(
+    doc: Document | null,
+    element: Element | null,
+  ): void {
+    // Drop stale overlay if the document was swapped (iframe reload).
+    if (this.focusHighlightDoc && this.focusHighlightDoc !== doc) {
+      this.removeFocusHighlight();
+    }
+
+    if (!doc?.body || !element || element.ownerDocument !== doc) {
+      this.hideFocusHighlight();
+      return;
+    }
+
+    // Determine the correct container: if the element is inside an open
+    // <dialog> (top-layer), the overlay must live inside that dialog.
+    const dialogAncestor = element.closest('dialog[open]');
+    const container = dialogAncestor ?? doc.body;
+
+    // If the container changed, re-create the overlay in the new container.
+    if (this.focusHighlightContainer !== container) {
+      this.removeFocusHighlight();
+    }
+
+    const overlay = this.ensureFocusHighlight(doc, container);
+    if (!overlay) return;
+
+    const rect = element.getBoundingClientRect();
+
+    // Use fixed positioning relative to the viewport — works in all contexts
+    // including top-layer dialogs.
+    const padding = 8;
+    overlay.style.display = 'block';
+    overlay.style.top = `${rect.top - padding}px`;
+    overlay.style.left = `${rect.left - padding}px`;
+    overlay.style.width = `${rect.width + padding * 2}px`;
+    overlay.style.height = `${rect.height + padding * 2}px`;
+  }
+
+  private ensureFocusHighlight(
+    doc: Document,
+    container: Element,
+  ): HTMLElement | null {
+    if (
+      this.focusHighlightEl &&
+      this.focusHighlightDoc === doc &&
+      this.focusHighlightContainer === container
+    ) {
+      return this.focusHighlightEl;
+    }
+    if (!container) return null;
+
+    const overlay = doc.createElement('div');
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.dataset['p11yFocusHighlight'] = '';
+    Object.assign(overlay.style, {
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      margin: '0',
+      padding: '0',
+      boxSizing: 'border-box',
+      pointerEvents: 'none',
+      zIndex: '2147483647',
+      border: 'none',
+      outline: 'none',
+      borderRadius: '4px',
+      backgroundColor: 'rgba(220, 38, 38, 0.25)',
+      boxShadow: 'none',
+      display: 'none',
+    } satisfies Partial<CSSStyleDeclaration>);
+
+    const mql = doc.defaultView?.matchMedia?.(
+      '(prefers-reduced-motion: reduce)',
+    );
+    if (!mql?.matches) {
+      overlay.style.transition =
+        'top 0.12s ease, left 0.12s ease, width 0.12s ease, height 0.12s ease';
+    }
+
+    container.appendChild(overlay);
+    this.focusHighlightEl = overlay;
+    this.focusHighlightDoc = doc;
+    this.focusHighlightContainer = container;
+    return overlay;
+  }
+
+  private hideFocusHighlight(): void {
+    if (this.focusHighlightEl) {
+      this.focusHighlightEl.style.display = 'none';
+    }
+  }
+
+  private removeFocusHighlight(): void {
+    if (this.focusHighlightEl) {
+      this.focusHighlightEl.remove();
+      this.focusHighlightEl = null;
+      this.focusHighlightDoc = null;
+      this.focusHighlightContainer = null;
     }
   }
 

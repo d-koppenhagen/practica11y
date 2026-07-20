@@ -1,0 +1,27 @@
+<div class="product-page">
+  <h1>Your Shopping Cart</h1>
+
+  <ul class="product-list">
+    <li class="product-item">
+      <span class="product-name">Wireless Headphones</span>
+      <span class="product-price">$79.99</span>
+      <button type="button" class="delete-btn">Delete item</button>
+    </li>
+    <li class="product-item">
+      <span class="product-name">USB-C Cable</span>
+      <span class="product-price">$12.99</span>
+      <button type="button" class="delete-btn">Delete item</button>
+    </li>
+  </ul>
+
+  <div id="confirm-dialog" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="dialog-title" hidden>
+    <div class="modal">
+      <h2 id="dialog-title">Confirm Deletion</h2>
+      <p>Are you sure you want to remove this item from your cart?</p>
+      <div class="dialog-actions">
+        <button type="button" id="confirm-btn" class="btn-danger">Yes, delete</button>
+        <button type="button" id="cancel-btn" class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

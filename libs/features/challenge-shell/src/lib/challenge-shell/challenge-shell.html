@@ -368,6 +368,69 @@
         <div panelHeader class="preview-header">
           <h2 id="preview-heading">Live Preview</h2>
           <div class="preview-header-actions">
+            <button
+              type="button"
+              class="preview-focus-highlight-btn"
+              (click)="toggleFocusHighlight()"
+              [attr.aria-pressed]="focusHighlightEnabled()"
+              [attr.aria-label]="
+                focusHighlightEnabled()
+                  ? 'Disable focus highlight'
+                  : 'Enable focus highlight'
+              "
+              [title]="
+                focusHighlightEnabled()
+                  ? 'Hide focus highlight'
+                  : 'Show focus highlight'
+              "
+            >
+              <svg
+                aria-hidden="true"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="3" />
+                <path
+                  d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+                />
+              </svg>
+              <span class="panel-btn-label">Focus</span>
+            </button>
+            <button
+              type="button"
+              class="preview-tab-order-btn"
+              (click)="toggleTabOrder()"
+              [attr.aria-pressed]="screenReaderTabOrderEnabled()"
+              [attr.aria-label]="
+                screenReaderTabOrderEnabled()
+                  ? 'Hide tab order overlay'
+                  : 'Show tab order overlay'
+              "
+              [title]="
+                screenReaderTabOrderEnabled()
+                  ? 'Hide tab order'
+                  : 'Show tab order'
+              "
+            >
+              <svg
+                aria-hidden="true"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M7 7H5v2h2V7zm0 4H5v2h2v-2zm0 4H5v2h2v-2zm12-8h-8v2h8V7zm0 4h-8v2h8v-2zm0 4h-8v2h8v-2z"
+                />
+              </svg>
+              <span class="panel-btn-label">Tab order</span>
+            </button>
             <a11y-simulation-popover></a11y-simulation-popover>
             <button
               class="preview-open-btn"

@@ -34,6 +34,8 @@ export interface ShellLayout {
   screenReaderHighlightEnabled: boolean;
   /** Whether the virtual screen reader tab order overlay is enabled. */
   screenReaderTabOrderEnabled: boolean;
+  /** Whether the focus highlight overlay in the preview is enabled. */
+  focusHighlightEnabled: boolean;
 }
 
 function getDefaultLayout(): ShellLayout {
@@ -52,6 +54,7 @@ function getDefaultLayout(): ShellLayout {
     screenReaderSpeechEnabled: true,
     screenReaderHighlightEnabled: true,
     screenReaderTabOrderEnabled: false,
+    focusHighlightEnabled: false,
   };
 }
 
@@ -125,6 +128,11 @@ export class LayoutStore {
   /** Update the virtual screen reader tab order overlay enabled state */
   setScreenReaderTabOrderEnabled(screenReaderTabOrderEnabled: boolean): void {
     this.layout.update((l) => ({ ...l, screenReaderTabOrderEnabled }));
+  }
+
+  /** Update the focus highlight overlay enabled state */
+  setFocusHighlightEnabled(focusHighlightEnabled: boolean): void {
+    this.layout.update((l) => ({ ...l, focusHighlightEnabled }));
   }
 
   private async init(): Promise<void> {
