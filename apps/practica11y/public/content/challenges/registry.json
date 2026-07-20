@@ -28,6 +28,7 @@
     { "id": "missing-autocomplete" },
     { "id": "target-size-too-small" },
     { "id": "tab-roulette" },
-    { "id": "skeleton-loader-announced" }
+    { "id": "skeleton-loader-announced" },
+    { "id": "blind-progress" }
   ]
 }

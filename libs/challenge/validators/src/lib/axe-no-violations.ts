@@ -14,7 +14,7 @@ export const axeNoViolations: Validator = {
       return {
         validatorId: 'axe-no-violations',
         passed: false,
-        message: 'No analysis result available.',
+        message: 'Axe Scan: No analysis result available.',
       };
     }
 
@@ -25,8 +25,8 @@ export const axeNoViolations: Validator = {
       validatorId: 'axe-no-violations',
       passed,
       message: passed
-        ? 'No accessibility violations found.'
-        : `${violations.length} accessibility violation(s) found.`,
+        ? 'Axe Scan: No accessibility violations found.'
+        : `Axe Scan: ${violations.length} accessibility violation(s) found.`,
       details: passed
         ? undefined
         : violations

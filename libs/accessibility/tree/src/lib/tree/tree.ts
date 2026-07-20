@@ -134,30 +134,38 @@ export class TreeGenerator {
       props.push({ key: 'invalid', value: true });
     }
 
-    // valuemin / valuemax / valuenow (range inputs, sliders, spinbuttons)
+    // valuemin / valuemax / valuenow (range-like elements: inputs, sliders, spinbuttons, progressbars, meters)
     if (
       element.matches(
-        'input[type="number"], input[type="range"], [role="slider"], [role="spinbutton"]',
+        'input[type="number"], input[type="range"], progress, meter, [role="slider"], [role="spinbutton"], [role="progressbar"], [role="meter"], [role="scrollbar"]',
       )
     ) {
+      const isProgress = element.matches('progress');
+      const isMeter = element.matches('meter');
+
       const min =
-        element.getAttribute('min') ??
         element.getAttribute('aria-valuemin') ??
+        element.getAttribute('min') ??
         '0';
       const max =
-        element.getAttribute('max') ??
         element.getAttribute('aria-valuemax') ??
-        '0';
+        element.getAttribute('max') ??
+        (isProgress || isMeter ? '1' : '0');
       props.push({ key: 'valuemin', value: min });
       props.push({ key: 'valuemax', value: max });
 
-      const now = element.getAttribute('aria-valuenow') ?? (el.value || '');
+      const now =
+        element.getAttribute('aria-valuenow') ??
+        element.getAttribute('value') ??
+        (el.value || '');
       if (now) {
         props.push({ key: 'valuenow', value: now });
       }
 
       const valuetext = element.getAttribute('aria-valuetext') ?? '';
-      props.push({ key: 'valuetext', value: valuetext });
+      if (valuetext) {
+        props.push({ key: 'valuetext', value: valuetext });
+      }
     }
 
     // multiline (textarea)

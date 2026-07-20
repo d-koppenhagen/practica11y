@@ -32,6 +32,7 @@ import {
   reducedMotion,
   prefersColorScheme,
   prefersContrast,
+  progressbarAccessible,
   ariaInvalidErrors,
   errorFocusManagement,
   videoHasCaptions,
@@ -97,6 +98,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(reducedMotion);
     this.challengeValidator.registerValidator(prefersColorScheme);
     this.challengeValidator.registerValidator(prefersContrast);
+    this.challengeValidator.registerValidator(progressbarAccessible);
     this.challengeValidator.registerValidator(ariaInvalidErrors);
     this.challengeValidator.registerValidator(errorFocusManagement);
     this.challengeValidator.registerValidator(videoHasCaptions);

@@ -33,3 +33,4 @@ export { noPositiveTabindex } from './lib/no-positive-tabindex';
 export { skeletonAriaHidden } from './lib/skeleton-aria-hidden';
 export { prefersContrast } from './lib/prefers-contrast';
 export { prefersColorScheme } from './lib/prefers-color-scheme';
+export { progressbarAccessible } from './lib/progressbar-accessible';
