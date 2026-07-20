@@ -48,6 +48,7 @@ import {
   noPositiveTabindex,
   skeletonAriaHidden,
   focusReturnAfterDialog,
+  uniqueButtonLabels,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -115,6 +116,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(noPositiveTabindex);
     this.challengeValidator.registerValidator(skeletonAriaHidden);
     this.challengeValidator.registerValidator(focusReturnAfterDialog);
+    this.challengeValidator.registerValidator(uniqueButtonLabels);
   }
 
   /** Debounced code change signal (300ms) */
