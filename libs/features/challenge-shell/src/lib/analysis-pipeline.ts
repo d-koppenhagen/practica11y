@@ -49,6 +49,7 @@ import {
   skeletonAriaHidden,
   focusReturnAfterDialog,
   uniqueButtonLabels,
+  labelInName,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -117,6 +118,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(skeletonAriaHidden);
     this.challengeValidator.registerValidator(focusReturnAfterDialog);
     this.challengeValidator.registerValidator(uniqueButtonLabels);
+    this.challengeValidator.registerValidator(labelInName);
   }
 
   /** Debounced code change signal (300ms) */

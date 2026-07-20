@@ -36,3 +36,4 @@ export { prefersColorScheme } from './lib/prefers-color-scheme';
 export { progressbarAccessible } from './lib/progressbar-accessible';
 export { focusReturnAfterDialog } from './lib/focus-return-after-dialog';
 export { uniqueButtonLabels } from './lib/unique-button-labels';
+export { labelInName } from './lib/label-in-name';
