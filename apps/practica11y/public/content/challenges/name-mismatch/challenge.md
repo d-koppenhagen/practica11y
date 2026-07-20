@@ -7,6 +7,7 @@ tags:
   - screen-reader
 points: 150
 createdAt: '2026-07-20'
+updatedAt: '2026-07-20'
 starter:
   html: starter.html
   css: starter.css
@@ -16,6 +17,7 @@ validators:
   - color-contrast
   - axe-no-violations
   - label-in-name
+  - section-accessible-name
 links:
   - text: 'W3C: Understanding Label in Name (2.5.3)'
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/label-in-name.html'

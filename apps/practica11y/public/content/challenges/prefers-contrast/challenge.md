@@ -7,7 +7,7 @@ tags:
   - user-preferences
 points: 150
 createdAt: '2026-07-19'
-updatedAt: '2026-07-19'
+updatedAt: '2026-07-20'
 starter:
   html: starter.html
   css: starter.css
@@ -16,6 +16,7 @@ solution:
 validators:
   - axe-no-violations
   - prefers-contrast
+  - section-accessible-name
 links:
   - text: 'MDN: prefers-contrast'
     url: 'https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast'

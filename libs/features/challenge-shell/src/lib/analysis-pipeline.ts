@@ -50,6 +50,8 @@ import {
   focusReturnAfterDialog,
   uniqueButtonLabels,
   labelInName,
+  ariaOverload,
+  sectionAccessibleName,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -119,6 +121,8 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(focusReturnAfterDialog);
     this.challengeValidator.registerValidator(uniqueButtonLabels);
     this.challengeValidator.registerValidator(labelInName);
+    this.challengeValidator.registerValidator(ariaOverload);
+    this.challengeValidator.registerValidator(sectionAccessibleName);
   }
 
   /** Debounced code change signal (300ms) */

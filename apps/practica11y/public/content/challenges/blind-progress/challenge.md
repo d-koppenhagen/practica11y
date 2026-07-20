@@ -17,6 +17,7 @@ validators:
   - color-contrast
   - axe-no-violations
   - progressbar-accessible
+  - section-accessible-name
 links:
   - text: 'MDN: <progress> element'
     url: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress'

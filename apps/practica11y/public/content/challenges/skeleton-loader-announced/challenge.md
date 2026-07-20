@@ -7,7 +7,7 @@ tags:
   - screen-reader
 points: 200
 createdAt: '2026-07-12'
-updatedAt: '2026-07-13'
+updatedAt: '2026-07-20'
 starter:
   html: starter.html
   css: starter.css
@@ -17,6 +17,7 @@ validators:
   - color-contrast
   - axe-no-violations
   - skeleton-aria-hidden
+  - section-accessible-name
 links:
   - text: 'MDN: aria-busy'
     url: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-busy'

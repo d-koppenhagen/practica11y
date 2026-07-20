@@ -7,6 +7,7 @@ tags:
   - aria
 points: 150
 createdAt: '2026-06-18'
+updatedAt: '2026-07-20'
 starter:
   html: starter.html
   css: starter.css
@@ -17,6 +18,7 @@ validators:
   - axe-no-violations
   - image-alt-text-limit
   - image-aria-describedby
+  - section-accessible-name
 links:
   - text: 'MDN: aria-describedby'
     url: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-describedby'
