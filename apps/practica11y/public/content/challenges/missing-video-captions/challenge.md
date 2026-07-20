@@ -3,7 +3,7 @@ id: missing-video-captions
 title: 'Lost for Words'
 difficulty: intermediate
 tags:
-  - media
+  - multimedia
   - semantics
 points: 125
 createdAt: '2026-06-18'

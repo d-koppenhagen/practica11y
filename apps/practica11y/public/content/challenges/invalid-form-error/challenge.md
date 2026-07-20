@@ -5,6 +5,7 @@ difficulty: advanced
 tags:
   - forms
   - aria
+  - keyboard
 points: 200
 createdAt: '2026-06-18'
 starter:

@@ -63,6 +63,7 @@ All commands run from workspace root. Never `cd` into subdirectories.
 | Lint all     | `pnpm nx run-many --target=lint` |
 | Format       | `pnpm prettier --write .`        |
 | Generate lib | `pnpm nx g @nx/angular:lib`      |
+| Analyze tags | `pnpm analyze-tags`              |
 
 Rules:
 
@@ -138,6 +139,7 @@ When adding challenges:
 - Always set `createdAt` to today's date (YYYY-MM-DD format).
 - When making content changes to existing challenges, add or update `updatedAt` to today's date.
 - Challenges with `createdAt` within 7 days show a "New" badge; those with `updatedAt` within 7 days show an "Updated" badge.
+- **Run `pnpm analyze-tags` before assigning tags** to see existing tags and their usage. Prefer reusing existing tags over introducing new ones. Use `pnpm analyze-tags -- --json` for machine-readable output.
 
 ## Testing
 

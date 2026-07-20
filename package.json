@@ -32,7 +32,8 @@
     "e2e": "pnpm nx e2e practica11y-e2e",
     "e2e:ci": "pnpm nx e2e practica11y-e2e --configuration=ci",
     "lint": "pnpm nx run-many --target=lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "analyze-tags": "tsx tools/analyze-tags.ts"
   },
   "private": true,
   "dependencies": {
@@ -98,7 +99,8 @@
     "typescript": "catalog:",
     "typescript-eslint": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "tsx": "catalog:"
   },
   "nx": {
     "includedScripts": []

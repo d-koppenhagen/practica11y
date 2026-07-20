@@ -3,7 +3,7 @@ name: create-challenge
 description: Creates a new accessibility challenge for the Practica11y app. Trigger when someone wants to add, scaffold, or create a new challenge including content, starter code, validators, and registry integration.
 metadata:
   author: Practica11y Team
-  version: '1.0'
+  version: '1.1'
 ---
 
 # Creating a New Challenge

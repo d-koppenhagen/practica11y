@@ -4,7 +4,7 @@ title: 'Lost in Pronunciation'
 difficulty: beginner
 tags:
   - semantics
-  - internationalization
+  - i18n
 points: 75
 createdAt: '2026-07-04'
 starter:

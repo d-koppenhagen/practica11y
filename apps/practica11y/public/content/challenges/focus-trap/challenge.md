@@ -5,6 +5,7 @@ difficulty: intermediate
 tags:
   - keyboard
   - focus
+  - aria
 points: 150
 createdAt: '2026-06-18'
 updatedAt: '2026-07-06'

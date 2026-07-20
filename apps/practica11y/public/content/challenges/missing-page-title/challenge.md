@@ -3,7 +3,7 @@ id: missing-page-title
 title: 'The Nameless Page'
 difficulty: beginner
 tags:
-  - SPA
+  - spa
   - semantics
 points: 75
 createdAt: '2026-06-18'

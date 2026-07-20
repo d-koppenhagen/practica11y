@@ -3,7 +3,6 @@ id: target-size-too-small
 title: 'Fat Finger Fiasco'
 difficulty: beginner
 tags:
-  - interaction
   - motor
 points: 100
 createdAt: '2026-07-05'

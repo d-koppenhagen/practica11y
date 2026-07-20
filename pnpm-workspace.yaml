@@ -82,4 +82,5 @@ catalog:
   colorjs.io: '^0.6.1'
   '@testing-library/jest-dom': ^6.9.1
   '@angular/aria': ^22.0.5
+  tsx: '4.23.1'
 catalogMode: 'strict'

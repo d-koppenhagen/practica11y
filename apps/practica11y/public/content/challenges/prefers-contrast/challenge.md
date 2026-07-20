@@ -4,7 +4,7 @@ title: 'High Contrast'
 difficulty: intermediate
 tags:
   - visual
-  - media-query
+  - user-preferences
 points: 150
 createdAt: '2026-07-19'
 updatedAt: '2026-07-19'

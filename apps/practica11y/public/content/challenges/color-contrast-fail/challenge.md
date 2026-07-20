@@ -4,7 +4,6 @@ title: 'Fifty Shades of Gray'
 difficulty: beginner
 tags:
   - visual
-  - color
 points: 100
 createdAt: '2026-06-18'
 starter:

@@ -3,7 +3,7 @@ name: evaluate-challenge
 description: Evaluates an existing accessibility challenge in the Practica11y app for consistency and quality. Trigger when someone wants to review, audit, check, or evaluate a challenge — verifying that the task description matches the starter code, that validators sufficiently cover the required fixes, and that metadata (points, tags, difficulty, title) is coherent. Produces actionable improvement suggestions that an agent can pick up and implement.
 metadata:
   author: Practica11y Team
-  version: '1.0'
+  version: '1.1'
 ---
 
 # Evaluating an Existing Challenge
@@ -93,17 +93,17 @@ verifies it**. Map every task requirement to a validating check.
 
 Check each frontmatter field against the rest of the challenge:
 
-| Field          | What to verify                                                                                                                    |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `id`           | kebab-case, matches the folder name and the registry entry                                                                        |
-| `title`        | descriptive, matches the actual scenario, not duplicated by another challenge                                                     |
-| `difficulty`   | `beginner` \| `intermediate` \| `advanced`; matches the real cognitive load (number of concepts, ARIA depth, dynamic JS required) |
-| `tags`         | accurate and complete for the topic (e.g. `forms`, `aria`, `keyboard`, `images`, `semantics`); no irrelevant tags                 |
-| `points`       | proportional to difficulty and consistent with comparable challenges (compare against peers in the registry)                      |
-| `starter`      | every referenced file exists; `html` present                                                                                      |
-| `validators`   | every id exists, is exported, and is registered; the set covers the task                                                          |
-| `previewTitle` | optional; sensible if present                                                                                                     |
-| `links`        | resolve to the right topic (MDN/WCAG/APG/Deque), no dead or off-topic links                                                       |
+| Field          | What to verify                                                                                                                                                                                                                                                                                                                                      |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`           | kebab-case, matches the folder name and the registry entry                                                                                                                                                                                                                                                                                          |
+| `title`        | descriptive, matches the actual scenario, not duplicated by another challenge                                                                                                                                                                                                                                                                       |
+| `difficulty`   | `beginner` \| `intermediate` \| `advanced`; matches the real cognitive load (number of concepts, ARIA depth, dynamic JS required)                                                                                                                                                                                                                   |
+| `tags`         | accurate and complete for the topic (e.g. `forms`, `aria`, `keyboard`, `images`, `semantics`); no irrelevant tags. Run `pnpm analyze-tags` to see existing tags and their frequency — prefer reusing existing tags over introducing new ones. Only suggest a new tag when the challenge clearly covers a topic not represented by any existing tag. |
+| `points`       | proportional to difficulty and consistent with comparable challenges (compare against peers in the registry)                                                                                                                                                                                                                                        |
+| `starter`      | every referenced file exists; `html` present                                                                                                                                                                                                                                                                                                        |
+| `validators`   | every id exists, is exported, and is registered; the set covers the task                                                                                                                                                                                                                                                                            |
+| `previewTitle` | optional; sensible if present                                                                                                                                                                                                                                                                                                                       |
+| `links`        | resolve to the right topic (MDN/WCAG/APG/Deque), no dead or off-topic links                                                                                                                                                                                                                                                                         |
 
 For `points` and `difficulty`, calibrate by comparing with sibling challenges in
 `registry.json` rather than judging in isolation. Note inconsistencies (e.g. a trivial
@@ -168,6 +168,7 @@ One or two sentences: overall verdict (solid / needs work / broken) + headline i
 - [ ] No validator passes trivially on the unmodified starter
 - [ ] No correct (incl. dynamic-JS) solution can fail the validators
 - [ ] All validator ids are exported and registered in the pipeline
+- [ ] Ran `pnpm analyze-tags` and verified tags reuse existing ones (or a new tag is clearly justified)
 - [ ] `difficulty`, `points`, `tags`, `title` are coherent and calibrated vs. peers
 - [ ] All referenced starter files exist; links resolve to the right topics
 - [ ] Registry entry present and `disabled` flag intentional

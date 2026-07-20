@@ -4,7 +4,7 @@ title: 'Dark Side'
 difficulty: beginner
 tags:
   - visual
-  - media-query
+  - user-preferences
 points: 100
 createdAt: '2026-07-19'
 starter:

@@ -5,7 +5,7 @@ difficulty: intermediate
 tags:
   - focus
   - keyboard
-  - SPA
+  - spa
 points: 150
 createdAt: '2026-06-18'
 starter:

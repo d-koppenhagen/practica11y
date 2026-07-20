@@ -4,7 +4,7 @@ title: 'Chill Out'
 difficulty: beginner
 tags:
   - visual
-  - media-query
+  - user-preferences
 points: 100
 createdAt: '2026-06-18'
 starter:
