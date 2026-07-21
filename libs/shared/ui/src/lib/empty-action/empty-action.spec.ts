@@ -43,10 +43,10 @@ describe('EmptyAction', () => {
     expect(clicked.value).toBe(true);
   });
 
-  it('should not have aria-pressed when active is false', async () => {
+  it('should have aria-pressed="false" when active is false', async () => {
     await setup({ active: false });
     const button = screen.getByRole('button', { name: /do something/i });
-    expect(button.getAttribute('aria-pressed')).toBeNull();
+    expect(button.getAttribute('aria-pressed')).toBe('false');
   });
 
   it('should set aria-pressed when active is true', async () => {

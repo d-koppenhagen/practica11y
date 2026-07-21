@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/angular';
 import { Component, input } from '@angular/core';
 import { DeferBlockState } from '@angular/core/testing';
 import { AnalysisPipelineResult } from '@practica11y/types';
+import { EmptyAction } from '@practica11y/ui';
 import { FeedbackPanel, FeedbackState } from './feedback-panel';
 
 @Component({
@@ -23,7 +24,7 @@ describe('FeedbackPanel — button state', () => {
             /* noop */
           }),
       },
-      componentImports: [MockChallengeFeedback],
+      componentImports: [MockChallengeFeedback, EmptyAction],
     });
   }
 
@@ -47,7 +48,7 @@ describe('FeedbackPanel — loading state', () => {
   async function setup() {
     return render(FeedbackPanel, {
       inputs: { state: 'loading' as FeedbackState, analysisResult: null },
-      componentImports: [MockChallengeFeedback],
+      componentImports: [MockChallengeFeedback, EmptyAction],
     });
   }
 
@@ -68,7 +69,7 @@ describe('FeedbackPanel — results state', () => {
   async function setup() {
     const { fixture } = await render(FeedbackPanel, {
       inputs: { state: 'results' as FeedbackState, analysisResult: null },
-      componentImports: [MockChallengeFeedback],
+      componentImports: [MockChallengeFeedback, EmptyAction],
       deferBlockStates: DeferBlockState.Complete,
     });
     return { fixture };
@@ -95,7 +96,7 @@ describe('FeedbackPanel — state transitions', () => {
   it('should remove the button when transitioning from "button" to "loading"', async () => {
     const { rerender } = await render(FeedbackPanel, {
       inputs: { state: 'button' as FeedbackState, analysisResult: null },
-      componentImports: [MockChallengeFeedback],
+      componentImports: [MockChallengeFeedback, EmptyAction],
     });
 
     expect(

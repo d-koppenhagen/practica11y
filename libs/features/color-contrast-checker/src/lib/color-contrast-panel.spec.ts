@@ -52,9 +52,11 @@ describe('ColorContrastPanel', () => {
 
   describe('Empty state', () => {
     it('should show instructional text when no element is selected', () => {
-      const emptyAction = element.querySelector('.empty-action');
+      const emptyAction = element.querySelector('a11y-empty-action');
       expect(emptyAction).not.toBeNull();
-      const button = element.querySelector('.pick-button-full');
+      const button = element.querySelector(
+        'a11y-empty-action .empty-action-btn',
+      );
       expect(button).not.toBeNull();
       expect(button!.textContent).toContain('Pick element');
     });
@@ -83,7 +85,7 @@ describe('ColorContrastPanel', () => {
 
     it('should set aria-pressed="true" when pick button is clicked', () => {
       const button = element.querySelector(
-        '.pick-button-full',
+        'a11y-empty-action .empty-action-btn',
       ) as HTMLButtonElement;
       expect(button.getAttribute('aria-pressed')).toBe('false');
 
@@ -95,7 +97,7 @@ describe('ColorContrastPanel', () => {
 
     it('should send enable-color-picker message when button is clicked', () => {
       const button = element.querySelector(
-        '.pick-button-full',
+        'a11y-empty-action .empty-action-btn',
       ) as HTMLButtonElement;
 
       button.click();
@@ -116,7 +118,7 @@ describe('ColorContrastPanel', () => {
 
     it('should send disable-color-picker message when button is clicked while active', () => {
       const button = element.querySelector(
-        '.pick-button-full',
+        'a11y-empty-action .empty-action-btn',
       ) as HTMLButtonElement;
 
       // Activate
@@ -144,7 +146,7 @@ describe('ColorContrastPanel', () => {
 
     it('should set aria-pressed="false" when color-pick-result is received', () => {
       const button = element.querySelector(
-        '.pick-button-full',
+        'a11y-empty-action .empty-action-btn',
       ) as HTMLButtonElement;
 
       // Activate picker
@@ -319,7 +321,7 @@ describe('ColorContrastPanel', () => {
       expect(element.querySelector('.ratio-display')).toBeNull();
       expect(element.querySelector('.color-swatches')).toBeNull();
       expect(element.querySelector('.conformance-grid')).toBeNull();
-      expect(element.querySelector('.empty-action')).not.toBeNull();
+      expect(element.querySelector('a11y-empty-action')).not.toBeNull();
     });
   });
 

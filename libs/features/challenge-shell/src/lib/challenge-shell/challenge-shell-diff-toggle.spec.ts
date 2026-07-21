@@ -9,7 +9,11 @@ import { By } from '@angular/platform-browser';
 import { Challenge } from '@practica11y/models';
 import { AccessibilityNode, AnalysisPipelineResult } from '@practica11y/types';
 import { SandboxAxeViolation } from '@practica11y/sandbox';
-import { ChallengeMetaBar, MarkdownContent } from '@practica11y/ui';
+import {
+  ChallengeMetaBar,
+  EmptyAction,
+  MarkdownContent,
+} from '@practica11y/ui';
 
 import { ChallengeShell } from './challenge-shell';
 import { AnalysisPipeline } from '../analysis-pipeline';
@@ -260,7 +264,7 @@ describe('ChallengeShell - Diff Toggle', () => {
       })
       .overrideComponent(FeedbackPanel, {
         set: {
-          imports: [MockChallengeFeedback],
+          imports: [MockChallengeFeedback, EmptyAction],
         },
       })
       .overrideComponent(PreviewPanel, {

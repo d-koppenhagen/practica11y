@@ -20,7 +20,11 @@ import { EditorTabs } from '../editor-tabs/editor-tabs';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
-import { ChallengeMetaBar, MarkdownContent } from '@practica11y/ui';
+import {
+  ChallengeMetaBar,
+  EmptyAction,
+  MarkdownContent,
+} from '@practica11y/ui';
 
 // --- Stub components ---
 
@@ -270,7 +274,7 @@ describe('ChallengeShell tab integration', () => {
       })
       .overrideComponent(FeedbackPanel, {
         set: {
-          imports: [MockChallengeFeedback],
+          imports: [MockChallengeFeedback, EmptyAction],
         },
       })
       .overrideComponent(PreviewPanel, {

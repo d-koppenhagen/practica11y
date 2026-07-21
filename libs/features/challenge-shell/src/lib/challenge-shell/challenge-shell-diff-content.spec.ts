@@ -19,7 +19,11 @@ import { EditorTabs } from '../editor-tabs/editor-tabs';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
-import { ChallengeMetaBar, MarkdownContent } from '@practica11y/ui';
+import {
+  ChallengeMetaBar,
+  EmptyAction,
+  MarkdownContent,
+} from '@practica11y/ui';
 import { DiffLanguageEntry } from '../editor-diff-view/editor-diff-view';
 
 // --- Stub components ---
@@ -294,7 +298,7 @@ describe('ChallengeShell - Diff Content Integration', () => {
       })
       .overrideComponent(FeedbackPanel, {
         set: {
-          imports: [MockChallengeFeedback],
+          imports: [MockChallengeFeedback, EmptyAction],
         },
       })
       .overrideComponent(PreviewPanel, {

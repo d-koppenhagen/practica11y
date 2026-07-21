@@ -15,7 +15,7 @@ import {
       type="button"
       class="empty-action-btn"
       [class.active]="active()"
-      [attr.aria-pressed]="active() ? true : null"
+      [attr.aria-pressed]="active()"
       (click)="actionClick.emit()"
     >
       <ng-content />

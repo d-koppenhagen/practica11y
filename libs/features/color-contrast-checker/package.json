@@ -4,6 +4,7 @@
   "peerDependencies": {
     "@angular/core": "catalog:",
     "@practica11y/types": "workspace:*",
+    "@practica11y/ui": "workspace:*",
     "colorjs.io": "catalog:"
   },
   "sideEffects": false

@@ -26,7 +26,11 @@ import { EditorTabs } from '../editor-tabs/editor-tabs';
 import { InvestigationToolTabs } from '../investigation-tool-tabs/investigation-tool-tabs';
 import { FeedbackPanel } from '../feedback-panel/feedback-panel';
 import { PreviewPanel } from '../preview-panel/preview-panel';
-import { ChallengeMetaBar, MarkdownContent } from '@practica11y/ui';
+import {
+  ChallengeMetaBar,
+  EmptyAction,
+  MarkdownContent,
+} from '@practica11y/ui';
 
 // --- Stub components ---
 
@@ -256,7 +260,7 @@ describe('ChallengeShell', () => {
       })
       .overrideComponent(FeedbackPanel, {
         set: {
-          imports: [MockChallengeFeedback],
+          imports: [MockChallengeFeedback, EmptyAction],
         },
       })
       .overrideComponent(PreviewPanel, {
@@ -641,19 +645,25 @@ describe('ChallengeShell', () => {
       it('should render Check Solution button when feedbackState is "button"', () => {
         // feedbackVisible is false by default → feedbackState is 'button'
         fixture.detectChanges();
-        const btn = fixture.debugElement.query(By.css('.check-solution-btn'));
+        const btn = fixture.debugElement.query(
+          By.css('a11y-feedback-panel .empty-action-btn'),
+        );
         expect(btn).toBeTruthy();
       });
 
       it('should have accessible name "Check Solution"', () => {
         fixture.detectChanges();
-        const btn = fixture.debugElement.query(By.css('.check-solution-btn'));
+        const btn = fixture.debugElement.query(
+          By.css('a11y-feedback-panel .empty-action-btn'),
+        );
         expect(btn.nativeElement.textContent.trim()).toBe('Check Solution');
       });
 
       it('should be a native <button> element', () => {
         fixture.detectChanges();
-        const btn = fixture.debugElement.query(By.css('.check-solution-btn'));
+        const btn = fixture.debugElement.query(
+          By.css('a11y-feedback-panel .empty-action-btn'),
+        );
         expect(btn.nativeElement.tagName.toLowerCase()).toBe('button');
       });
     });
