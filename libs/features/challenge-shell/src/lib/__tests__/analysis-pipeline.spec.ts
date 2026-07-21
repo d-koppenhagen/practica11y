@@ -188,7 +188,7 @@ describe('AnalysisPipeline', () => {
 
       expect(mockChallengeValidator.validateChallenge).toHaveBeenCalledWith(
         doc,
-        ['axe-no-violations', 'has-landmarks', 'valid-html-syntax'],
+        ['valid-html-syntax', 'axe-no-violations', 'has-landmarks'],
         mockAnalysisResult,
       );
     });
@@ -412,7 +412,7 @@ describe('AnalysisPipeline', () => {
 
       expect(mockChallengeValidator.validateChallenge).toHaveBeenCalledWith(
         document,
-        [...mockChallenge.validatorIds, 'valid-html-syntax'],
+        ['valid-html-syntax', ...mockChallenge.validatorIds],
         expect.anything(),
       );
     });

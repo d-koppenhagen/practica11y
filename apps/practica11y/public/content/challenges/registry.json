@@ -33,6 +33,7 @@
     { "id": "focus-return-dialog" },
     { "id": "ambiguous-button-labels" },
     { "id": "name-mismatch" },
-    { "id": "aria-overload" }
+    { "id": "aria-overload" },
+    { "id": "infinite-scroll-no-skip" }
   ]
 }

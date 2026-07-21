@@ -39,3 +39,4 @@ export { uniqueButtonLabels } from './lib/unique-button-labels';
 export { labelInName } from './lib/label-in-name';
 export { ariaOverload } from './lib/aria-overload';
 export { sectionAccessibleName } from './lib/section-accessible-name';
+export { infiniteScrollBypass } from './lib/infinite-scroll-bypass';

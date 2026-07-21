@@ -52,6 +52,7 @@ import {
   labelInName,
   ariaOverload,
   sectionAccessibleName,
+  infiniteScrollBypass,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -123,6 +124,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(labelInName);
     this.challengeValidator.registerValidator(ariaOverload);
     this.challengeValidator.registerValidator(sectionAccessibleName);
+    this.challengeValidator.registerValidator(infiniteScrollBypass);
   }
 
   /** Debounced code change signal (300ms) */
@@ -318,7 +320,7 @@ export class AnalysisPipeline {
       if (challenge) {
         validationResults = await this.challengeValidator.validateChallenge(
           doc,
-          [...challenge.validatorIds, 'valid-html-syntax'],
+          ['valid-html-syntax', ...challenge.validatorIds],
           accessibilityAnalysis,
         );
       }
@@ -364,7 +366,7 @@ export class AnalysisPipeline {
       if (challenge) {
         validationResults = await this.challengeValidator.validateChallenge(
           doc,
-          [...challenge.validatorIds, 'valid-html-syntax'],
+          ['valid-html-syntax', ...challenge.validatorIds],
           accessibilityAnalysis,
         );
       }
