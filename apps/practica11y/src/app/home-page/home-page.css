@@ -145,5 +145,6 @@
 
 .home-card-link--secondary:hover {
   background: var(--p11y-primary);
+  transform: translateX(3px);
   color: var(--p11y-primary-text);
 }
