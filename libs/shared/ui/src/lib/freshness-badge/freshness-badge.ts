@@ -42,8 +42,8 @@ export type FreshnessType = 'new' | 'updated' | 'none';
     }
 
     .freshness-badge--new {
-      background-color: var(--p11y-primary-bg, #dbeafe);
-      color: var(--p11y-primary, #2563eb);
+      background-color: var(--p11y-primary-light, #dbeafe);
+      color: var(--p11y-primary-badge-text, #1e40af);
     }
 
     .freshness-badge--updated {

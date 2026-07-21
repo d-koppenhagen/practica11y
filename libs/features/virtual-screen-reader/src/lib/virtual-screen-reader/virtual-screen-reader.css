@@ -174,7 +174,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 600;
-  color: var(--p11y-text-muted, #6b7280);
+  color: var(--p11y-text-secondary, #4b5563);
 }
 
 .vsr-current-phrase {

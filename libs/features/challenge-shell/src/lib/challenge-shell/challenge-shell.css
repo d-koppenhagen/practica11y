@@ -245,13 +245,13 @@ a11y-shell-resizer {
 .diff-toggle-label {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--p11y-text-muted, #6b7280);
+  color: var(--p11y-text-secondary, #4b5563);
   user-select: none;
   transition: color 0.15s ease;
 }
 
 .diff-toggle--active .diff-toggle-label {
-  color: var(--p11y-primary, #2563eb);
+  color: var(--p11y-primary-badge-text, #2563eb);
 }
 
 .diff-toggle-switch {
