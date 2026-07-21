@@ -6,12 +6,13 @@ import {
 } from '@angular/core';
 import { AnalysisPipelineResult } from '@practica11y/types';
 import { ChallengeFeedback } from '@practica11y/challenge-feedback';
+import { EmptyAction } from '@practica11y/ui';
 
 export type FeedbackState = 'button' | 'loading' | 'results';
 
 @Component({
   selector: 'a11y-feedback-panel',
-  imports: [ChallengeFeedback],
+  imports: [ChallengeFeedback, EmptyAction],
   templateUrl: './feedback-panel.html',
   styleUrl: './feedback-panel.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

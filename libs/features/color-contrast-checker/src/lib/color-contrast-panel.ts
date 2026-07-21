@@ -8,6 +8,7 @@ import {
   inject,
 } from '@angular/core';
 import { ColorPickResult } from '@practica11y/types';
+import { EmptyAction } from '@practica11y/ui';
 
 import {
   calculateContrastRatio,
@@ -19,6 +20,7 @@ import {
 
 @Component({
   selector: 'a11y-color-contrast-panel',
+  imports: [EmptyAction],
   templateUrl: './color-contrast-panel.html',
   styleUrl: './color-contrast-panel.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -12,3 +12,4 @@ export {
   type FreshnessType,
 } from './lib/freshness-badge/freshness-badge';
 export { ChallengeMetaBar } from './lib/challenge-meta-bar/challenge-meta-bar';
+export { EmptyAction } from './lib/empty-action/empty-action';

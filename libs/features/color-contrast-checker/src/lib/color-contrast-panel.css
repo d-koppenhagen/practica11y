@@ -12,64 +12,8 @@
 }
 
 /* ===================================================================
-   Empty state — full-area button with blurred pipette background
-   (mirrors the Feedback panel's "Check Solution" pattern)
+   Empty state — handled by shared <a11y-empty-action> component
    =================================================================== */
-
-.empty-action {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  overflow: hidden;
-  min-height: 4rem;
-}
-
-.empty-bg-icon {
-  position: absolute;
-  width: 14rem;
-  height: 14rem;
-  color: var(--p11y-primary);
-  opacity: 0.08;
-  filter: blur(4px);
-  pointer-events: none;
-  user-select: none;
-}
-
-.pick-button-full {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--p11y-primary);
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
-  margin: 0;
-  z-index: 1;
-}
-
-.pick-button-full:hover {
-  background-color: color-mix(in srgb, var(--p11y-primary) 10%, transparent);
-  color: var(--p11y-primary);
-}
-
-.pick-button-full:focus-visible {
-  outline: 2px solid var(--p11y-primary);
-  outline-offset: -2px;
-}
-
-.pick-button-full.active {
-  background-color: color-mix(in srgb, var(--p11y-primary) 15%, transparent);
-  cursor: crosshair;
-}
 
 .panel-header {
   display: flex;

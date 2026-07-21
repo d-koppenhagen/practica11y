@@ -3,9 +3,9 @@
   [class.has-result]="!!colorResult() || !!errorState()"
 >
   @if (!colorResult() && !errorState()) {
-    <div class="empty-action">
+    <a11y-empty-action [active]="pickerActive()" (actionClick)="togglePicker()">
       <svg
-        class="empty-bg-icon"
+        icon
         aria-hidden="true"
         viewBox="0 0 24 24"
         fill="none"
@@ -21,15 +21,8 @@
         />
         <path d="M9.5 10.5l4 4" />
       </svg>
-      <button
-        class="pick-button-full"
-        [class.active]="pickerActive()"
-        [attr.aria-pressed]="pickerActive()"
-        (click)="togglePicker()"
-      >
-        Pick element
-      </button>
-    </div>
+      Pick element
+    </a11y-empty-action>
   } @else {
     <div class="panel-header">
       @if (colorResult()) {
