@@ -163,13 +163,16 @@ This is an accessibility teaching platform — the UI itself must be exemplary:
 
 ## Documentation
 
-Architecture and data flow documentation lives in `docs/`:
+Architecture and data flow documentation lives in `docs/`. Always read the relevant doc before making structural changes:
 
-| File                       | Content                                                         |
-| -------------------------- | --------------------------------------------------------------- |
-| `docs/architecture.md`     | System overview, Nx library graph, dependency rules             |
-| `docs/data-flow.md`        | Analysis pipeline, gamification, sandbox communication, caching |
-| `docs/testing-strategy.md` | Testing approach, tools, coverage expectations                  |
+| File                        | Content                                                            |
+| --------------------------- | ------------------------------------------------------------------ |
+| `docs/architecture.md`      | System overview, Nx library graph, dependency rules                |
+| `docs/data-flow.md`         | Analysis pipeline, gamification, sandbox communication, caching    |
+| `docs/testing-strategy.md`  | Testing approach, tools, coverage expectations                     |
+| `docs/github-auth-proxy.md` | CORS proxy setup, Cloudflare Worker config, OAuth Device Flow docs |
+
+#[[file]] #[[file]] #[[file]] #[[file]]
 
 Rules:
 

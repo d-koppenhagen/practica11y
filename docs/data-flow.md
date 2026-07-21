@@ -101,11 +101,52 @@ sequenceDiagram
     Iframe->>Host: postMessage({ type: 'dom-ready' })
     Host->>Host: Start accessibility analysis
 
+    alt User interacts with preview (focus, input, DOM mutation)
+        Iframe->>Host: postMessage({ type: 'interaction-change' })
+        Note over Host: Debounced (150ms) — re-runs tree + screen reader
+    end
+
+    alt Host requests axe analysis
+        Host->>Iframe: postMessage({ type: 'run-analysis' })
+        Iframe->>Host: postMessage({ type: 'axe-result', payload })
+    end
+
     alt Runtime error in user code
-        Iframe->>Host: postMessage({ type: 'error', message })
+        Iframe->>Host: postMessage({ type: 'axe-error', payload: { message } })
         Host->>Host: Show error state in preview
     end
 ```
+
+### Message Protocol
+
+| Direction     | Message Type           | Payload                            | Purpose                                                                                    |
+| ------------- | ---------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------ |
+| Iframe → Host | `dom-ready`            | —                                  | Signals the iframe document has loaded; triggers initial analysis                          |
+| Iframe → Host | `interaction-change`   | —                                  | User interaction or DOM mutation in preview; debounced at 150ms to avoid excessive updates |
+| Host → Iframe | `run-analysis`         | —                                  | Request axe-core analysis                                                                  |
+| Iframe → Host | `axe-result`           | `AxeResults`                       | axe-core analysis results                                                                  |
+| Iframe → Host | `axe-error`            | `{ message }`                      | axe-core analysis failed                                                                   |
+| Host → Iframe | `enable-color-picker`  | —                                  | Activate element color picker mode                                                         |
+| Host → Iframe | `disable-color-picker` | —                                  | Deactivate color picker mode                                                               |
+| Iframe → Host | `color-pick-result`    | `{ fg, bg, fontSize, fontWeight }` | Color data for selected element                                                            |
+
+### Live Updates via Interaction Observer
+
+The sandbox script (`sandbox-scripts`) observes in-place DOM changes and user interactions to notify the host for live accessibility tree / screen reader updates:
+
+- **MutationObserver** on `#user-content`: watches attributes, child list, subtree, and character data changes
+- **Event listeners**: `input`, `change` (form values), `focusin`, `focusout` (focus state changes)
+- All triggers are **debounced at 150ms** before sending `interaction-change` to avoid flooding the host during rapid interactions
+
+This allows the accessibility tree and virtual screen reader to stay in sync with user interactions (e.g., toggling ARIA attributes via JavaScript, focusing form fields) without requiring a full srcdoc reload.
+
+### Link Interception
+
+The sandbox script intercepts all anchor clicks to prevent navigation (which would destroy the srcdoc iframe):
+
+- **In-page anchors** (`#id`): Scrolls smoothly to the target element
+- **External/relative URLs**: Shows a toast notification ("Navigation blocked → {url}") via an accessible `aria-live` region
+- This ensures learner code with `<a href="...">` elements does not break the preview
 
 ### Security Model
 
