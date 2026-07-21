@@ -53,6 +53,7 @@ import {
   ariaOverload,
   sectionAccessibleName,
   infiniteScrollBypass,
+  hoverDropdownAccessible,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -125,6 +126,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(ariaOverload);
     this.challengeValidator.registerValidator(sectionAccessibleName);
     this.challengeValidator.registerValidator(infiniteScrollBypass);
+    this.challengeValidator.registerValidator(hoverDropdownAccessible);
   }
 
   /** Debounced code change signal (300ms) */

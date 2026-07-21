@@ -34,6 +34,7 @@
     { "id": "ambiguous-button-labels" },
     { "id": "name-mismatch" },
     { "id": "aria-overload" },
-    { "id": "infinite-scroll-no-skip" }
+    { "id": "infinite-scroll-no-skip" },
+    { "id": "hover-only-dropdown" }
   ]
 }
