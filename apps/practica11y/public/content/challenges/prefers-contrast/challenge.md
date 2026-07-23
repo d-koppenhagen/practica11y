@@ -24,6 +24,8 @@ links:
     url: 'https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast.html'
   - text: 'web.dev: prefers-contrast'
     url: 'https://web.dev/articles/prefers-contrast'
+  - text: 'Sara Soueidan: A guide to designing accessible focus indicators'
+    url: 'https://www.sarasoueidan.com/blog/focus-indicators/'
 ---
 
 This pricing card uses subtle visual patterns common in modern UI: barely-visible borders, soft box-shadows for depth, ghost buttons with faint outlines, and a badge with no border. Users who prefer increased contrast may struggle to perceive where one element ends and another begins. The disclaimer text is too faint and the link relies solely on color.

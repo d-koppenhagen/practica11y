@@ -24,6 +24,8 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible'
   - text: 'Deque: Focus Indicator'
     url: 'https://dequeuniversity.com/rules/axe/4.10/focus-order-semantics'
+  - text: 'Sara Soueidan: A guide to designing accessible focus indicators'
+    url: 'https://www.sarasoueidan.com/blog/focus-indicators/'
 discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/15'
 ---
 

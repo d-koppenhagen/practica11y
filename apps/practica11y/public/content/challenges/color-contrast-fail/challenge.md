@@ -22,6 +22,8 @@ links:
     url: 'https://webaim.org/resources/contrastchecker/'
   - text: 'Deque: Color Contrast'
     url: 'https://dequeuniversity.com/rules/axe/4.10/color-contrast'
+  - text: 'Sara Soueidan: A guide to designing accessible focus indicators'
+    url: 'https://www.sarasoueidan.com/blog/focus-indicators/'
 discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/20'
 ---
 
