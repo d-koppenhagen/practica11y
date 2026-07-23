@@ -1,0 +1,119 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: 76px;
+  scroll-padding-bottom: 96px;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  color: #1f2937;
+  background: #f9fafb;
+}
+
+.sticky-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+.sticky-header nav {
+  display: flex;
+  gap: 16px;
+}
+
+.sticky-header a {
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.sticky-header a:hover {
+  background: #eff6ff;
+}
+
+main {
+  padding: 24px;
+  margin-top: 76px;
+  margin-bottom: 96px;
+  max-width: 720px;
+}
+
+main a,
+main button {
+  scroll-margin-top: 76px;
+  scroll-margin-bottom: 96px;
+}
+
+main a {
+  color: #1d4ed8;
+  font-weight: 500;
+}
+
+main button {
+  background: #1d4ed8;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+main button:hover {
+  background: #1e40af;
+}
+
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: #1f2937;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 100;
+}
+
+.cookie-banner p {
+  margin: 0;
+}
+
+.cookie-banner button {
+  background: #ffffff;
+  color: #1f2937;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.cookie-banner button:hover {
+  background: #f3f4f6;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}

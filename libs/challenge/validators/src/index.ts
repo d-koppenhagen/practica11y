@@ -41,3 +41,4 @@ export { ariaOverload } from './lib/aria-overload';
 export { sectionAccessibleName } from './lib/section-accessible-name';
 export { infiniteScrollBypass } from './lib/infinite-scroll-bypass';
 export { hoverDropdownAccessible } from './lib/hover-dropdown-accessible';
+export { focusNotObscured } from './lib/focus-not-obscured';
