@@ -55,6 +55,7 @@ import {
   infiniteScrollBypass,
   hoverDropdownAccessible,
   focusNotObscured,
+  accessibleAuthentication,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -129,6 +130,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(infiniteScrollBypass);
     this.challengeValidator.registerValidator(hoverDropdownAccessible);
     this.challengeValidator.registerValidator(focusNotObscured);
+    this.challengeValidator.registerValidator(accessibleAuthentication);
   }
 
   /** Debounced code change signal (300ms) */

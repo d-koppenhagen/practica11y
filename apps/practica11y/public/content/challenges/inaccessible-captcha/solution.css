@@ -1,0 +1,44 @@
+.login-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.login-form label {
+  display: block;
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.captcha {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.verification-code {
+  display: block;
+  margin: 8px 0;
+  padding: 8px;
+  font-family: monospace;
+  font-size: 1.2rem;
+  background: #fff;
+  border: 1px dashed #999;
+  user-select: all;
+}
+
+button[type="submit"] {
+  margin-top: 24px;
+  padding: 12px 24px;
+  width: 100%;
+}

@@ -1,0 +1,28 @@
+<form class="login-form">
+  <h1>Log In</h1>
+
+  <label for="username">Username</label>
+  <input type="text" id="username" name="username">
+
+  <label for="password">Password</label>
+  <input type="password" id="password" name="password">
+
+  <div class="captcha">
+    <p>Type the characters you see below:</p>
+    <svg class="captcha-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" aria-hidden="true">
+      <rect width="200" height="60" fill="#e8e8e8"></rect>
+      <line x1="10" y1="15" x2="190" y2="45" stroke="#ccc" stroke-width="1"></line>
+      <line x1="5" y1="40" x2="195" y2="10" stroke="#ddd" stroke-width="1"></line>
+      <line x1="30" y1="5" x2="170" y2="55" stroke="#ccc" stroke-width="1"></line>
+      <text x="15" y="42" font-family="monospace" font-size="28" fill="#555" transform="rotate(-5 15 42)">X</text>
+      <text x="45" y="38" font-family="monospace" font-size="32" fill="#444" transform="rotate(8 45 38)">7</text>
+      <text x="75" y="44" font-family="monospace" font-size="26" fill="#666" transform="rotate(-12 75 44)">k</text>
+      <text x="100" y="36" font-family="monospace" font-size="30" fill="#555" transform="rotate(6 100 36)">9</text>
+      <text x="130" y="42" font-family="monospace" font-size="28" fill="#444" transform="rotate(-8 130 42)">Q</text>
+      <text x="160" y="38" font-family="monospace" font-size="32" fill="#666" transform="rotate(10 160 38)">m</text>
+    </svg>
+    <input type="text" id="captcha" name="captcha" placeholder="Enter CAPTCHA">
+  </div>
+
+  <button type="submit">Log In</button>
+</form>

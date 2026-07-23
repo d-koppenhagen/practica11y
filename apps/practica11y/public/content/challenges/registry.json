@@ -36,6 +36,7 @@
     { "id": "aria-overload" },
     { "id": "infinite-scroll-no-skip" },
     { "id": "hover-only-dropdown" },
-    { "id": "focus-obscured" }
+    { "id": "focus-obscured" },
+    { "id": "inaccessible-captcha" }
   ]
 }
