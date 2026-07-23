@@ -21,12 +21,12 @@ function createAnalysisResult(
 }
 
 describe('has-landmarks', () => {
-  it('should have id "has-landmarks"', () => {
+  it('should have id "has-landmarks"', async () => {
     expect(hasLandmarks.id).toBe('has-landmarks');
   });
 
   describe('landmarks present → pass', () => {
-    it('should pass when landmarks are present in the tree', () => {
+    it('should pass when landmarks are present in the tree', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [
@@ -36,7 +36,7 @@ describe('has-landmarks', () => {
         ],
       };
 
-      const result = hasLandmarks.validate(
+      const result = await hasLandmarks.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -45,13 +45,13 @@ describe('has-landmarks', () => {
       expect(result.message).toContain('3');
     });
 
-    it('should pass with a single landmark', () => {
+    it('should pass with a single landmark', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [{ role: 'navigation', name: 'Main Nav', children: [] }],
       };
 
-      const result = hasLandmarks.validate(
+      const result = await hasLandmarks.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -59,7 +59,7 @@ describe('has-landmarks', () => {
       expect(result.passed).toBe(true);
     });
 
-    it('should find nested landmarks', () => {
+    it('should find nested landmarks', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [
@@ -70,7 +70,7 @@ describe('has-landmarks', () => {
         ],
       };
 
-      const result = hasLandmarks.validate(
+      const result = await hasLandmarks.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -80,7 +80,7 @@ describe('has-landmarks', () => {
   });
 
   describe('no landmarks → fail', () => {
-    it('should fail when no landmarks are found', () => {
+    it('should fail when no landmarks are found', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [
@@ -90,7 +90,7 @@ describe('has-landmarks', () => {
         ],
       };
 
-      const result = hasLandmarks.validate(
+      const result = await hasLandmarks.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -99,13 +99,13 @@ describe('has-landmarks', () => {
       expect(result.message).toContain('No landmark');
     });
 
-    it('should fail for completely empty tree', () => {
+    it('should fail for completely empty tree', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [],
       };
 
-      const result = hasLandmarks.validate(
+      const result = await hasLandmarks.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -115,8 +115,8 @@ describe('has-landmarks', () => {
   });
 
   describe('no context → fail', () => {
-    it('should fail when no context is provided', () => {
-      const result = hasLandmarks.validate(document, undefined);
+    it('should fail when no context is provided', async () => {
+      const result = await hasLandmarks.validate(document, undefined);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('No analysis result');

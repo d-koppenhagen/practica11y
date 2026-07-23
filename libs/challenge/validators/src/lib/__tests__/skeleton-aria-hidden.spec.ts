@@ -6,7 +6,7 @@ function createDoc(html: string): Document {
 }
 
 describe('skeletonAriaHidden', () => {
-  it('passes when skeleton cards have aria-hidden, container has aria-busy, and a live region exists', () => {
+  it('passes when skeleton cards have aria-hidden, container has aria-busy, and a live region exists', async () => {
     const doc = createDoc(`
       <section>
         <div class="cards-container" aria-busy="true">
@@ -22,11 +22,11 @@ describe('skeletonAriaHidden', () => {
         <p role="status">Loading articles, please wait.</p>
       </section>
     `);
-    const result = skeletonAriaHidden.validate(doc);
+    const result = await skeletonAriaHidden.validate(doc);
     expect(result.passed).toBe(true);
   });
 
-  it('fails when skeleton cards are missing aria-hidden', () => {
+  it('fails when skeleton cards are missing aria-hidden', async () => {
     const doc = createDoc(`
       <section>
         <div class="cards-container" aria-busy="true">
@@ -37,12 +37,12 @@ describe('skeletonAriaHidden', () => {
         <p role="status">Loading articles, please wait.</p>
       </section>
     `);
-    const result = skeletonAriaHidden.validate(doc);
+    const result = await skeletonAriaHidden.validate(doc);
     expect(result.passed).toBe(false);
     expect(result.details).toContain('aria-hidden="true"');
   });
 
-  it('fails when container is missing aria-busy', () => {
+  it('fails when container is missing aria-busy', async () => {
     const doc = createDoc(`
       <section>
         <div class="cards-container">
@@ -53,12 +53,12 @@ describe('skeletonAriaHidden', () => {
         <p role="status">Loading articles, please wait.</p>
       </section>
     `);
-    const result = skeletonAriaHidden.validate(doc);
+    const result = await skeletonAriaHidden.validate(doc);
     expect(result.passed).toBe(false);
     expect(result.details).toContain('aria-busy="true"');
   });
 
-  it('fails when no live region is present', () => {
+  it('fails when no live region is present', async () => {
     const doc = createDoc(`
       <section>
         <div class="cards-container" aria-busy="true">
@@ -68,12 +68,12 @@ describe('skeletonAriaHidden', () => {
         </div>
       </section>
     `);
-    const result = skeletonAriaHidden.validate(doc);
+    const result = await skeletonAriaHidden.validate(doc);
     expect(result.passed).toBe(false);
     expect(result.details).toContain('live region');
   });
 
-  it('passes when no skeleton elements are found', () => {
+  it('passes when no skeleton elements are found', async () => {
     const doc = createDoc(`
       <section>
         <div class="cards-container">
@@ -84,11 +84,11 @@ describe('skeletonAriaHidden', () => {
         </div>
       </section>
     `);
-    const result = skeletonAriaHidden.validate(doc);
+    const result = await skeletonAriaHidden.validate(doc);
     expect(result.passed).toBe(true);
   });
 
-  it('accepts aria-live="polite" as a valid live region', () => {
+  it('accepts aria-live="polite" as a valid live region', async () => {
     const doc = createDoc(`
       <section>
         <div class="cards-container" aria-busy="true">
@@ -99,11 +99,11 @@ describe('skeletonAriaHidden', () => {
         <div aria-live="polite">Loading content...</div>
       </section>
     `);
-    const result = skeletonAriaHidden.validate(doc);
+    const result = await skeletonAriaHidden.validate(doc);
     expect(result.passed).toBe(true);
   });
 
-  it('detects aria-busy on an ancestor up to 3 levels above', () => {
+  it('detects aria-busy on an ancestor up to 3 levels above', async () => {
     const doc = createDoc(`
       <section aria-busy="true">
         <div class="wrapper">
@@ -116,11 +116,11 @@ describe('skeletonAriaHidden', () => {
         <p role="status">Loading...</p>
       </section>
     `);
-    const result = skeletonAriaHidden.validate(doc);
+    const result = await skeletonAriaHidden.validate(doc);
     expect(result.passed).toBe(true);
   });
 
-  it('reports multiple issues when all checks fail', () => {
+  it('reports multiple issues when all checks fail', async () => {
     const doc = createDoc(`
       <section>
         <div class="cards-container">
@@ -130,7 +130,7 @@ describe('skeletonAriaHidden', () => {
         </div>
       </section>
     `);
-    const result = skeletonAriaHidden.validate(doc);
+    const result = await skeletonAriaHidden.validate(doc);
     expect(result.passed).toBe(false);
     expect(result.message).toContain('3 issue(s)');
   });

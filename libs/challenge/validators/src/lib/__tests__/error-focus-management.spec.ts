@@ -45,40 +45,40 @@ describe('error-focus-management', () => {
     document.body.innerHTML = '';
   });
 
-  it('should have id "error-focus-management"', () => {
+  it('should have id "error-focus-management"', async () => {
     expect(errorFocusManagement.id).toBe('error-focus-management');
   });
 
-  it('should fail when there is no form', () => {
+  it('should fail when there is no form', async () => {
     document.body.innerHTML = '<p>No form here</p>';
-    const result = errorFocusManagement.validate(document);
+    const result = await errorFocusManagement.validate(document);
     expect(result.passed).toBe(false);
     expect(result.message).toContain('No form');
   });
 
-  it('should fail when focus is not moved after an invalid submit', () => {
+  it('should fail when focus is not moved after an invalid submit', async () => {
     renderForm((e) => {
       e.preventDefault();
       document.getElementById('email')!.setAttribute('aria-invalid', 'true');
       // No focus() call
     });
-    const result = errorFocusManagement.validate(document);
+    const result = await errorFocusManagement.validate(document);
     expect(result.passed).toBe(false);
     expect(result.message).toContain('focus');
   });
 
-  it('should fail when focus moves to a field that is not aria-invalid', () => {
+  it('should fail when focus moves to a field that is not aria-invalid', async () => {
     renderForm((e) => {
       e.preventDefault();
       // Focus a field but never mark it invalid.
       (document.getElementById('email') as HTMLInputElement).focus();
     });
-    const result = errorFocusManagement.validate(document);
+    const result = await errorFocusManagement.validate(document);
     expect(result.passed).toBe(false);
     expect(result.message).toContain('aria-invalid');
   });
 
-  it('should fail when focus moves to a later invalid field, not the first', () => {
+  it('should fail when focus moves to a later invalid field, not the first', async () => {
     renderForm((e) => {
       e.preventDefault();
       const email = document.getElementById('email') as HTMLInputElement;
@@ -87,14 +87,14 @@ describe('error-focus-management', () => {
       password.setAttribute('aria-invalid', 'true');
       password.focus(); // wrong: should focus the first invalid field
     });
-    const result = errorFocusManagement.validate(document);
+    const result = await errorFocusManagement.validate(document);
     expect(result.passed).toBe(false);
     expect(result.message).toContain('first');
   });
 
-  it('should pass when focus moves to the first invalid field', () => {
+  it('should pass when focus moves to the first invalid field', async () => {
     renderForm(focusFirstInvalidHandler);
-    const result = errorFocusManagement.validate(document);
+    const result = await errorFocusManagement.validate(document);
     expect(result.passed).toBe(true);
   });
 });

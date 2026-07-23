@@ -34,13 +34,13 @@ function createViolation(overrides: Partial<AxeViolation> = {}): AxeViolation {
 }
 
 describe('axe-no-violations', () => {
-  it('should have id "axe-no-violations"', () => {
+  it('should have id "axe-no-violations"', async () => {
     expect(axeNoViolations.id).toBe('axe-no-violations');
   });
 
   describe('no violations → pass', () => {
-    it('should pass when axeResults is empty', () => {
-      const result = axeNoViolations.validate(
+    it('should pass when axeResults is empty', async () => {
+      const result = await axeNoViolations.validate(
         document,
         createAnalysisResult([]),
       );
@@ -51,9 +51,9 @@ describe('axe-no-violations', () => {
   });
 
   describe('some violations → fail', () => {
-    it('should fail when there are violations', () => {
+    it('should fail when there are violations', async () => {
       const violations = [createViolation()];
-      const result = axeNoViolations.validate(
+      const result = await axeNoViolations.validate(
         document,
         createAnalysisResult(violations),
       );
@@ -62,13 +62,13 @@ describe('axe-no-violations', () => {
       expect(result.message).toContain('1');
     });
 
-    it('should report the correct number of violations', () => {
+    it('should report the correct number of violations', async () => {
       const violations = [
         createViolation({ id: 'rule-1' }),
         createViolation({ id: 'rule-2' }),
         createViolation({ id: 'rule-3' }),
       ];
-      const result = axeNoViolations.validate(
+      const result = await axeNoViolations.validate(
         document,
         createAnalysisResult(violations),
       );
@@ -77,7 +77,7 @@ describe('axe-no-violations', () => {
       expect(result.message).toContain('3');
     });
 
-    it('should include violation details', () => {
+    it('should include violation details', async () => {
       const violations = [
         createViolation({
           id: 'image-alt',
@@ -85,7 +85,7 @@ describe('axe-no-violations', () => {
           description: 'Images must have alt text',
         }),
       ];
-      const result = axeNoViolations.validate(
+      const result = await axeNoViolations.validate(
         document,
         createAnalysisResult(violations),
       );
@@ -96,8 +96,8 @@ describe('axe-no-violations', () => {
   });
 
   describe('no context → fail', () => {
-    it('should fail when no context is provided', () => {
-      const result = axeNoViolations.validate(document, undefined);
+    it('should fail when no context is provided', async () => {
+      const result = await axeNoViolations.validate(document, undefined);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('No analysis result');

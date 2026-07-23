@@ -37,12 +37,12 @@ describe('prefers-contrast', () => {
     document.body.innerHTML = '';
   });
 
-  it('should have id "prefers-contrast"', () => {
+  it('should have id "prefers-contrast"', async () => {
     expect(prefersContrast.id).toBe('prefers-contrast');
   });
 
   describe('valid prefers-contrast usage → pass', () => {
-    it('should pass when CSS contains @media (prefers-contrast: more) with border rules', () => {
+    it('should pass when CSS contains @media (prefers-contrast: more) with border rules', async () => {
       injectCss(`
         .card { border: 1px solid #ccc; }
         @media (prefers-contrast: more) {
@@ -50,7 +50,7 @@ describe('prefers-contrast', () => {
         }
       `);
 
-      const result = prefersContrast.validate(
+      const result = await prefersContrast.validate(
         document,
         createAnalysisContext(),
       );
@@ -59,7 +59,7 @@ describe('prefers-contrast', () => {
       expect(result.validatorId).toBe('prefers-contrast');
     });
 
-    it('should pass when CSS contains @media (prefers-contrast: more) with box-shadow rules', () => {
+    it('should pass when CSS contains @media (prefers-contrast: more) with box-shadow rules', async () => {
       injectCss(`
         .card { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         @media (prefers-contrast: more) {
@@ -67,7 +67,7 @@ describe('prefers-contrast', () => {
         }
       `);
 
-      const result = prefersContrast.validate(
+      const result = await prefersContrast.validate(
         document,
         createAnalysisContext(),
       );
@@ -75,7 +75,7 @@ describe('prefers-contrast', () => {
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when CSS contains @media (prefers-contrast: more) with outline rules', () => {
+    it('should pass when CSS contains @media (prefers-contrast: more) with outline rules', async () => {
       injectCss(`
         .btn { outline: none; }
         @media (prefers-contrast: more) {
@@ -83,7 +83,7 @@ describe('prefers-contrast', () => {
         }
       `);
 
-      const result = prefersContrast.validate(
+      const result = await prefersContrast.validate(
         document,
         createAnalysisContext(),
       );
@@ -93,12 +93,12 @@ describe('prefers-contrast', () => {
   });
 
   describe('missing media query → fail', () => {
-    it('should fail when no prefers-contrast media query exists', () => {
+    it('should fail when no prefers-contrast media query exists', async () => {
       injectCss(`
         .card { border: 1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
       `);
 
-      const result = prefersContrast.validate(
+      const result = await prefersContrast.validate(
         document,
         createAnalysisContext(),
       );
@@ -112,8 +112,8 @@ describe('prefers-contrast', () => {
       );
     });
 
-    it('should fail when page has no stylesheets at all', () => {
-      const result = prefersContrast.validate(
+    it('should fail when page has no stylesheets at all', async () => {
+      const result = await prefersContrast.validate(
         document,
         createAnalysisContext(),
       );
@@ -123,14 +123,14 @@ describe('prefers-contrast', () => {
   });
 
   describe('media query without contrast-enhancing rules → fail', () => {
-    it('should fail when prefers-contrast: more exists but lacks border/box-shadow/outline rules', () => {
+    it('should fail when prefers-contrast: more exists but lacks border/box-shadow/outline rules', async () => {
       injectCss(`
         @media (prefers-contrast: more) {
           .card { color: #000; background-color: #fff; }
         }
       `);
 
-      const result = prefersContrast.validate(
+      const result = await prefersContrast.validate(
         document,
         createAnalysisContext(),
       );

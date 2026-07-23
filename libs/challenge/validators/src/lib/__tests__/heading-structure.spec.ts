@@ -25,12 +25,12 @@ function heading(level: number, name?: string): AccessibilityNode {
 }
 
 describe('heading-structure', () => {
-  it('should have id "heading-structure"', () => {
+  it('should have id "heading-structure"', async () => {
     expect(headingStructure.id).toBe('heading-structure');
   });
 
   describe('correct hierarchy → pass', () => {
-    it('should pass with h1 → h2 → h3 hierarchy', () => {
+    it('should pass with h1 → h2 → h3 hierarchy', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [
@@ -40,7 +40,7 @@ describe('heading-structure', () => {
         ],
       };
 
-      const result = headingStructure.validate(
+      const result = await headingStructure.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -48,7 +48,7 @@ describe('heading-structure', () => {
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when going back up in level (h1 → h2 → h3 → h2)', () => {
+    it('should pass when going back up in level (h1 → h2 → h3 → h2)', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [
@@ -59,7 +59,7 @@ describe('heading-structure', () => {
         ],
       };
 
-      const result = headingStructure.validate(
+      const result = await headingStructure.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -67,13 +67,13 @@ describe('heading-structure', () => {
       expect(result.passed).toBe(true);
     });
 
-    it('should pass with a single h1', () => {
+    it('should pass with a single h1', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [heading(1, 'Only Heading')],
       };
 
-      const result = headingStructure.validate(
+      const result = await headingStructure.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -83,13 +83,13 @@ describe('heading-structure', () => {
   });
 
   describe('skipped levels → fail', () => {
-    it('should fail when h1 jumps to h3 (skipping h2)', () => {
+    it('should fail when h1 jumps to h3 (skipping h2)', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [heading(1, 'Title'), heading(3, 'Subsection')],
       };
 
-      const result = headingStructure.validate(
+      const result = await headingStructure.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -98,13 +98,13 @@ describe('heading-structure', () => {
       expect(result.details).toContain('h2');
     });
 
-    it('should fail when first heading is not h1', () => {
+    it('should fail when first heading is not h1', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [heading(2, 'Not a h1'), heading(3, 'Sub')],
       };
 
-      const result = headingStructure.validate(
+      const result = await headingStructure.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -113,13 +113,13 @@ describe('heading-structure', () => {
       expect(result.details).toContain('h1');
     });
 
-    it('should fail when multiple levels are skipped', () => {
+    it('should fail when multiple levels are skipped', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [heading(1, 'Title'), heading(4, 'Deep heading')],
       };
 
-      const result = headingStructure.validate(
+      const result = await headingStructure.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -131,7 +131,7 @@ describe('heading-structure', () => {
   });
 
   describe('no headings → fail', () => {
-    it('should fail when there are no headings in the tree', () => {
+    it('should fail when there are no headings in the tree', async () => {
       const tree: AccessibilityNode = {
         role: 'document',
         children: [
@@ -140,7 +140,7 @@ describe('heading-structure', () => {
         ],
       };
 
-      const result = headingStructure.validate(
+      const result = await headingStructure.validate(
         document,
         createAnalysisResult(tree),
       );
@@ -151,8 +151,8 @@ describe('heading-structure', () => {
   });
 
   describe('no context → fail', () => {
-    it('should fail when no context is provided', () => {
-      const result = headingStructure.validate(document, undefined);
+    it('should fail when no context is provided', async () => {
+      const result = await headingStructure.validate(document, undefined);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('No analysis result');

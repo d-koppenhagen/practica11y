@@ -73,46 +73,46 @@ describe('aria-invalid-errors', () => {
     document.body.innerHTML = '';
   });
 
-  it('should have id "aria-invalid-errors"', () => {
+  it('should have id "aria-invalid-errors"', async () => {
     expect(ariaInvalidErrors.id).toBe('aria-invalid-errors');
   });
 
-  it('should fail when there are no form fields', () => {
+  it('should fail when there are no form fields', async () => {
     document.body.innerHTML = '<p>No form here</p>';
-    const result = ariaInvalidErrors.validate(document);
+    const result = await ariaInvalidErrors.validate(document);
     expect(result.passed).toBe(false);
     expect(result.message).toContain('No form fields');
   });
 
-  it('should fail on the visual-only starter (no aria-invalid set)', () => {
+  it('should fail on the visual-only starter (no aria-invalid set)', async () => {
     renderForm(visualOnlyHandler);
-    const result = ariaInvalidErrors.validate(document);
+    const result = await ariaInvalidErrors.validate(document);
     expect(result.passed).toBe(false);
     expect(result.details).toContain('aria-invalid="true"');
   });
 
-  it('should fail when aria-invalid is statically "false"', () => {
+  it('should fail when aria-invalid is statically "false"', async () => {
     renderForm((e) => e.preventDefault());
     document.getElementById('email')!.setAttribute('aria-invalid', 'false');
     document
       .getElementById('email')!
       .setAttribute('aria-describedby', 'email-error');
-    const result = ariaInvalidErrors.validate(document);
+    const result = await ariaInvalidErrors.validate(document);
     expect(result.passed).toBe(false);
   });
 
-  it('should fail when invalid field has no associated error message', () => {
+  it('should fail when invalid field has no associated error message', async () => {
     renderForm((e) => {
       e.preventDefault();
       document.getElementById('email')!.setAttribute('aria-invalid', 'true');
       // No aria-describedby / aria-errormessage
     });
-    const result = ariaInvalidErrors.validate(document);
+    const result = await ariaInvalidErrors.validate(document);
     expect(result.passed).toBe(false);
     expect(result.details).toContain('aria-describedby');
   });
 
-  it('should fail when the referenced error message element is empty', () => {
+  it('should fail when the referenced error message element is empty', async () => {
     renderForm((e) => {
       e.preventDefault();
       const email = document.getElementById('email')!;
@@ -120,30 +120,30 @@ describe('aria-invalid-errors', () => {
       email.setAttribute('aria-describedby', 'email-error');
       // error span left empty
     });
-    const result = ariaInvalidErrors.validate(document);
+    const result = await ariaInvalidErrors.validate(document);
     expect(result.passed).toBe(false);
     expect(result.details).toContain('empty');
   });
 
-  it('should fail when aria-describedby references a non-existent id', () => {
+  it('should fail when aria-describedby references a non-existent id', async () => {
     renderForm((e) => {
       e.preventDefault();
       const email = document.getElementById('email')!;
       email.setAttribute('aria-invalid', 'true');
       email.setAttribute('aria-describedby', 'does-not-exist');
     });
-    const result = ariaInvalidErrors.validate(document);
+    const result = await ariaInvalidErrors.validate(document);
     expect(result.passed).toBe(false);
     expect(result.details).toContain('non-existent');
   });
 
-  it('should pass for a correct accessible solution', () => {
+  it('should pass for a correct accessible solution', async () => {
     renderForm(accessibleHandler);
-    const result = ariaInvalidErrors.validate(document);
+    const result = await ariaInvalidErrors.validate(document);
     expect(result.passed).toBe(true);
   });
 
-  it('should fail when only one of two error fields is marked invalid', () => {
+  it('should fail when only one of two error fields is marked invalid', async () => {
     // Both fields show an error message, but only email is marked/associated.
     renderForm((e) => {
       e.preventDefault();
@@ -159,13 +159,13 @@ describe('aria-invalid-errors', () => {
       passwordError.textContent = 'Password must be at least 8 characters';
     });
 
-    const result = ariaInvalidErrors.validate(document);
+    const result = await ariaInvalidErrors.validate(document);
 
     expect(result.passed).toBe(false);
     expect(result.details).toContain('not linked');
   });
 
-  it('should fail when aria-invalid is set without aria-describedby (regression)', () => {
+  it('should fail when aria-invalid is set without aria-describedby (regression)', async () => {
     // Mirrors a learner solution that marks aria-invalid but forgets to link
     // the message, on a single field only.
     renderForm((e) => {
@@ -177,7 +177,7 @@ describe('aria-invalid-errors', () => {
       // no aria-describedby
     });
 
-    const result = ariaInvalidErrors.validate(document);
+    const result = await ariaInvalidErrors.validate(document);
 
     expect(result.passed).toBe(false);
   });

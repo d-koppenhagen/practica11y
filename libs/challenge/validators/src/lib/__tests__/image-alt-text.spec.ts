@@ -6,42 +6,42 @@ describe('image-alt-text', () => {
     document.body.innerHTML = '';
   });
 
-  it('should have id "image-alt-text"', () => {
+  it('should have id "image-alt-text"', async () => {
     expect(imageAltText.id).toBe('image-alt-text');
   });
 
   describe('images with alt text → pass', () => {
-    it('should pass when all images have non-empty alt', () => {
+    it('should pass when all images have non-empty alt', async () => {
       document.body.innerHTML = `
         <img src="photo.jpg" alt="A sunset over the ocean">
         <img src="logo.png" alt="Company logo">
       `;
 
-      const result = imageAltText.validate(document);
+      const result = await imageAltText.validate(document);
 
       expect(result.passed).toBe(true);
       expect(result.message).toContain('2');
     });
 
-    it('should pass when decorative images have no alt', () => {
+    it('should pass when decorative images have no alt', async () => {
       document.body.innerHTML = `
         <img src="decorative.png" role="presentation">
         <img src="spacer.gif" role="none">
       `;
 
-      const result = imageAltText.validate(document);
+      const result = await imageAltText.validate(document);
 
       expect(result.passed).toBe(true);
       expect(result.message).toContain('No meaningful images');
     });
 
-    it('should ignore decorative images and validate only meaningful ones', () => {
+    it('should ignore decorative images and validate only meaningful ones', async () => {
       document.body.innerHTML = `
         <img src="hero.jpg" alt="Hero banner showing team meeting">
         <img src="divider.png" role="presentation">
       `;
 
-      const result = imageAltText.validate(document);
+      const result = await imageAltText.validate(document);
 
       expect(result.passed).toBe(true);
       expect(result.message).toContain('1 image(s) have alt text');
@@ -49,46 +49,46 @@ describe('image-alt-text', () => {
   });
 
   describe('images without alt text → fail', () => {
-    it('should fail when an image has no alt attribute', () => {
+    it('should fail when an image has no alt attribute', async () => {
       document.body.innerHTML = `
         <img src="photo.jpg">
       `;
 
-      const result = imageAltText.validate(document);
+      const result = await imageAltText.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('1');
       expect(result.message).toContain('missing');
     });
 
-    it('should fail when an image has empty alt (non-decorative)', () => {
+    it('should fail when an image has empty alt (non-decorative)', async () => {
       document.body.innerHTML = `
         <img src="important-chart.png" alt="">
       `;
 
-      const result = imageAltText.validate(document);
+      const result = await imageAltText.validate(document);
 
       expect(result.passed).toBe(false);
     });
 
-    it('should fail when an image has whitespace-only alt', () => {
+    it('should fail when an image has whitespace-only alt', async () => {
       document.body.innerHTML = `
         <img src="photo.jpg" alt="   ">
       `;
 
-      const result = imageAltText.validate(document);
+      const result = await imageAltText.validate(document);
 
       expect(result.passed).toBe(false);
     });
 
-    it('should report correct count of missing alt texts', () => {
+    it('should report correct count of missing alt texts', async () => {
       document.body.innerHTML = `
         <img src="a.jpg" alt="Valid alt">
         <img src="b.jpg">
         <img src="c.jpg" alt="">
       `;
 
-      const result = imageAltText.validate(document);
+      const result = await imageAltText.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('2 of 3');
@@ -96,12 +96,12 @@ describe('image-alt-text', () => {
   });
 
   describe('no images → pass', () => {
-    it('should pass when there are no images', () => {
+    it('should pass when there are no images', async () => {
       document.body.innerHTML = `
         <p>No images here</p>
       `;
 
-      const result = imageAltText.validate(document);
+      const result = await imageAltText.validate(document);
 
       expect(result.passed).toBe(true);
       expect(result.message).toContain('No meaningful images');

@@ -6,58 +6,58 @@ describe('interactive-element-name', () => {
     document.body.innerHTML = '';
   });
 
-  it('should have id "interactive-element-name"', () => {
+  it('should have id "interactive-element-name"', async () => {
     expect(interactiveElementName.id).toBe('interactive-element-name');
   });
 
   describe('elements with accessible names → pass', () => {
-    it('should pass when buttons have aria-label', () => {
+    it('should pass when buttons have aria-label', async () => {
       document.body.innerHTML = `
         <button aria-label="Open menu">
           <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2z"/></svg>
         </button>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when links have aria-label', () => {
+    it('should pass when links have aria-label', async () => {
       document.body.innerHTML = `
         <a href="/home" aria-label="Home">
           <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3"/></svg>
         </a>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when links contain an img with alt text', () => {
+    it('should pass when links contain an img with alt text', async () => {
       document.body.innerHTML = `
         <a href="/profile">
           <img src="avatar.png" alt="User profile">
         </a>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when buttons have visible text', () => {
+    it('should pass when buttons have visible text', async () => {
       document.body.innerHTML = `
         <button>Submit</button>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when elements use aria-labelledby', () => {
+    it('should pass when elements use aria-labelledby', async () => {
       document.body.innerHTML = `
         <span id="menu-label">Open menu</span>
         <button aria-labelledby="menu-label">
@@ -65,107 +65,107 @@ describe('interactive-element-name', () => {
         </button>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when elements have a title attribute', () => {
+    it('should pass when elements have a title attribute', async () => {
       document.body.innerHTML = `
         <button title="Close">
           <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5"/></svg>
         </button>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when no interactive elements exist', () => {
+    it('should pass when no interactive elements exist', async () => {
       document.body.innerHTML = `
         <p>No buttons or links here</p>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(true);
     });
   });
 
   describe('elements without accessible names → fail', () => {
-    it('should fail when a button contains only an SVG without aria-label', () => {
+    it('should fail when a button contains only an SVG without aria-label', async () => {
       document.body.innerHTML = `
         <button>
           <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2z"/></svg>
         </button>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('1');
     });
 
-    it('should fail when a link contains only an icon element', () => {
+    it('should fail when a link contains only an icon element', async () => {
       document.body.innerHTML = `
         <a href="/search"><i class="icon-search"></i></a>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.details).toContain('<a>');
     });
 
-    it('should fail when a link contains an img without alt', () => {
+    it('should fail when a link contains an img without alt', async () => {
       document.body.innerHTML = `
         <a href="/profile"><img src="avatar.png"></a>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(false);
     });
 
-    it('should fail when a link contains an img with empty alt', () => {
+    it('should fail when a link contains an img with empty alt', async () => {
       document.body.innerHTML = `
         <a href="/profile"><img src="avatar.png" alt=""></a>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(false);
     });
 
-    it('should report correct count of issues', () => {
+    it('should report correct count of issues', async () => {
       document.body.innerHTML = `
         <a href="/home"><svg viewBox="0 0 24 24"><path d="M10 20"/></svg></a>
         <a href="/search"><i class="icon-search"></i></a>
         <button><svg viewBox="0 0 24 24"><path d="M3 18h18"/></svg></button>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('3');
     });
 
-    it('should not count aria-hidden text as visible text', () => {
+    it('should not count aria-hidden text as visible text', async () => {
       document.body.innerHTML = `
         <button>
           <span aria-hidden="true">🔍</span>
         </button>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(false);
     });
   });
 
   describe('the full starter code from the challenge', () => {
-    it('should fail on the starter code', () => {
+    it('should fail on the starter code', async () => {
       document.body.innerHTML = `
         <nav>
           <a href="/home"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></a>
@@ -179,14 +179,14 @@ describe('interactive-element-name', () => {
         </div>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(false);
       // 3 links + 2 buttons without names (the ❤️ button has visible text)
       expect(result.message).toContain('5');
     });
 
-    it('should pass on the solution code', () => {
+    it('should pass on the solution code', async () => {
       document.body.innerHTML = `
         <nav>
           <a href="/home" aria-label="Home">
@@ -210,7 +210,7 @@ describe('interactive-element-name', () => {
         </div>
       `;
 
-      const result = interactiveElementName.validate(document);
+      const result = await interactiveElementName.validate(document);
 
       expect(result.passed).toBe(true);
     });

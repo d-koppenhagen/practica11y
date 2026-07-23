@@ -21,12 +21,12 @@ describe('prefers-color-scheme', () => {
     cleanup = undefined;
   });
 
-  it('should have id "prefers-color-scheme"', () => {
+  it('should have id "prefers-color-scheme"', async () => {
     expect(prefersColorScheme.id).toBe('prefers-color-scheme');
   });
 
   describe('valid dark mode support → pass', () => {
-    it('should pass when CSS contains @media (prefers-color-scheme: dark) with background and color rules', () => {
+    it('should pass when CSS contains @media (prefers-color-scheme: dark) with background and color rules', async () => {
       cleanup = injectStyle(`
         @media (prefers-color-scheme: dark) {
           body {
@@ -36,13 +36,13 @@ describe('prefers-color-scheme', () => {
         }
       `);
 
-      const result = prefersColorScheme.validate(document);
+      const result = await prefersColorScheme.validate(document);
 
       expect(result.passed).toBe(true);
       expect(result.validatorId).toBe('prefers-color-scheme');
     });
 
-    it('should pass when using background shorthand instead of background-color', () => {
+    it('should pass when using background shorthand instead of background-color', async () => {
       cleanup = injectStyle(`
         @media (prefers-color-scheme: dark) {
           body {
@@ -52,14 +52,14 @@ describe('prefers-color-scheme', () => {
         }
       `);
 
-      const result = prefersColorScheme.validate(document);
+      const result = await prefersColorScheme.validate(document);
 
       expect(result.passed).toBe(true);
     });
   });
 
   describe('missing media query → fail', () => {
-    it('should fail when no prefers-color-scheme media query exists', () => {
+    it('should fail when no prefers-color-scheme media query exists', async () => {
       cleanup = injectStyle(`
         body {
           background-color: #fff;
@@ -67,7 +67,7 @@ describe('prefers-color-scheme', () => {
         }
       `);
 
-      const result = prefersColorScheme.validate(document);
+      const result = await prefersColorScheme.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.details).toContain(
@@ -77,7 +77,7 @@ describe('prefers-color-scheme', () => {
   });
 
   describe('incomplete media query → fail', () => {
-    it('should fail when media query exists but lacks color rule', () => {
+    it('should fail when media query exists but lacks color rule', async () => {
       cleanup = injectStyle(`
         @media (prefers-color-scheme: dark) {
           body {
@@ -86,13 +86,13 @@ describe('prefers-color-scheme', () => {
         }
       `);
 
-      const result = prefersColorScheme.validate(document);
+      const result = await prefersColorScheme.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.details).toContain('does not adjust the text color');
     });
 
-    it('should fail when media query exists but lacks background rule', () => {
+    it('should fail when media query exists but lacks background rule', async () => {
       cleanup = injectStyle(`
         @media (prefers-color-scheme: dark) {
           body {
@@ -101,7 +101,7 @@ describe('prefers-color-scheme', () => {
         }
       `);
 
-      const result = prefersColorScheme.validate(document);
+      const result = await prefersColorScheme.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.details).toContain('does not adjust background-color');

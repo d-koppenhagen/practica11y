@@ -6,88 +6,88 @@ describe('no-positive-tabindex', () => {
     document.body.innerHTML = '';
   });
 
-  it('should have id "no-positive-tabindex"', () => {
+  it('should have id "no-positive-tabindex"', async () => {
     expect(noPositiveTabindex.id).toBe('no-positive-tabindex');
   });
 
   describe('no positive tabindex → pass', () => {
-    it('should pass when no tabindex attributes are present', () => {
+    it('should pass when no tabindex attributes are present', async () => {
       document.body.innerHTML = `
         <a href="#home">Home</a>
         <button>Submit</button>
         <input type="text">
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(true);
       expect(result.message).toContain('No positive tabindex');
     });
 
-    it('should pass when tabindex="0" is used', () => {
+    it('should pass when tabindex="0" is used', async () => {
       document.body.innerHTML = `
         <div tabindex="0" role="button">Custom Widget</div>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when tabindex="-1" is used', () => {
+    it('should pass when tabindex="-1" is used', async () => {
       document.body.innerHTML = `
         <div tabindex="-1" id="modal-content">Modal</div>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when both tabindex="0" and tabindex="-1" are used', () => {
+    it('should pass when both tabindex="0" and tabindex="-1" are used', async () => {
       document.body.innerHTML = `
         <div tabindex="0" role="button">Focusable</div>
         <div tabindex="-1" id="skip-target">Target</div>
         <a href="#link">Link</a>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(true);
     });
   });
 
   describe('positive tabindex → fail', () => {
-    it('should fail when an element has tabindex="1"', () => {
+    it('should fail when an element has tabindex="1"', async () => {
       document.body.innerHTML = `
         <a href="#home" tabindex="1">Home</a>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('1 tabindex issue(s)');
     });
 
-    it('should fail when multiple elements have positive tabindex', () => {
+    it('should fail when multiple elements have positive tabindex', async () => {
       document.body.innerHTML = `
         <a href="#home" tabindex="3">Home</a>
         <a href="#about" tabindex="7">About</a>
         <input type="text" tabindex="5">
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('3 tabindex issue(s)');
     });
 
-    it('should include details about offending elements', () => {
+    it('should include details about offending elements', async () => {
       document.body.innerHTML = `
         <button tabindex="2">Submit</button>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.details).toContain('<button>');
@@ -95,14 +95,14 @@ describe('no-positive-tabindex', () => {
       expect(result.details).toContain('Submit');
     });
 
-    it('should only report positive values, not zero or negative', () => {
+    it('should only report positive values, not zero or negative', async () => {
       document.body.innerHTML = `
         <a href="#home" tabindex="0">Home</a>
         <a href="#about" tabindex="-1">About</a>
         <a href="#contact" tabindex="5">Contact</a>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('1 tabindex issue(s)');
@@ -111,7 +111,7 @@ describe('no-positive-tabindex', () => {
   });
 
   describe('skip-link target validation', () => {
-    it('should pass when skip-link target has tabindex="-1"', () => {
+    it('should pass when skip-link target has tabindex="-1"', async () => {
       document.body.innerHTML = `
         <a href="#main-content" class="skip-link">Skip to main content</a>
         <main id="main-content" tabindex="-1">
@@ -119,12 +119,12 @@ describe('no-positive-tabindex', () => {
         </main>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should fail when skip-link target has a positive tabindex', () => {
+    it('should fail when skip-link target has a positive tabindex', async () => {
       document.body.innerHTML = `
         <a href="#main-content" class="skip-link">Skip to main content</a>
         <main id="main-content" tabindex="2">
@@ -132,14 +132,14 @@ describe('no-positive-tabindex', () => {
         </main>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.details).toContain('skip-link target');
       expect(result.details).toContain('tabindex="-1"');
     });
 
-    it('should fail when skip-link target has tabindex="0"', () => {
+    it('should fail when skip-link target has tabindex="0"', async () => {
       document.body.innerHTML = `
         <a href="#main-content">Skip to content</a>
         <main id="main-content" tabindex="0">
@@ -147,14 +147,14 @@ describe('no-positive-tabindex', () => {
         </main>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.details).toContain('tabindex="0"');
       expect(result.details).toContain('tabindex="-1"');
     });
 
-    it('should fail when skip-link target has no tabindex at all', () => {
+    it('should fail when skip-link target has no tabindex at all', async () => {
       document.body.innerHTML = `
         <a href="#main-content">Skip to main</a>
         <main id="main-content">
@@ -162,14 +162,14 @@ describe('no-positive-tabindex', () => {
         </main>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.details).toContain('tabindex="none"');
       expect(result.details).toContain('tabindex="-1"');
     });
 
-    it('should not flag non-skip links', () => {
+    it('should not flag non-skip links', async () => {
       document.body.innerHTML = `
         <a href="#section">Go to section</a>
         <div id="section">
@@ -177,7 +177,7 @@ describe('no-positive-tabindex', () => {
         </div>
       `;
 
-      const result = noPositiveTabindex.validate(document);
+      const result = await noPositiveTabindex.validate(document);
 
       expect(result.passed).toBe(true);
     });

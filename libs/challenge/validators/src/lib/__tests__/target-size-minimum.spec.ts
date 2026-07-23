@@ -6,12 +6,12 @@ describe('target-size-minimum', () => {
     document.body.innerHTML = '';
   });
 
-  it('should have id "target-size-minimum"', () => {
+  it('should have id "target-size-minimum"', async () => {
     expect(targetSizeMinimum.id).toBe('target-size-minimum');
   });
 
   describe('elements meeting minimum target size → pass', () => {
-    it('should pass when buttons have min-width and min-height >= 24px', () => {
+    it('should pass when buttons have min-width and min-height >= 24px', async () => {
       document.body.innerHTML = `
         <style>
           .remove { min-width: 24px; min-height: 24px; padding: 4px; }
@@ -19,12 +19,12 @@ describe('target-size-minimum', () => {
         <button class="remove" aria-label="Remove">×</button>
       `;
 
-      const result = targetSizeMinimum.validate(document);
+      const result = await targetSizeMinimum.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when links have min-width and min-height >= 24px', () => {
+    it('should pass when links have min-width and min-height >= 24px', async () => {
       document.body.innerHTML = `
         <style>
           .pagination a { min-width: 24px; min-height: 24px; padding: 6px 10px; }
@@ -34,12 +34,12 @@ describe('target-size-minimum', () => {
         </nav>
       `;
 
-      const result = targetSizeMinimum.validate(document);
+      const result = await targetSizeMinimum.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when elements have sufficient padding to reach 24px', () => {
+    it('should pass when elements have sufficient padding to reach 24px', async () => {
       document.body.innerHTML = `
         <style>
           a { padding: 8px; font-size: 18px; }
@@ -48,22 +48,22 @@ describe('target-size-minimum', () => {
       `;
 
       // padding (8+8=16) + fontSize (18) = 34 > 24
-      const result = targetSizeMinimum.validate(document);
+      const result = await targetSizeMinimum.validate(document);
 
       expect(result.passed).toBe(true);
     });
 
-    it('should pass when no interactive elements exist', () => {
+    it('should pass when no interactive elements exist', async () => {
       document.body.innerHTML = `<p>No buttons or links here</p>`;
 
-      const result = targetSizeMinimum.validate(document);
+      const result = await targetSizeMinimum.validate(document);
 
       expect(result.passed).toBe(true);
     });
   });
 
   describe('elements below minimum target size → fail', () => {
-    it('should fail when a button has tiny padding and no min-width/height', () => {
+    it('should fail when a button has tiny padding and no min-width/height', async () => {
       document.body.innerHTML = `
         <style>
           .remove { padding: 2px; font-size: 10px; }
@@ -72,13 +72,13 @@ describe('target-size-minimum', () => {
       `;
 
       // padding (2+2=4) + fontSize (10) = 14 < 24
-      const result = targetSizeMinimum.validate(document);
+      const result = await targetSizeMinimum.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('1');
     });
 
-    it('should fail when links have small padding', () => {
+    it('should fail when links have small padding', async () => {
       document.body.innerHTML = `
         <style>
           .pagination a { padding: 2px 6px; font-size: 12px; }
@@ -90,13 +90,13 @@ describe('target-size-minimum', () => {
       `;
 
       // vertical: padding (2+2=4) + fontSize (12) = 16 < 24
-      const result = targetSizeMinimum.validate(document);
+      const result = await targetSizeMinimum.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('2');
     });
 
-    it('should fail when icon links have minimal padding', () => {
+    it('should fail when icon links have minimal padding', async () => {
       document.body.innerHTML = `
         <style>
           .social a { padding: 4px; font-size: 14px; }
@@ -107,12 +107,12 @@ describe('target-size-minimum', () => {
       `;
 
       // padding (4+4=8) + fontSize (14) = 22 < 24
-      const result = targetSizeMinimum.validate(document);
+      const result = await targetSizeMinimum.validate(document);
 
       expect(result.passed).toBe(false);
     });
 
-    it('should report correct count of failing elements', () => {
+    it('should report correct count of failing elements', async () => {
       document.body.innerHTML = `
         <style>
           button { padding: 2px; font-size: 10px; }
@@ -123,7 +123,7 @@ describe('target-size-minimum', () => {
         <a href="?p=2">2</a>
       `;
 
-      const result = targetSizeMinimum.validate(document);
+      const result = await targetSizeMinimum.validate(document);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('3');
@@ -131,7 +131,7 @@ describe('target-size-minimum', () => {
   });
 
   describe('the full starter/solution code from the challenge', () => {
-    it('should fail on the starter code', () => {
+    it('should fail on the starter code', async () => {
       document.body.innerHTML = `
         <style>
           .tag .remove {
@@ -174,14 +174,14 @@ describe('target-size-minimum', () => {
         </div>
       `;
 
-      const result = targetSizeMinimum.validate(document);
+      const result = await targetSizeMinimum.validate(document);
 
       expect(result.passed).toBe(false);
       // 3 buttons + 5 pagination links + 3 social links = 11
       expect(result.details).toBeDefined();
     });
 
-    it('should pass on the solution code', () => {
+    it('should pass on the solution code', async () => {
       document.body.innerHTML = `
         <style>
           .tag .remove {
@@ -233,7 +233,7 @@ describe('target-size-minimum', () => {
         </div>
       `;
 
-      const result = targetSizeMinimum.validate(document);
+      const result = await targetSizeMinimum.validate(document);
 
       expect(result.passed).toBe(true);
     });

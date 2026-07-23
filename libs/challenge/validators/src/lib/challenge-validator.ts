@@ -20,22 +20,29 @@ export class ChallengeValidator {
   /**
    * Validates a challenge by running the specified validators against the document.
    * Validators that are not registered will be skipped with a failing result.
+   * Supports both sync and async validators.
    */
   async validateChallenge(
     document: Document,
     validatorIds: string[],
     analysisResult: AccessibilityAnalysisResult,
   ): Promise<ValidationResult[]> {
-    return validatorIds.map((id) => {
+    const results: ValidationResult[] = [];
+
+    for (const id of validatorIds) {
       const validator = this.validators.get(id);
       if (!validator) {
-        return {
+        results.push({
           validatorId: id,
           passed: false,
           message: `Validator "${id}" not found in registry.`,
-        };
+        });
+        continue;
       }
-      return validator.validate(document, analysisResult);
-    });
+      const result = await validator.validate(document, analysisResult);
+      results.push(result);
+    }
+
+    return results;
   }
 }

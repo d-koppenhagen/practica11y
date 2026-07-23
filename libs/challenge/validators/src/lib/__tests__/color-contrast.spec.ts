@@ -35,19 +35,22 @@ function createContrastViolation(nodeCount = 1): AxeViolation {
 }
 
 describe('color-contrast', () => {
-  it('should have id "color-contrast"', () => {
+  it('should have id "color-contrast"', async () => {
     expect(colorContrast.id).toBe('color-contrast');
   });
 
   describe('no contrast violations → pass', () => {
-    it('should pass when no contrast violations exist', () => {
-      const result = colorContrast.validate(document, createAnalysisResult([]));
+    it('should pass when no contrast violations exist', async () => {
+      const result = await colorContrast.validate(
+        document,
+        createAnalysisResult([]),
+      );
 
       expect(result.passed).toBe(true);
       expect(result.message).toContain('WCAG');
     });
 
-    it('should pass when violations exist but none are color-contrast', () => {
+    it('should pass when violations exist but none are color-contrast', async () => {
       const otherViolation: AxeViolation = {
         id: 'image-alt',
         impact: 'critical',
@@ -58,7 +61,7 @@ describe('color-contrast', () => {
         ],
       };
 
-      const result = colorContrast.validate(
+      const result = await colorContrast.validate(
         document,
         createAnalysisResult([otherViolation]),
       );
@@ -68,10 +71,10 @@ describe('color-contrast', () => {
   });
 
   describe('contrast violations → fail', () => {
-    it('should fail when contrast violations are present', () => {
+    it('should fail when contrast violations are present', async () => {
       const violations = [createContrastViolation(2)];
 
-      const result = colorContrast.validate(
+      const result = await colorContrast.validate(
         document,
         createAnalysisResult(violations),
       );
@@ -80,10 +83,10 @@ describe('color-contrast', () => {
       expect(result.message).toContain('2');
     });
 
-    it('should include details about affected elements', () => {
+    it('should include details about affected elements', async () => {
       const violations = [createContrastViolation(1)];
 
-      const result = colorContrast.validate(
+      const result = await colorContrast.validate(
         document,
         createAnalysisResult(violations),
       );
@@ -92,13 +95,13 @@ describe('color-contrast', () => {
       expect(result.details).toContain('low-contrast');
     });
 
-    it('should count total nodes across multiple contrast violations', () => {
+    it('should count total nodes across multiple contrast violations', async () => {
       const violations = [
         createContrastViolation(2),
         createContrastViolation(3),
       ];
 
-      const result = colorContrast.validate(
+      const result = await colorContrast.validate(
         document,
         createAnalysisResult(violations),
       );
@@ -109,8 +112,8 @@ describe('color-contrast', () => {
   });
 
   describe('no context → fail', () => {
-    it('should fail when no context is provided', () => {
-      const result = colorContrast.validate(document, undefined);
+    it('should fail when no context is provided', async () => {
+      const result = await colorContrast.validate(document, undefined);
 
       expect(result.passed).toBe(false);
       expect(result.message).toContain('No analysis result');
