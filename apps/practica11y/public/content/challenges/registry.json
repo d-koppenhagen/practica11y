@@ -38,6 +38,7 @@
     { "id": "hover-only-dropdown" },
     { "id": "focus-obscured" },
     { "id": "inaccessible-captcha" },
-    { "id": "non-descriptive-link-text" }
+    { "id": "non-descriptive-link-text" },
+    { "id": "inaccessible-toggle-switch" }
   ]
 }

@@ -44,3 +44,4 @@ export { hoverDropdownAccessible } from './lib/hover-dropdown-accessible';
 export { focusNotObscured } from './lib/focus-not-obscured';
 export { accessibleAuthentication } from './lib/accessible-authentication';
 export { descriptiveLinkText } from './lib/descriptive-link-text';
+export { switchRoleAccessible } from './lib/switch-role-accessible';

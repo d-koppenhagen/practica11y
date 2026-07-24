@@ -57,6 +57,7 @@ import {
   focusNotObscured,
   accessibleAuthentication,
   descriptiveLinkText,
+  switchRoleAccessible,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -133,6 +134,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(focusNotObscured);
     this.challengeValidator.registerValidator(accessibleAuthentication);
     this.challengeValidator.registerValidator(descriptiveLinkText);
+    this.challengeValidator.registerValidator(switchRoleAccessible);
   }
 
   /** Debounced code change signal (300ms) */
