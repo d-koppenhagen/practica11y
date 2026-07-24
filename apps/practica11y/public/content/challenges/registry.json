@@ -37,6 +37,7 @@
     { "id": "infinite-scroll-no-skip" },
     { "id": "hover-only-dropdown" },
     { "id": "focus-obscured" },
-    { "id": "inaccessible-captcha" }
+    { "id": "inaccessible-captcha" },
+    { "id": "non-descriptive-link-text" }
   ]
 }

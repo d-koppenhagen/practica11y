@@ -56,6 +56,7 @@ import {
   hoverDropdownAccessible,
   focusNotObscured,
   accessibleAuthentication,
+  descriptiveLinkText,
 } from '@practica11y/validators';
 
 interface CodeChange {
@@ -131,6 +132,7 @@ export class AnalysisPipeline {
     this.challengeValidator.registerValidator(hoverDropdownAccessible);
     this.challengeValidator.registerValidator(focusNotObscured);
     this.challengeValidator.registerValidator(accessibleAuthentication);
+    this.challengeValidator.registerValidator(descriptiveLinkText);
   }
 
   /** Debounced code change signal (300ms) */

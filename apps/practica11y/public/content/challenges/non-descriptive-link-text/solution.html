@@ -1,0 +1,24 @@
+<main class="blog-page">
+  <h1>Tech Blog</h1>
+
+  <!-- Technique 1: Descriptive visible link text -->
+  <article class="post-card">
+    <h2>Getting Started with Web Accessibility</h2>
+    <p>Learn the basics of making your websites accessible to everyone, including people who use assistive technologies.</p>
+    <a href="/blog/web-accessibility-basics" class="post-link">Read the web accessibility basics guide</a>
+  </article>
+
+  <!-- Technique 2: Keeping visible text short + aria-label for screen readers -->
+  <article class="post-card">
+    <h2>Understanding ARIA Attributes</h2>
+    <p>ARIA attributes help bridge gaps in accessibility. Find out when and how to use them effectively.</p>
+    <a href="/blog/aria-attributes" class="post-link" aria-label="Read more about ARIA attributes">Read more</a>
+  </article>
+
+  <!-- Technique 3: Using aria-labelledby to compose a name from the heading -->
+  <article class="post-card">
+    <h2 id="post-keyboard">Keyboard Navigation Best Practices</h2>
+    <p>Not everyone uses a mouse. Discover how to ensure your site works well for keyboard-only users.</p>
+    <a href="/blog/keyboard-navigation" class="post-link" id="link-keyboard" aria-labelledby="link-keyboard post-keyboard">Read more</a>
+  </article>
+</main>

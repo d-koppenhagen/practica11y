@@ -1,0 +1,50 @@
+.blog-page {
+  font-family: system-ui, sans-serif;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  line-height: 1.6;
+}
+
+.blog-page h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  color: #1a1a2e;
+}
+
+.post-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  background: #fafafa;
+}
+
+.post-card h2 {
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem;
+  color: #1a1a2e;
+}
+
+.post-card p {
+  margin: 0 0 0.75rem;
+  color: #333;
+}
+
+.post-link {
+  display: inline-block;
+  color: #1a5dab;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.post-link:hover {
+  color: #0d3b6e;
+}
+
+.post-link:focus {
+  outline: 2px solid #1a5dab;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
