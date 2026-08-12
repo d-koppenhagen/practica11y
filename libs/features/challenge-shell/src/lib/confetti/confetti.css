@@ -59,7 +59,7 @@
     opacity: 0;
     transform: translate(
         calc(var(--burst-x) + var(--drift)),
-        calc(var(--burst-y) + 80vh)
+        calc(var(--burst-y) + 80dvh)
       )
       rotate(var(--rotation)) scale(var(--scale));
   }
