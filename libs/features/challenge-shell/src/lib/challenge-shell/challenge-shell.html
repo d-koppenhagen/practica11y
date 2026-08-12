@@ -2,6 +2,7 @@
   <!-- Col 1: Task Description (spans both rows) -->
   <a11y-shell-panel
     #descriptionPanel
+    id="description-panel"
     class="shell-description"
     [collapsible]="true"
     collapseDirection="horizontal"
@@ -64,17 +65,23 @@
   <a11y-shell-resizer
     class="shell-resizer-col1"
     orientation="vertical"
+    ariaLabel="Description"
+    ariaControls="description-panel"
     [valueNow]="col1SeparatorPercent()"
     (resized)="onResizeCol1($event)"
+    (toggleCollapse)="onResizerToggleCollapse('description')"
+    (jumpToMin)="onResizerJumpToMin('col1')"
+    (jumpToMax)="onResizerJumpToMax('col1')"
   />
 
   <!-- Right side: 2×2 grid -->
   <div class="shell-right" [style.flex]="colWidths()[1] + colWidths()[2]">
     <!-- Top row -->
-    <div class="shell-right-top" [style.flex]="topRowFlex()">
+    <div id="shell-top-row" class="shell-right-top" [style.flex]="topRowFlex()">
       <!-- Col 2, Row 1: Editor -->
       <a11y-shell-panel
         #editorPanel
+        id="editor-panel"
         class="shell-editor"
         [collapsible]="true"
         collapseDirection="vertical"
@@ -350,8 +357,13 @@
       <a11y-shell-resizer
         class="shell-resizer-col2"
         orientation="vertical"
+        ariaLabel="Editor"
+        ariaControls="editor-panel"
         [valueNow]="col2SeparatorPercent()"
         (resized)="onResizeCol2($event)"
+        (toggleCollapse)="onResizerToggleCollapse('editor')"
+        (jumpToMin)="onResizerJumpToMin('col2')"
+        (jumpToMax)="onResizerJumpToMax('col2')"
       />
 
       <!-- Col 3, Row 1: Preview -->
@@ -477,8 +489,13 @@
     <a11y-shell-resizer
       class="shell-resizer-row"
       orientation="horizontal"
+      ariaLabel="Top row"
+      ariaControls="shell-top-row"
       [valueNow]="rowSeparatorPercent()"
       (resized)="onResizeRow($event)"
+      (toggleCollapse)="onResizerToggleCollapse('topRow')"
+      (jumpToMin)="onResizerJumpToMin('row')"
+      (jumpToMax)="onResizerJumpToMax('row')"
     />
 
     <!-- Bottom row -->
@@ -486,6 +503,7 @@
       <!-- Col 2, Row 2: Accessibility Tree + Virtual Screen Reader -->
       <a11y-shell-panel
         #treePanel
+        id="tree-panel"
         class="shell-tree"
         [collapsible]="true"
         collapseDirection="vertical"
@@ -588,8 +606,13 @@
       <a11y-shell-resizer
         class="shell-resizer-col2-bottom"
         orientation="vertical"
+        ariaLabel="Accessibility Tree"
+        ariaControls="tree-panel"
         [valueNow]="col2SeparatorPercent()"
         (resized)="onResizeCol2($event)"
+        (toggleCollapse)="onResizerToggleCollapse('tree')"
+        (jumpToMin)="onResizerJumpToMin('col2')"
+        (jumpToMax)="onResizerJumpToMax('col2')"
       />
 
       <!-- Col 3, Row 2: Feedback -->

@@ -519,6 +519,100 @@ export class ChallengeShell {
     this.shellLayout.resizeRow(delta, gridHeight);
   }
 
+  /** Toggle the primary pane of a resizer between collapsed and expanded (Enter key per APG). */
+  protected onResizerToggleCollapse(
+    panel: 'description' | 'editor' | 'tree' | 'topRow',
+  ): void {
+    if (panel === 'topRow') {
+      // Collapse both editor and preview (the entire top row)
+      const editor = this.editorPanel();
+      const preview = this.previewPanel();
+      if (editor && preview) {
+        const shouldCollapse = !editor.collapsed();
+        editor.collapsed.set(shouldCollapse);
+        preview.collapsed.set(shouldCollapse);
+      }
+    } else {
+      const panelRef = this.getPanelRef(panel);
+      if (panelRef) {
+        panelRef.collapsed.set(!panelRef.collapsed());
+      }
+    }
+  }
+
+  /** Move the splitter to minimum position (Home key per APG). */
+  protected onResizerJumpToMin(axis: 'col1' | 'col2' | 'row'): void {
+    const el = this.hostRef.nativeElement as HTMLElement;
+    if (axis === 'col1') {
+      const gridWidth =
+        el.querySelector('.shell-grid')?.clientWidth ?? el.clientWidth;
+      const [l, m, r] = this.shellLayout.colWidths();
+      const total = l + m + r;
+      const targetL = 0.5;
+      const delta = ((targetL - l) / total) * gridWidth;
+      this.shellLayout.resizeCol1(delta, gridWidth);
+    } else if (axis === 'col2') {
+      const gridWidth =
+        el.querySelector('.shell-grid')?.clientWidth ?? el.clientWidth;
+      const [, m, r] = this.shellLayout.colWidths();
+      const total = m + r;
+      const targetM = 0.5;
+      const delta = ((targetM - m) / total) * gridWidth;
+      this.shellLayout.resizeCol2(delta, gridWidth);
+    } else {
+      const gridHeight =
+        el.querySelector('.shell-grid')?.clientHeight ?? el.clientHeight;
+      const [t, b] = this.shellLayout.rowHeights();
+      const total = t + b;
+      const targetT = 0.3;
+      const delta = ((targetT - t) / total) * gridHeight;
+      this.shellLayout.resizeRow(delta, gridHeight);
+    }
+  }
+
+  /** Move the splitter to maximum position (End key per APG). */
+  protected onResizerJumpToMax(axis: 'col1' | 'col2' | 'row'): void {
+    const el = this.hostRef.nativeElement as HTMLElement;
+    if (axis === 'col1') {
+      const gridWidth =
+        el.querySelector('.shell-grid')?.clientWidth ?? el.clientWidth;
+      const [l, m, r] = this.shellLayout.colWidths();
+      const total = l + m + r;
+      const targetL = total - 0.5 - r;
+      const delta = ((targetL - l) / total) * gridWidth;
+      this.shellLayout.resizeCol1(delta, gridWidth);
+    } else if (axis === 'col2') {
+      const gridWidth =
+        el.querySelector('.shell-grid')?.clientWidth ?? el.clientWidth;
+      const [, m, r] = this.shellLayout.colWidths();
+      const total = m + r;
+      const targetM = total - 0.5;
+      const delta = ((targetM - m) / total) * gridWidth;
+      this.shellLayout.resizeCol2(delta, gridWidth);
+    } else {
+      const gridHeight =
+        el.querySelector('.shell-grid')?.clientHeight ?? el.clientHeight;
+      const [t, b] = this.shellLayout.rowHeights();
+      const total = t + b;
+      const targetT = total - 0.3;
+      const delta = ((targetT - t) / total) * gridHeight;
+      this.shellLayout.resizeRow(delta, gridHeight);
+    }
+  }
+
+  private getPanelRef(
+    panel: 'description' | 'editor' | 'tree',
+  ): ShellPanel | undefined {
+    switch (panel) {
+      case 'description':
+        return this.descriptionPanel();
+      case 'editor':
+        return this.editorPanel();
+      case 'tree':
+        return this.treePanel();
+    }
+  }
+
   protected onHtmlContentChange(content: string): void {
     this.htmlContent.set(content);
     this.feedbackVisible.set(false);

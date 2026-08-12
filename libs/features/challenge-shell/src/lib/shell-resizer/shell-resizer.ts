@@ -19,7 +19,8 @@ export type ResizerOrientation = 'vertical' | 'horizontal';
     [attr.aria-valuenow]="valueNow()"
     [attr.aria-valuemin]="valueMin()"
     [attr.aria-valuemax]="valueMax()"
-    aria-label="Resize"
+    [attr.aria-controls]="ariaControls() || null"
+    [attr.aria-label]="ariaLabel()"
     tabindex="0"
     (keydown)="onKeydown($event)"
   ></div>`,
@@ -44,8 +45,23 @@ export class ShellResizer {
   /** Maximum value for the separator position */
   readonly valueMax = input(100);
 
+  /** ID of the primary pane controlled by this separator (aria-controls) */
+  readonly ariaControls = input('');
+
+  /** Accessible name for the separator — should match the primary pane name */
+  readonly ariaLabel = input('Resize pane');
+
   /** Emits delta in pixels while dragging */
   readonly resized = output<number>();
+
+  /** Emits when Enter is pressed to collapse/restore the primary pane */
+  readonly toggleCollapse = output<void>();
+
+  /** Emits when Home is pressed to move splitter to minimum position */
+  readonly jumpToMin = output<void>();
+
+  /** Emits when End is pressed to move splitter to maximum position */
+  readonly jumpToMax = output<void>();
 
   private readonly zone = inject(NgZone);
   private readonly elRef = inject(ElementRef);
@@ -98,6 +114,15 @@ export class ShellResizer {
     } else if (!isVertical && event.key === 'ArrowUp') {
       event.preventDefault();
       this.resized.emit(-step);
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      this.toggleCollapse.emit();
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      this.jumpToMin.emit();
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      this.jumpToMax.emit();
     }
   }
 }
