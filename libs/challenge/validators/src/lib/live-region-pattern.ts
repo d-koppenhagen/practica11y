@@ -2,17 +2,25 @@ import type { Validator, ValidationResult } from '@practica11y/models';
 import type { AccessibilityAnalysisResult } from '@practica11y/types';
 
 /**
- * Validates that the page uses a persistent live region pattern.
+ * Validates that the page announces dynamic updates to screen readers using
+ * one of two accepted patterns:
  *
- * Screen readers only announce changes to live regions that already exist in the DOM.
- * Creating an element and setting aria-live at the same time means the announcement
- * will be missed. The correct pattern is:
- * - A persistent element with aria-live exists in the HTML from the start
- * - Content is updated by changing textContent of the existing region
+ * 1. **Persistent live region** (classic ARIA pattern)
+ *    Screen readers only announce changes to live regions that already exist
+ *    in the DOM. Creating an element and setting aria-live at the same time
+ *    means the announcement will be missed. The correct pattern is:
+ *    - A persistent element with aria-live exists in the HTML from the start
+ *    - Content is updated by changing textContent of the existing region
  *
- * This validator checks:
- * 1. An element with aria-live (polite or assertive) exists in the static HTML
- * 2. The live region is not dynamically created in JavaScript
+ * 2. **ariaNotify() API** (modern alternative, Baseline since 09/2026)
+ *    `element.ariaNotify()` / `document.ariaNotify()` triggers a screen reader
+ *    announcement directly from JavaScript, without needing a persistent live
+ *    region in the DOM. This is a valid, more robust solution to the same
+ *    problem, so it is accepted here as an equivalent alternative.
+ *    See https://developer.mozilla.org/en-US/docs/Web/API/Element/ariaNotify
+ *
+ * When the ariaNotify() approach is detected, the persistent-live-region checks
+ * are skipped, because that pattern deliberately does not rely on a live region.
  */
 export const liveRegionPattern: Validator = {
   id: 'live-region-pattern',
@@ -20,6 +28,28 @@ export const liveRegionPattern: Validator = {
   validate(document: Document, context?: unknown): ValidationResult {
     const analysisResult = context as AccessibilityAnalysisResult | undefined;
     const sourceHtml = analysisResult?.sourceHtml ?? '';
+
+    // Gather script content from the rendered document. The user's JS is
+    // injected into the sandbox as a <script> tag, so ariaNotify() calls show
+    // up here. Fall back to sourceHtml for environments where the script text
+    // is only available in the raw source.
+    const domScriptContent = Array.from(document.querySelectorAll('script'))
+      .map((script) => script.textContent ?? '')
+      .join('\n');
+    const scriptContent = `${domScriptContent}\n${sourceHtml}`;
+
+    // Accept the modern ariaNotify() API as an equivalent solution. It matches
+    // `foo.ariaNotify(`, `ariaNotify (`, `document.ariaNotify(`, etc.
+    const usesAriaNotify = /\bariaNotify\s*\(/.test(scriptContent);
+    if (usesAriaNotify) {
+      return {
+        validatorId: 'live-region-pattern',
+        passed: true,
+        message:
+          'Announcements are made using the ariaNotify() API, a valid modern alternative to a persistent live region.',
+      };
+    }
+
     const issues: string[] = [];
 
     // Check if there's a live region in the rendered DOM
@@ -31,7 +61,7 @@ export const liveRegionPattern: Validator = {
 
     if (liveRegions.length === 0) {
       issues.push(
-        'No live region found. Add an element with aria-live="polite" (or role="status") that exists in the HTML before content changes.',
+        'No live region found. Add an element with aria-live="polite" (or role="status") that exists in the HTML before content changes, or use the ariaNotify() API.',
       );
     }
 
@@ -43,7 +73,7 @@ export const liveRegionPattern: Validator = {
 
       if (!hasLiveRegionInSource) {
         issues.push(
-          'No persistent live region found in the HTML source. The live region must exist in the static HTML before dynamic content is inserted.',
+          'No persistent live region found in the HTML source. The live region must exist in the static HTML before dynamic content is inserted (or use the ariaNotify() API instead).',
         );
       }
     }
