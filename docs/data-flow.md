@@ -144,13 +144,13 @@ This allows the accessibility tree and virtual screen reader to stay in sync wit
 
 The sandbox script intercepts all anchor clicks to prevent navigation (which would destroy the srcdoc iframe):
 
-- **In-page anchors** (`#id`): Scrolls smoothly to the target element
+- **In-page anchors** (`#id`): Scrolls smoothly to the target element **and moves keyboard focus to it**. Targets that are not natively focusable receive a temporary `tabindex="-1"` (removed again on `blur`) so programmatic focus works without permanently mutating the learner's DOM. This is what makes skip links behave correctly — keyboard navigation continues from the target instead of from the skip link.
 - **External/relative URLs**: Shows a toast notification ("Navigation blocked → {url}") via an accessible `aria-live` region
 - This ensures learner code with `<a href="...">` elements does not break the preview
 
 ### Security Model
 
-- The iframe uses `sandbox="allow-scripts"` — no access to parent DOM, no navigation
+- The iframe uses `sandbox="allow-scripts allow-same-origin allow-modals allow-forms"` — no top-level navigation; user code cannot reach the parent Angular context
 - User code is **never** executed in the Angular context
 - Errors in user code are caught inside the iframe and communicated via `postMessage`
 

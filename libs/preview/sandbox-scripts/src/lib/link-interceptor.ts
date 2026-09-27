@@ -3,8 +3,11 @@
  * Prevents all anchor clicks from navigating away from the preview content
  * and shows a small toast notification indicating where the link would navigate.
  *
- * For in-page anchors (#id), scrolls to the target element instead of
- * letting the browser handle it (which would reload the srcdoc iframe).
+ * For in-page anchors (#id), scrolls to and moves focus to the target
+ * element instead of letting the browser handle it (which would reload the
+ * srcdoc iframe). Moving focus is essential for skip links to work: without
+ * it, keyboard navigation would continue from the skip link rather than from
+ * the target, defeating the purpose of the link.
  */
 export function interceptLinkNavigation(): void {
   injectToastStyles();
@@ -25,12 +28,13 @@ export function interceptLinkNavigation(): void {
       // Always prevent default — srcdoc iframes reload on any navigation
       event.preventDefault();
 
-      // Handle in-page anchors by scrolling to the target (or doing nothing)
+      // Handle in-page anchors by scrolling to and focusing the target
       if (href.startsWith('#')) {
         if (href.length > 1) {
           const targetId = href.slice(1);
           const targetElement = document.getElementById(targetId);
           if (targetElement) {
+            moveFocusTo(targetElement);
             targetElement.scrollIntoView({ behavior: 'smooth' });
           }
         } else {
@@ -45,6 +49,60 @@ export function interceptLinkNavigation(): void {
     },
     { capture: true },
   );
+}
+
+/**
+ * Moves keyboard focus to an in-page anchor target so skip links behave
+ * correctly. Elements that are not natively focusable (e.g. `<main>`, `<div>`,
+ * headings) get a temporary `tabindex="-1"` so they can receive programmatic
+ * focus without being added to the tab order. Focus is applied without
+ * scrolling here; the caller handles smooth scrolling separately to avoid a
+ * jarring double scroll.
+ */
+function moveFocusTo(targetElement: HTMLElement): void {
+  const needsTabindex = !isFocusable(targetElement);
+  if (needsTabindex) {
+    targetElement.setAttribute('tabindex', '-1');
+  }
+
+  targetElement.focus({ preventScroll: true });
+
+  // If we added the tabindex ourselves, remove it once focus leaves the
+  // element so the DOM (and any accessibility analysis) is not permanently
+  // mutated by author-unintended attributes.
+  if (needsTabindex) {
+    targetElement.addEventListener(
+      'blur',
+      () => targetElement.removeAttribute('tabindex'),
+      { once: true },
+    );
+  }
+}
+
+const NATIVELY_FOCUSABLE = new Set([
+  'A',
+  'AREA',
+  'BUTTON',
+  'DETAILS',
+  'INPUT',
+  'SELECT',
+  'TEXTAREA',
+]);
+
+/**
+ * Determines whether an element can already receive keyboard focus, so we
+ * only inject a temporary `tabindex` on elements that actually need it
+ * (e.g. `<main>`, `<div>`, headings). Natively focusable form controls and
+ * links, or any element with an explicit `tabindex`, are left untouched.
+ */
+function isFocusable(element: HTMLElement): boolean {
+  if (element.hasAttribute('tabindex')) {
+    return true;
+  }
+  if (NATIVELY_FOCUSABLE.has(element.tagName)) {
+    return true;
+  }
+  return element.isContentEditable;
 }
 
 let toastTimeout: ReturnType<typeof setTimeout> | null = null;
