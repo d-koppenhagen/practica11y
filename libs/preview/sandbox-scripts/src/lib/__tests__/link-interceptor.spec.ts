@@ -166,6 +166,85 @@ describe('interceptLinkNavigation', () => {
       });
     });
 
+    it('should move focus to the target element (skip link behavior)', () => {
+      document.body.innerHTML = `
+        <a href="#main-content">Skip to main content</a>
+        <main id="main-content">Main content</main>
+      `;
+      const target = document.getElementById('main-content')!;
+      target.scrollIntoView = vi.fn();
+      const link = document.querySelector('a')!;
+
+      clickLink(link);
+
+      expect(document.activeElement).toBe(target);
+    });
+
+    it('should add tabindex="-1" to a non-focusable target so it can receive focus', () => {
+      document.body.innerHTML = `
+        <a href="#main-content">Skip to main content</a>
+        <main id="main-content">Main content</main>
+      `;
+      const target = document.getElementById('main-content')!;
+      target.scrollIntoView = vi.fn();
+      const link = document.querySelector('a')!;
+
+      clickLink(link);
+
+      expect(target.getAttribute('tabindex')).toBe('-1');
+    });
+
+    it('should remove the injected tabindex once focus leaves the target', () => {
+      document.body.innerHTML = `
+        <a href="#main-content">Skip to main content</a>
+        <main id="main-content">Main content</main>
+      `;
+      const target = document.getElementById('main-content')!;
+      target.scrollIntoView = vi.fn();
+      const link = document.querySelector('a')!;
+
+      clickLink(link);
+      expect(target.getAttribute('tabindex')).toBe('-1');
+
+      target.dispatchEvent(new FocusEvent('blur'));
+
+      expect(target.hasAttribute('tabindex')).toBe(false);
+    });
+
+    it('should preserve an existing tabindex on the target', () => {
+      document.body.innerHTML = `
+        <a href="#target">Go</a>
+        <div id="target" tabindex="0">Focusable region</div>
+      `;
+      const target = document.getElementById('target')!;
+      target.scrollIntoView = vi.fn();
+      const link = document.querySelector('a')!;
+
+      clickLink(link);
+      expect(target.getAttribute('tabindex')).toBe('0');
+
+      target.dispatchEvent(new FocusEvent('blur'));
+
+      // A pre-existing tabindex must not be stripped.
+      expect(target.getAttribute('tabindex')).toBe('0');
+      expect(document.activeElement).toBe(target);
+    });
+
+    it('should focus a natively focusable target without adding tabindex', () => {
+      document.body.innerHTML = `
+        <a href="#jump">Jump to field</a>
+        <input id="jump" type="text" />
+      `;
+      const target = document.getElementById('jump')!;
+      target.scrollIntoView = vi.fn();
+      const link = document.querySelector('a')!;
+
+      clickLink(link);
+
+      expect(document.activeElement).toBe(target);
+      expect(target.hasAttribute('tabindex')).toBe(false);
+    });
+
     it('should not throw when target element does not exist', () => {
       document.body.innerHTML = '<a href="#nonexistent">Link</a>';
       const link = document.querySelector('a')!;
