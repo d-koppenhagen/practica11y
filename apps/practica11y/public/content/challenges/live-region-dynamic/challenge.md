@@ -7,6 +7,7 @@ tags:
   - screen-reader
 points: 200
 createdAt: '2026-06-18'
+updatedAt: '2026-09-27'
 starter:
   html: starter.html
   js: starter.js
@@ -27,6 +28,8 @@ links:
     url: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions'
   - text: 'Deque: aria-live'
     url: 'https://dequeuniversity.com/rules/axe/4.10/aria-live-region'
+  - text: 'MDN: Element.ariaNotify()'
+    url: 'https://developer.mozilla.org/en-US/docs/Web/API/Element/ariaNotify'
 discussionUrl: 'https://github.com/d-koppenhagen/practica11y/discussions/18'
 ---
 
@@ -34,14 +37,23 @@ In this challenge, a notification is created dynamically with `aria-live` set at
 
 ## Your Task
 
-Fix the live region pattern so that screen readers reliably announce notifications:
+Fix the code so that screen readers reliably announce notifications. Either of the two approaches below is accepted:
+
+**Option A — Persistent live region (classic ARIA pattern):**
 
 - Create a persistent, empty live region in the HTML (not dynamically)
 - When a notification appears, update the live region's text content
 - Use `aria-live="polite"` and `aria-atomic="true"` on the persistent region
 - Ensure that each new notification is announced
 
+**Option B — The `ariaNotify()` API (modern alternative):**
+
+- Call `element.ariaNotify(message)` (or `document.ariaNotify(message)`) when a notification appears
+- No persistent live region is required — the announcement is made directly from JavaScript
+
 ## Tips
+
+For the persistent live region (Option A):
 
 - The live region element must exist in the DOM **before** its content changes
 - Use a "global announcer" pattern: an empty `<div aria-live="polite" aria-atomic="true">` that's always present
