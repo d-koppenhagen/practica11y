@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   generateSpokenPhrases,
@@ -148,5 +149,180 @@ describe('VirtualScreenReader', () => {
     } finally {
       iframe.remove();
     }
+  });
+});
+
+/**
+ * A controllable stand-in for the Web Speech API. jsdom provides no
+ * `speechSynthesis`, and even where it exists it speaks asynchronously with
+ * real timing. This mock records spoken phrases and lets the test fire the
+ * `end` event manually, so the auto-play advance can be asserted
+ * deterministically.
+ */
+class FakeSpeechSynthesis {
+  readonly spoken: string[] = [];
+  cancelCount = 0;
+
+  private queue: FakeUtterance[] = [];
+
+  speak(utterance: FakeUtterance): void {
+    this.spoken.push(utterance.text);
+    this.queue.push(utterance);
+  }
+
+  cancel(): void {
+    this.cancelCount++;
+    this.queue = [];
+  }
+
+  /** Simulates the browser finishing the most recently spoken utterance. */
+  finishCurrent(): void {
+    const utterance = this.queue.shift();
+    utterance?.onend?.(new Event('end'));
+  }
+}
+
+class FakeUtterance {
+  onend: ((event: Event) => void) | null = null;
+  onerror: ((event: Event) => void) | null = null;
+  rate = 1;
+  constructor(readonly text: string) {}
+}
+
+describe('VirtualScreenReader auto-play advance', () => {
+  let fixture: ComponentFixture<TestHost>;
+  let host: HTMLElement;
+  let synth: FakeSpeechSynthesis;
+  let iframe: HTMLIFrameElement;
+  let originalSynth: PropertyDescriptor | undefined;
+  let originalUtterance: PropertyDescriptor | undefined;
+
+  const playButton = () =>
+    host.querySelector<HTMLButtonElement>('.vsr-btn--primary');
+  const position = () =>
+    host.querySelector('.vsr-position')?.textContent?.trim() ?? '';
+
+  beforeEach(async () => {
+    vi.useFakeTimers();
+
+    synth = new FakeSpeechSynthesis();
+    originalSynth = Object.getOwnPropertyDescriptor(window, 'speechSynthesis');
+    originalUtterance = Object.getOwnPropertyDescriptor(
+      window,
+      'SpeechSynthesisUtterance',
+    );
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: synth,
+    });
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+      configurable: true,
+      value: FakeUtterance,
+    });
+
+    await TestBed.configureTestingModule({
+      imports: [TestHost],
+    }).compileComponents();
+    fixture = TestBed.createComponent(TestHost);
+    host = fixture.nativeElement;
+    fixture.detectChanges();
+
+    iframe = document.createElement('iframe');
+    document.body.appendChild(iframe);
+    const doc = iframe.contentDocument!;
+    doc.open();
+    doc.write(
+      '<html><body><main><h1>First heading</h1><p>Some paragraph text</p><button type="button">Submit</button></main></body></html>',
+    );
+    doc.close();
+
+    fixture.componentRef.setInput('doc', doc);
+    fixture.detectChanges();
+
+    // Flush the async phrase generation (a resolved promise, not a timer).
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      expect(playButton()).not.toBeNull();
+    });
+  });
+
+  afterEach(() => {
+    // Destroy the fixture while the speech mock is still installed so the
+    // component's teardown (pause -> cancelSpeech) sees a valid API.
+    fixture.destroy();
+    iframe.remove();
+    if (originalSynth) {
+      Object.defineProperty(window, 'speechSynthesis', originalSynth);
+    } else {
+      delete (window as unknown as Record<string, unknown>)['speechSynthesis'];
+    }
+    if (originalUtterance) {
+      Object.defineProperty(
+        window,
+        'SpeechSynthesisUtterance',
+        originalUtterance,
+      );
+    } else {
+      delete (window as unknown as Record<string, unknown>)[
+        'SpeechSynthesisUtterance'
+      ];
+    }
+    vi.useRealTimers();
+  });
+
+  it('does not advance to the next phrase before speech finishes', () => {
+    playButton()!.click();
+    fixture.detectChanges();
+
+    const firstPosition = position();
+    const spokenBefore = synth.spoken.length;
+    expect(firstPosition).toContain('Step 1');
+    expect(spokenBefore).toBe(1);
+
+    // Let every pending timer fire. The estimated fallback timer must NOT
+    // advance playback while speech is driving it — this is the regression
+    // the fix addresses (phrases were cut off mid-sentence).
+    vi.advanceTimersByTime(10_000);
+    fixture.detectChanges();
+
+    expect(position()).toBe(firstPosition);
+    expect(synth.spoken.length).toBe(spokenBefore);
+  });
+
+  it('advances to the next phrase when speech ends', () => {
+    playButton()!.click();
+    fixture.detectChanges();
+    expect(position()).toContain('Step 1');
+
+    synth.finishCurrent();
+    fixture.detectChanges();
+
+    expect(position()).toContain('Step 2');
+    expect(synth.spoken.length).toBe(2);
+  });
+
+  it('reads each phrase to completion through the whole log', () => {
+    playButton()!.click();
+    fixture.detectChanges();
+
+    const total = host.querySelectorAll('.vsr-log-item').length;
+    expect(total).toBeGreaterThan(1);
+
+    // Finishing one utterance at a time should step through every phrase
+    // exactly once without skipping any.
+    for (let i = 1; i < total; i++) {
+      expect(synth.spoken.length).toBe(i);
+      synth.finishCurrent();
+      fixture.detectChanges();
+    }
+
+    expect(synth.spoken.length).toBe(total);
+    expect(position()).toContain(`Step ${total}`);
+
+    // Playback stops at the end; a further end event does not loop.
+    synth.finishCurrent();
+    fixture.detectChanges();
+    expect(synth.spoken.length).toBe(total);
+    expect(playButton()!.getAttribute('aria-pressed')).toBe('false');
   });
 });

@@ -136,6 +136,9 @@ export class VirtualScreenReader {
   private autoPlayTimer: ReturnType<typeof setTimeout> | null = null;
   private generationToken = 0;
 
+  /** The utterance currently voicing a phrase, used to drive auto-play advance. */
+  private activeUtterance: SpeechSynthesisUtterance | null = null;
+
   /** Highlight overlay rendered inside the preview document, and its owner doc. */
   private highlightEl: HTMLElement | null = null;
   private highlightDoc: Document | null = null;
@@ -288,7 +291,10 @@ export class VirtualScreenReader {
     }
     const clamped = Math.min(Math.max(parsed, MIN_RATE), MAX_RATE);
     this.rate.set(clamped);
-    if (this.isPlaying()) {
+    // When speech drives the advance, the new rate applies to the next
+    // utterance and the estimated timer must not be (re)armed — it would cut
+    // the current phrase short. Only reschedule the fallback timer.
+    if (this.isPlaying() && !this.activeUtterance) {
       this.scheduleAdvance();
     }
   }
@@ -297,8 +303,18 @@ export class VirtualScreenReader {
     const next = !this.speechEnabled();
     this.speechEnabled.set(next);
     if (!next) {
+      // Audio turned off: stop speaking and let the estimated timer drive the
+      // remaining auto-play so it doesn't stall without the `onend` callback.
       this.cancelSpeech();
+      if (this.isPlaying()) {
+        this.scheduleAdvance();
+      }
     } else {
+      // Audio turned on: the utterance's `onend` now drives the advance, so
+      // drop the fallback timer before (re)starting speech.
+      if (this.isPlaying()) {
+        this.clearTimer();
+      }
       this.speak(this.currentPhrase());
     }
   }
@@ -322,8 +338,11 @@ export class VirtualScreenReader {
   private goTo(index: number): void {
     this.activeSource.set('manual');
     this.currentIndex.set(index);
-    this.speak(this.phrases()[index] ?? '');
-    if (this.isPlaying()) {
+    const spoken = this.speak(this.phrases()[index] ?? '');
+    // Only fall back to the estimated timer when audio isn't driving the
+    // advance. When speech is active, its `onend` event advances playback so a
+    // phrase is always read to completion before the next one starts.
+    if (this.isPlaying() && !spoken) {
       this.scheduleAdvance();
     }
   }
@@ -332,15 +351,24 @@ export class VirtualScreenReader {
     this.clearTimer();
     const phrase = this.phrases()[this.currentIndex()] ?? '';
     const delay = this.computeDelay(phrase);
+    this.autoPlayTimer = setTimeout(() => this.advance(), delay);
+  }
+
+  /**
+   * Advances to the next phrase during auto-play, or stops at the end since
+   * playback does not loop. Shared by the estimated timer and the speech
+   * `onend` callback so both paths behave identically.
+   */
+  private advance(): void {
+    if (!this.isPlaying()) {
+      return;
+    }
     const last = this.phrases().length - 1;
-    this.autoPlayTimer = setTimeout(() => {
-      // Stop once the last phrase has been announced; play does not loop.
-      if (this.currentIndex() >= last) {
-        this.pause();
-        return;
-      }
-      this.goTo(this.currentIndex() + 1);
-    }, delay);
+    if (this.currentIndex() >= last) {
+      this.pause();
+      return;
+    }
+    this.goTo(this.currentIndex() + 1);
   }
 
   private computeDelay(phrase: string): number {
@@ -364,19 +392,61 @@ export class VirtualScreenReader {
     }
   }
 
-  private speak(text: string): void {
+  /**
+   * Voices the given phrase through the Web Speech API. Returns whether speech
+   * was actually started: when it was and auto-play is running, the utterance's
+   * `onend` event advances to the next phrase so each one is read to completion
+   * rather than being cut off by an estimated timer.
+   */
+  private speak(text: string): boolean {
     if (!text || !this.speechEnabled() || !this.speechSupported) {
-      return;
+      return false;
     }
     const synth = window.speechSynthesis;
+    if (!synth) {
+      return false;
+    }
+    // Cancelling fires `onend` on the previous utterance. Clear our handler
+    // first so an interrupted phrase never triggers an advance.
+    this.detachUtterance();
     synth.cancel();
+
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = Math.min(Math.max(this.rate(), MIN_RATE), MAX_RATE);
+
+    const onDone = () => {
+      // Ignore events from a stale utterance (e.g. after cancel or swap).
+      if (utterance !== this.activeUtterance) {
+        return;
+      }
+      this.detachUtterance();
+      if (this.isPlaying()) {
+        this.advance();
+      }
+    };
+    utterance.onend = onDone;
+    // Some browsers emit `error` (e.g. 'interrupted'/'canceled') instead of
+    // `end`; only advance when it's the still-current utterance.
+    utterance.onerror = onDone;
+
+    this.activeUtterance = utterance;
     synth.speak(utterance);
+    return true;
+  }
+
+  private detachUtterance(): void {
+    if (this.activeUtterance) {
+      this.activeUtterance.onend = null;
+      this.activeUtterance.onerror = null;
+      this.activeUtterance = null;
+    }
   }
 
   private cancelSpeech(): void {
-    if (this.speechSupported) {
+    this.detachUtterance();
+    // Guard against the API disappearing at runtime (e.g. during teardown)
+    // rather than trusting the construction-time `speechSupported` flag.
+    if (this.speechSupported && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
   }
